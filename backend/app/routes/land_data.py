@@ -217,7 +217,7 @@ when using environmental wisdom phrases."""
             },
             "ai_summary": ai_summary,
             "data_source": {
-                "temperature": "Google Maps Weather API (Real-time)",
+                "temperature": "OpenWeatherMap API (Real-time)" if weather_data else "NASA POWER (7-day average)",
                 "climate_analysis": "NASA POWER (30-day trends)"
             },
             "analyzed_at": datetime.now(timezone.utc).isoformat()
