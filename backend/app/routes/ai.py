@@ -134,8 +134,6 @@ class FutureScenarioRequest(BaseModel):
 async def unified_ai_ask(
     request: Request,
     question: str = Form(..., description="Your question about environment, climate, or Kenya"),
-    location: Optional[str] = Form(None, description="Optional: Kenya location (e.g., 'Nairobi')"),
-    mode: Optional[str] = Form(None, description="Optional: 'community' or 'professional'"),
     file: Optional[UploadFile] = File(None, description="Optional: PDF, TXT, MD, CSV, JSON (max 10MB)")
 ):
     """
@@ -144,19 +142,17 @@ async def unified_ai_ask(
     ONE endpoint that does EVERYTHING:
     - Simple questions: "What's the weather in Nairobi?"
     - Document analysis: Upload PDF + ask "What are the main risks?"
-    - Location-aware: Automatically gets real weather/climate data
+    - Location-aware: AI automatically detects location from your question
     - Risk assessment: "Environmental risks for my factory in Mombasa?"
     - Compliance: "What permits do I need for quarrying in Machakos?"
     - Energy advice: "Help me switch to solar power"
     - Future scenarios: "What will Turkana look like in 10 years?"
     - Any environmental question about Kenya
     
-    The AI automatically detects what you need and provides the right analysis.
+    The AI automatically detects location from your question and provides the right analysis.
     
     Parameters:
-    - question: Your question (required)
-    - location: Kenya location for context (optional - AI can also detect from question)
-    - mode: "community" (simple) or "professional" (formal) - defaults to community
+    - question: Your question (required) - include location in your question for context
     - file: Upload document for analysis (optional, max 10MB)
     
     Supported files: PDF, TXT, MD, CSV, JSON
@@ -164,16 +160,6 @@ async def unified_ai_ask(
     client_ip = request.client.host
     if not check_rate_limit(client_ip):
         raise HTTPException(status_code=429, detail="Too many requests. Please wait a minute.")
-    
-    # Clean up location - handle empty strings and placeholder values
-    if location and location.strip().lower() in ["", "string", "null", "none"]:
-        location = None
-    
-    # Clean up mode - default to community if invalid
-    if not mode or mode.strip().lower() not in ["community", "professional"]:
-        mode = "community"
-    else:
-        mode = mode.strip().lower()
     
     document_content = None
     file_info = None
@@ -202,22 +188,27 @@ async def unified_ai_ask(
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"File processing error: {str(e)}")
     
+    # Use AI to extract location from the question (same as Telegram bot)
+    location = await greenpulse_ai.extract_location(question)
+    
     # Call the unified GreenPulse AI
     result = await greenpulse_ai.ask(
         question=question,
-        mode=mode,
-        location=location if location else None,
+        mode="community",  # Always community mode for simplicity
+        location=location,
         document_content=document_content,
-        include_weather=location is not None  # Auto-include weather if location provided
+        include_weather=location is not None  # Auto-include weather if location detected
     )
     
     if not result.get("success"):
         raise HTTPException(status_code=500, detail=result.get("error", "AI service error"))
     
-    # Add file info if a file was analyzed
+    # Add file info and detected location to response
     response = {**result}
     if file_info:
         response["file_analyzed"] = file_info
+    if location:
+        response["detected_location"] = location
     
     return response
 

@@ -402,13 +402,13 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
         
         if 'location' in context:
             loc = context['location']
-            lines.append(f"\n📍 LOCATION: {loc.get('formatted_address', loc.get('name'))}")
+            lines.append(f"\n LOCATION: {loc.get('formatted_address', loc.get('name'))}")
             coords = loc.get('coordinates', {})
             lines.append(f"   Coordinates: {coords.get('latitude')}, {coords.get('longitude')}")
         
         if 'current_weather' in context:
             w = context['current_weather']
-            lines.append(f"\n🌤️ CURRENT WEATHER (Google Weather API - Real-time):")
+            lines.append(f"\n CURRENT WEATHER (Google Weather API - Real-time):")
             lines.append(f"   Temperature: {w.get('temperature_celsius')}°C (feels like {w.get('feels_like_celsius')}°C)")
             lines.append(f"   Conditions: {w.get('conditions')}")
             lines.append(f"   Humidity: {w.get('humidity_percent')}%")
@@ -418,7 +418,7 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
         
         # 7-DAY WEATHER FORECAST
         if 'weather_forecast_7_day' in context:
-            lines.append(f"\n🔮 7-DAY WEATHER FORECAST (Google Weather API):")
+            lines.append(f"\n7-DAY WEATHER FORECAST (Google Weather API):")
             for day in context['weather_forecast_7_day']:
                 date = day.get('date', 'N/A')
                 high = day.get('high_celsius', 'N/A')
@@ -429,7 +429,7 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
         
         if 'climate_30_day' in context:
             c = context['climate_30_day']
-            lines.append(f"\n📊 RECENT CLIMATE (NASA POWER - Last 30 Days):")
+            lines.append(f"\n RECENT CLIMATE (NASA POWER - Last 30 Days):")
             lines.append(f"   Avg Temperature: {c.get('avg_temperature_celsius')}°C")
             lines.append(f"   Temperature Range: {c.get('min_temperature')}°C to {c.get('max_temperature')}°C")
             lines.append(f"   Total Precipitation: {c.get('total_precipitation_mm')} mm")
@@ -439,7 +439,7 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
         # 1-YEAR HISTORICAL CLIMATE
         if 'climate_1_year' in context:
             y = context['climate_1_year']
-            lines.append(f"\n📈 HISTORICAL CLIMATE (NASA POWER - Past 12 Months):")
+            lines.append(f"\n HISTORICAL CLIMATE (NASA POWER - Past 12 Months):")
             lines.append(f"   Period: {y.get('period', 'N/A')}")
             lines.append(f"   Annual Avg Temperature: {y.get('annual_avg_temp_celsius')}°C")
             lines.append(f"   Annual Total Rainfall: {y.get('annual_total_precipitation_mm')} mm")
@@ -456,7 +456,7 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
         
         if 'risk_assessment' in context:
             r = context['risk_assessment']
-            lines.append(f"\n⚠️ CURRENT RISK ASSESSMENT:")
+            lines.append(f"\n CURRENT RISK ASSESSMENT:")
             if 'drought' in r:
                 d = r['drought']
                 lines.append(f"   Drought Risk: {d.get('severity', 'unknown').upper()}")
