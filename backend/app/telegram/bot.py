@@ -199,7 +199,7 @@ What would you like to know?
         # TODO: Fetch from database
     
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle all regular messages - Same AI as website"""
+        """Handle all regular messages - Smart AI with automatic location detection"""
         user_message = update.message.text
         user = update.effective_user
         chat_id = update.effective_chat.id
@@ -228,7 +228,6 @@ What would you like to know?
             user_location = None
             user_record = None
             try:
-                from app.services.database import db_service
                 user_record = await db_service.get_or_create_telegram_user(
                     telegram_id=user.id,
                     username=user.username,
@@ -236,19 +235,18 @@ What would you like to know?
                 )
                 if user_record and user_record.get('region'):
                     user_location = user_record['region']
-                    logger.info(f"Using saved location: {user_location}")
+                    logger.info(f"User has saved location: {user_location}")
             except Exception as db_error:
-                logger.error(f"Could not get user location: {db_error}")
+                logger.error(f"Could not get user record: {db_error}")
             
-            # Detect location from message if none saved
-            detected_location = None
-            if not user_location:
-                detected_location = self._extract_location_from_message(user_message)
-                if detected_location:
-                    user_location = detected_location
-                    logger.info(f"Detected location from message: {detected_location}")
+            # SMART: Use AI to extract location from message
+            detected_location = await greenpulse_ai.extract_location(user_message)
+            if detected_location:
+                user_location = detected_location
+                logger.info(f"AI detected location: {detected_location}")
             
             # Use the SAME GreenPulse AI as the website
+            # Pass location - AI will get ALL weather data and decide what to use
             import asyncio
             try:
                 result = await asyncio.wait_for(
@@ -258,12 +256,12 @@ What would you like to know?
                         location=user_location,
                         include_weather=True
                     ),
-                    timeout=60.0
+                    timeout=45.0  # Reduced timeout for faster feedback
                 )
             except asyncio.TimeoutError:
                 logger.warning(f"AI timeout for message: {user_message[:100]}")
                 await update.message.reply_text(
-                    "That's a complex question! Try breaking it into smaller parts."
+                    "Taking a bit longer than expected. Please try again or simplify your question."
                 )
                 return
             
@@ -321,45 +319,9 @@ What would you like to know?
                 "Sorry, I had trouble with that. Could you rephrase your question?"
             )
     
-    def _extract_location_from_message(self, message: str) -> str | None:
-        """Extract Kenya county or town from message"""
-        # Common Kenya locations
-        kenya_locations = [
-            'nairobi', 'mombasa', 'kisumu', 'nakuru', 'eldoret', 'thika', 'malindi',
-            'kitale', 'garissa', 'nyeri', 'machakos', 'meru', 'lamu', 'naivasha',
-            'kericho', 'bungoma', 'busia', 'kakamega', 'kisii', 'migori', 'homa bay',
-            'siaya', 'vihiga', 'nandi', 'uasin gishu', 'trans nzoia', 'west pokot',
-            'turkana', 'samburu', 'isiolo', 'marsabit', 'mandera', 'wajir', 'tana river',
-            'kilifi', 'kwale', 'taita taveta', 'embu', 'kirinyaga', 'muranga', 'kiambu',
-            'nyandarua', 'laikipia', 'baringo', 'elgeyo marakwet', 'narok', 'kajiado',
-            'bomet', 'nyamira', 'makueni', 'kitui', 'tharaka nithi'
-        ]
-        
-        message_lower = message.lower()
-        
-        # Check for "in [location]" pattern
-        import re
-        in_pattern = re.search(r'\bin\s+([a-zA-Z\s]+)', message_lower)
-        if in_pattern:
-            potential = in_pattern.group(1).strip()
-            for loc in kenya_locations:
-                if loc in potential:
-                    return loc.title()
-        
-        # Check for "from [location]" pattern
-        from_pattern = re.search(r'\bfrom\s+([a-zA-Z\s]+)', message_lower)
-        if from_pattern:
-            potential = from_pattern.group(1).strip()
-            for loc in kenya_locations:
-                if loc in potential:
-                    return loc.title()
-        
-        # Direct mention
-        for loc in kenya_locations:
-            if loc in message_lower:
-                return loc.title()
-        
-        return None
+    # NOTE: Removed hardcoded _extract_location_from_message() function
+    # Now using AI-based location extraction via greenpulse_ai.extract_location()
+    # This is smarter and knows ALL Kenya locations without maintenance
     
     async def handle_location(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle location sharing"""
@@ -367,9 +329,6 @@ What would you like to know?
         user = update.effective_user
         
         try:
-            from app.services.google_maps_service import gmaps_service
-            from app.services.database import db_service
-            
             # Reverse geocode to get region name
             region_data = await gmaps_service.reverse_geocode(
                 location.latitude,

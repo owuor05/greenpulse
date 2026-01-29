@@ -559,6 +559,60 @@ DOCUMENT FOR ANALYSIS
                 "error": str(e),
                 "answer": None
             }
+    
+    async def extract_location(self, message: str) -> Optional[str]:
+        """
+        Fast AI call to extract location from user message.
+        Returns the location string or None if no location mentioned.
+        
+        Examples:
+        - "weather in Webuye" → "Webuye, Kenya"
+        - "what's the climate in Athi River?" → "Athi River, Kenya"  
+        - "tell me about farming" → None
+        """
+        if not self.client:
+            return None
+        
+        try:
+            response = await asyncio.to_thread(
+                self.client.chat.completions.create,
+                model=self.model,
+                messages=[
+                    {
+                        "role": "system", 
+                        "content": """You are a location extractor. Your ONLY job is to extract a Kenya location from user messages.
+
+RULES:
+1. If the message mentions a place in Kenya, return ONLY the location name with ", Kenya" appended
+2. If no location is mentioned, return exactly: NONE
+3. Return the most complete location name (e.g., "Athi River, Machakos County, Kenya")
+4. Do NOT add explanations or extra text
+
+Examples:
+- "weather in Webuye" → "Webuye, Bungoma County, Kenya"
+- "how is Nairobi today?" → "Nairobi, Kenya"  
+- "farming tips" → "NONE"
+- "climate in Athi River area" → "Athi River, Machakos County, Kenya"
+- "I live in Kisumu" → "Kisumu, Kenya"
+- "tell me about environment" → "NONE"
+"""
+                    },
+                    {"role": "user", "content": message}
+                ],
+                temperature=0.1,
+                max_tokens=50
+            )
+            
+            result = response.choices[0].message.content.strip()
+            
+            if result.upper() == "NONE" or not result:
+                return None
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Location extraction error: {e}")
+            return None
 
 
 # Global instance
