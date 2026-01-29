@@ -485,7 +485,8 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
         mode: ResponseMode = "community",
         location: Optional[str] = None,
         document_content: Optional[str] = None,
-        include_weather: bool = True
+        include_weather: bool = True,
+        telegram_fast_mode: bool = False
     ) -> Dict[str, Any]:
         """
         Main method to ask GreenPulse AI anything
@@ -496,6 +497,7 @@ FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
             location: Optional Kenya location for context-aware response
             document_content: Optional document text for analysis
             include_weather: Whether to fetch real weather/climate data
+            telegram_fast_mode: If True, AI responds faster and more concisely (for Telegram)
             
         Returns:
             Dict with answer, data_used, model, timestamp
@@ -533,6 +535,15 @@ DOCUMENT FOR ANALYSIS
         
         # Add the actual question
         user_message_parts.append(f"\nUSER QUESTION:\n{question}")
+        
+        # Add speed instruction for Telegram
+        if telegram_fast_mode:
+            user_message_parts.append("""
+⚡ TELEGRAM MODE - SPEED REQUIRED ⚡
+You MUST respond in 30 seconds or less.
+Be concise but complete. Aim for 100-200 words max.
+No lengthy explanations unless absolutely critical.
+Prioritize clarity and speed over comprehensive detail.""")
         
         full_user_message = "\n".join(user_message_parts)
         

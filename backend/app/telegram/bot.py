@@ -237,9 +237,10 @@ What would you like to know?
                         question=user_message,
                         mode="community",
                         location=user_location,
-                        include_weather=True
+                        include_weather=True,
+                        telegram_fast_mode=True  # AI knows to be fast and concise (30s target)
                     ),
-                    timeout=45.0  # Reduced timeout for faster feedback
+                    timeout=120.0  # 120s safety timeout, but AI targets 30s response
                 )
             except asyncio.TimeoutError:
                 logger.warning(f"AI timeout for message: {user_message[:100]}")
