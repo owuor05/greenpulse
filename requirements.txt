@@ -1,3 +1,46 @@
-# Railway/Railpack deploy helper for monorepo
-# Root-level requirements file so Railpack detects Python at repo root.
--r backend/requirements.txt
+# FastAPI and Server
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+python-multipart==0.0.17
+
+# Database
+supabase==2.10.0
+psycopg2-binary==2.9.10
+
+# HTTP & APIs
+httpx==0.27.2
+requests==2.32.3
+aiohttp==3.11.10
+
+# AI
+openai==1.57.4
+python-dotenv==1.0.1
+
+# SMS & Messaging
+python-telegram-bot==21.8
+
+# Data Processing
+pandas==2.2.3
+numpy==1.26.4
+meteostat==1.6.8
+
+# Date & Time
+python-dateutil==2.8.2
+
+# Google Maps
+googlemaps==4.10.0
+
+# Environment
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# CORS
+fastapi-cors==0.0.6
+
+# Background Tasks
+celery==5.4.0
+redis==5.2.1
+
+# Utilities
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
