@@ -13,8 +13,8 @@ from telegram.ext import (
 )
 from app.config import settings
 from app.services.ai_intelligence import greenpulse_ai
-from app.services.database import supabase
-from app.services.google_maps_service import google_maps_service
+from app.services.database import db_service
+from app.services.google_maps_service import gmaps_service
 import logging
 import json
 
@@ -274,9 +274,8 @@ What would you like to know?
             # Save detected location to database
             if detected_location and user_record:
                 try:
-                    location_data = await google_maps_service.geocode_address(detected_location)
+                    location_data = await gmaps_service.geocode_address(detected_location)
                     if location_data:
-                        from app.services.database import db_service
                         await db_service.update_user_location(
                             user_id=user_record['id'],
                             latitude=location_data.get('latitude'),
@@ -290,7 +289,6 @@ What would you like to know?
             # Save conversation to database
             try:
                 if user_record:
-                    from app.services.database import db_service
                     await db_service.save_telegram_message({
                         "user_id": user_record["id"],
                         "telegram_id": user.id,
