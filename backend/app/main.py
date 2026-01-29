@@ -1,6 +1,4 @@
-"""
-Terraguard Backend - FastAPI Main Application
-"""
+"""GreenPulse Backend - FastAPI Main Application"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -13,7 +11,6 @@ load_dotenv()
 
 # Import routers
 from app.routes import climate_router
-from app.routes.webhooks import router as webhooks_router
 from app.routes.ai import router as ai_router
 from app.routes.cron import router as cron_router
 from app.routes.land_data import router as land_data_router
@@ -25,17 +22,17 @@ async def lifespan(app: FastAPI):
     """
     # Startup
     print("=" * 50)
-    print("Terraguard API Starting...")
+    print("GreenPulse API Starting...")
     print(f"Environment: {'Production' if os.getenv('DEBUG', 'False') == 'False' else 'Development'}")
     print(f"Port: {os.getenv('PORT', 8000)}")
     print("=" * 50)
     yield
     # Shutdown
-    print("Terraguard API Shutting down...")
+    print("GreenPulse API Shutting down...")
 
 # Initialize FastAPI app
 app = FastAPI(
-    title=os.getenv("APP_NAME", "Terraguard API"),
+    title=os.getenv("APP_NAME", "GreenPulse API"),
     version=os.getenv("APP_VERSION", "1.0.0"),
     description="AI-powered climate risk and resilience platform API for Africa",
     lifespan=lifespan,
@@ -44,7 +41,7 @@ app = FastAPI(
 )
 
 # CORS Configuration
-cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,https://terraguard.vercel.app").split(",")
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,https://greenpulse.vercel.app").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in cors_origins],
@@ -59,7 +56,7 @@ async def root():
     """Root endpoint - API health check"""
     return {
         "status": "online",
-        "message": "Terraguard API - Guarding the Land. Empowering the People.",
+        "message": "GreenPulse API - Guarding the Land. Empowering the People.",
         "version": os.getenv("APP_VERSION", "1.0.0"),
     "timestamp": datetime.now(timezone.utc).isoformat(),
         "docs": "/docs",
@@ -76,7 +73,7 @@ async def health_check():
             "api": "running",
             "database": "connected",
             "telegram_bot": "active",
-            "whatsapp": "active"
+            "whatsapp": "disabled"
         },
         "features": {
             "ai_chat": os.getenv("ENABLE_AI_CHAT", "True") == "True",
@@ -88,7 +85,6 @@ async def health_check():
 
 # Include routers
 app.include_router(climate_router)
-app.include_router(webhooks_router)
 app.include_router(ai_router)
 app.include_router(cron_router)
 app.include_router(land_data_router)

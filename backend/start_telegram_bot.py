@@ -1,6 +1,5 @@
-"""
-Start Telegram Bot
-Run this to start the Terraguard Telegram bot
+"""Start Telegram Bot
+Run this to start the GreenPulse Telegram bot
 """
 import asyncio
 import sys
@@ -20,7 +19,7 @@ logging.basicConfig(
 
 async def main():
     """Start the bot"""
-    print("Starting Terraguard Telegram Bot...")
+    print("Starting GreenPulse Telegram Bot...")
     print("Bot will run until you press Ctrl+C")
     
     # Build application

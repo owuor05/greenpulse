@@ -1,6 +1,4 @@
-"""
-Configuration management for Terraguard Backend
-"""
+"""Configuration management for GreenPulse Backend"""
 from pydantic_settings import BaseSettings
 from typing import List
 import os
@@ -9,7 +7,7 @@ class Settings(BaseSettings):
     """Application settings"""
     
     # App Config
-    APP_NAME: str = "Terraguard API"
+    APP_NAME: str = "GreenPulse API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
     HOST: str = "0.0.0.0"
@@ -25,14 +23,9 @@ class Settings(BaseSettings):
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
     OPENROUTER_MODEL: str = "openai/gpt-4o-2024-11-20"
     
-    # WhatsApp - Twilio
-    TWILIO_ACCOUNT_SID: str = ""
-    TWILIO_AUTH_TOKEN: str = ""
-    TWILIO_WHATSAPP_NUMBER: str = ""
-    
     # Telegram Bot
     TELEGRAM_BOT_TOKEN: str = ""
-    TELEGRAM_BOT_USERNAME: str = "terraguard_bot"
+    TELEGRAM_BOT_USERNAME: str = "greenpulse_bot"
     
     # Google Maps API
     GOOGLE_MAPS_API_KEY: str
@@ -59,6 +52,9 @@ class Settings(BaseSettings):
     ENABLE_SMS: bool = True
     ENABLE_AI_CHAT: bool = True
     ENABLE_BACKGROUND_TASKS: bool = True
+
+    # Cron Jobs
+    CRON_SECRET: str = ""
     
     class Config:
         env_file = ".env"

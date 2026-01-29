@@ -1,6 +1,9 @@
-"""
-Telegram Bot for Terraguard
-Handles climate alerts and AI chat via Telegram
+"""Telegram Bot for GreenPulse AI
+
+GreenPulse AI is a smart, fast, and analytical AI system designed to help
+governments, businesses, communities, and institutions in Kenya understand
+environmental conditions, assess risks, ensure compliance, and make
+climate-smart decisions using data, reasoning, and scientific knowledge.
 """
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -12,16 +15,18 @@ from telegram.ext import (
     filters,
 )
 from app.config import settings
-from app.services.ai_service import ai_service
+from app.services.ai_intelligence import greenpulse_ai
+from app.services.database import db_service
+from app.services.google_maps_service import gmaps_service
 import logging
 import json
 
 logger = logging.getLogger(__name__)
 
 
-class TerragaurdTelegramBot:
+class GreenPulseTelegramBot:
     """
-    Telegram bot for climate risk alerts and AI assistance
+    Telegram bot for GreenPulse AI - Environmental Intelligence for Kenya
     """
     
     def __init__(self):
@@ -49,157 +54,135 @@ class TerragaurdTelegramBot:
                 # User already set up - show normal welcome
                 welcome_message = f"""Hello {user.first_name}! 👋
 
-Your location: *{user_record['region']}* ✅
+Welcome to **GreenPulse AI** - Environmental Intelligence for Kenya.
+
+Your location: **{user_record['region']}** ✅
 
 ━━━━━━━━━━━━━━━━━━━━
 
-*Ask me anything:*
-• "What's the weather forecast?"
-• "Best crops for this season?"
-• "How to prepare for drought?"
+**I can help you with:**
+• Environmental decision analysis
+• Climate & weather intelligence
+• Regulatory compliance (NEMA, EMCA)
+• Land & water risk assessment
+• Energy transition planning
 
 ━━━━━━━━━━━━━━━━━━━━
+
+**Examples:**
+• "What's the weather in Nakuru?"
+• "Is this land suitable for construction?"
+• "What NEMA permits do I need for a factory?"
+• "Analyze climate risks for my farm"
 
 _Just type your question!_"""
                 
                 await update.message.reply_text(welcome_message, parse_mode='Markdown')
             
             else:
-                # NEW USER - Ask for location FIRST
-                welcome_message = f"""Hello {user.first_name}!
+                # NEW USER - Welcome with new identity
+                welcome_message = f"""Hello {user.first_name}! 👋
 
-Welcome to *Terraguard* - Your AI climate assistant for Africa.
-
-━━━━━━━━━━━━━━━━━━━━
-
-*I can help you with:*
-
-• Climate risk alerts
-• Weather forecasts  
-• Crop recommendations
-• Land management tips
+Welcome to **GreenPulse AI** - Environmental Intelligence for Kenya.
 
 ━━━━━━━━━━━━━━━━━━━━
 
-**FIRST: Please share your location!**
+**I can help you with:**
 
-This helps me give you:
-✓ Accurate forecasts
-✓ Region-specific alerts  
-✓ Localized advice
+• Environmental decision analysis
+• Climate & weather intelligence  
+• Regulatory compliance (NEMA, EMCA)
+• Land & water risk assessment
+• Energy transition planning
 
 ━━━━━━━━━━━━━━━━━━━━
 
-*How to share:*
+**Examples:**
+• "What's the weather in Nakuru?"
+• "Is this land suitable for construction?"
+• "What NEMA permits do I need?"
+• "Analyze climate risks for my farm"
 
-1. Tap "Share My Location" below
-2. Or type your town/county
-   (e.g., "Nairobi", "Kitui")
+━━━━━━━━━━━━━━━━━━━━
 
-━━━━━━━━━━━━━━━━━━━━"""
-                
-                keyboard = [
-                    [InlineKeyboardButton("Share My Location", request_location=True)],
-                    [InlineKeyboardButton("Type Location", callback_data="enter_location")],
-                ]
-                reply_markup = InlineKeyboardMarkup(keyboard)
+_Just type your question to get started!_"""
                 
                 await update.message.reply_text(
                     welcome_message,
-                    parse_mode='Markdown',
-                    reply_markup=reply_markup
+                    parse_mode='Markdown'
                 )
         
         except Exception as e:
             logger.error(f"Error in start command: {e}")
             # Fallback
-            welcome_message = f"""Hello {user.first_name}!
+            welcome_message = f"""Hello {user.first_name}! 👋
 
-Welcome to *Terraguard* - Your AI climate assistant for Africa.
+Welcome to **GreenPulse AI** - Environmental Intelligence for Kenya.
 
+**I can help you with:**
+• Environmental decision analysis
+• Climate & weather intelligence
+• Regulatory compliance (NEMA, EMCA)
+• Land & water risk assessment
 
-*I can help you with:*
-
-• Climate risk alerts
-• Weather forecasts  
-• Crop recommendations
-• Land management tips
-• Climate adaptation strategies
-
-
-*Just chat naturally!*
+**Just chat naturally!**
 
 Examples:
 → "What's the weather in Nairobi?"
-→ "Best crops for dry season?"
-→ "How to prepare for drought?"
-
-To get daily alerts, tell me your location:
-→ "I'm in Kisumu"
-
+→ "What NEMA permits do I need?"
+→ "Analyze risks for land in Kitui"
 
 _Ninaweza pia kusaidia kwa Kiswahili!_
 
 How can I help you today?"""
             
-            keyboard = [
-                [
-                    InlineKeyboardButton(" Share My Location", callback_data="share_location"),
-                    InlineKeyboardButton(" Learn More", callback_data="education"),
-                ],
-            ]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            
             await update.message.reply_text(
-                welcome_message, 
-                reply_markup=reply_markup,
+                welcome_message,
                 parse_mode='Markdown'
             )
     
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /help command - Only if user explicitly asks"""
-        help_text = """
-*Terraguard Bot Help*
+        """Handle /help command"""
+        help_text = """**GreenPulse AI Help**
 
-Just chat with me naturally! I understand questions like:
-• "What's the weather forecast?"
-• "How do I conserve water on my farm?"
-• "Best crops for Nakuru region?"
-• "Tell me about soil degradation"
+I'm an environmental intelligence system for Kenya. Just chat naturally!
 
-*Special Actions:*
-• Share your location to get climate alerts
-• Send photos of crop issues for analysis
-• Ask about any climate or agriculture topic
+**I can help with:**
+• Weather & climate analysis
+• Environmental impact assessment
+• NEMA & regulatory compliance
+• Land suitability & risk analysis
+• Energy transition planning
+• Agricultural advice
 
-*Privacy:* Type "delete my data" to remove your information
+**Examples:**
+• "What's the weather in Mombasa?"
+• "What permits do I need for a factory?"
+• "Analyze flood risk in Kisumu"
+• "Is this land suitable for farming?"
+
+**Tips:**
+• Include location for better answers
+• Upload documents for analysis
+• Ask "what-if" scenarios
 
 What would you like to know?
 """
         await update.message.reply_text(help_text, parse_mode='Markdown')
     
-    async def subscribe_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle location sharing for subscriptions"""
-        keyboard = [
-            [InlineKeyboardButton(" Share My GPS Location", request_location=True)],
-            [InlineKeyboardButton(" Type My Location", callback_data="enter_location")],
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        
+    async def location_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /location command - set user location"""
         await update.message.reply_text(
-            "To get climate alerts for your area, I need to know your location.\n\nYou can either share your GPS location or just tell me your county/town (e.g., 'Nairobi', 'Mombasa'):",
-            reply_markup=reply_markup
+            "To set your location, just tell me your county or town.\n\n"
+            "Examples:\n"
+            "→ Nairobi\n"
+            "→ Mombasa\n"
+            "→ Kisumu\n\n"
+            "Or share your GPS location using the attachment button."
         )
-    
-    async def alerts_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle alerts request"""
-        await update.message.reply_text(
-            "Let me check the latest climate alerts in your area...\n\n(Connecting to database...)"
-        )
-        # TODO: Fetch from database
     
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle all regular messages - Revolutionary AI-first conversation"""
+        """Handle all regular messages - Smart AI with automatic location detection"""
         user_message = update.message.text
         user = update.effective_user
         chat_id = update.effective_chat.id
@@ -208,155 +191,83 @@ What would you like to know?
         await context.bot.send_chat_action(chat_id=chat_id, action="typing")
         
         try:
-            # Quick greetings - respond instantly
-            greetings = ['hello', 'hi', 'hey', 'habari', 'mambo', 'niaje', 'sasa', 'jambo']
-            if user_message.lower().strip() in greetings:
-                responses = [
-                    f"Hello {user.first_name}!\n\nHow can I help you today?",
-                    f"Hi there!\n\nAsk me about weather, farming, or land management.",
-                    f"Habari {user.first_name}!\n\nNaweza kukusaidia namna gani?",
-                    f"Hey!\n\nReady to help. What's your question?"
-                ]
-                import random
-                response = random.choice(responses)
-                await update.message.reply_text(response, parse_mode='Markdown')
-                return
+            logger.info(f"Processing message from {user.id}: {user_message[:100]}")
             
-            # REVOLUTIONARY SINGLE-CALL APPROACH
-            # Let GPT-5 do everything: detect language, extract location, generate response
-            from app.services.intent_parser import generate_revolutionary_response
-            import asyncio
-            
-            logger.info(f"Processing message: {user_message}")
-            
-            # Build user context
-            user_context = {
-                "user_id": user.id,
-                "username": user.username,
-                "first_name": user.first_name,
-                "platform": "telegram"
-            }
-            
-            # Get revolutionary AI response (single call!) with timeout protection
+            # Get user's saved location from database
+            user_location = None
+            user_record = None
             try:
-                result = await asyncio.wait_for(
-                    generate_revolutionary_response(user_message, user_context),
-                    timeout=60.0  # 60 seconds max for faster responses
-                )
-                
-                response_text = result["response"]
-                location = result.get("location")
-                needs_climate = result.get("needs_climate_data", False)
-                wants_subscription = result.get("subscribe_intent", False)
-                detected_name = result.get("name")
-            
-            except asyncio.TimeoutError:
-                # AI took too long - send helpful message
-                logger.warning(f"⏱️ AI timeout for Telegram message from {user.id}: {user_message[:100]}")
-                
-                await update.message.reply_text(
-                    "That's a complex question! Could you break it into smaller parts or use fewer words? I'll respond faster.",
-                    parse_mode='Markdown'
-                )
-                return
-            
-            logger.info(f"AI Response - Language: {result['language']}, Location: {location}, Name: {detected_name}")
-            
-            # SMART SYSTEM INTEGRATION
-            # If AI detected location need and we have location, fetch real data
-            if location and needs_climate:
-                try:
-                    # Check cache FIRST (free!)
-                    from app.services.location_cache import get_cached_coordinates
-                    location_data = get_cached_coordinates(location)
-                    
-                    if not location_data:
-                        # Only call Google Maps API if not cached
-                        from app.services.google_maps_service import gmaps_service
-                        location_data = await gmaps_service.geocode_address(location)
-                    
-                    if location_data:
-                        from app.services.climate_risk_service import climate_risk_service
-                        # Get real climate data from NASA
-                        climate_info = await climate_risk_service.detect_risks_for_region(location)
-                        
-                        if climate_info:
-                            # Enhance response with real data
-                            if result['language'] == 'swahili':
-                                data_note = f"\n\n━━━━━━━━━━━━━━━━━━━━\n\n*Taarifa za Hali ya Hewa - {location}*\n\n{json.dumps(climate_info, indent=2, ensure_ascii=False)}"
-                            else:
-                                data_note = f"\n\n━━━━━━━━━━━━━━━━━━━━\n\n*Real Climate Data - {location}*\n\n{json.dumps(climate_info, indent=2)}"
-                            
-                            # Let GPT-5 format the data beautifully
-                            logger.info(f"Fetched climate data for {location}")
-                
-                except Exception as loc_error:
-                    logger.error(f"Location/climate data error: {loc_error}")
-            
-            # Offer subscription if user wants alerts
-            if wants_subscription and location:
-                if result['language'] == 'swahili':
-                    response_text += f"\n\n━━━━━━━━━━━━━━━━━━━━\n\n*Taarifa za Kila Siku*\n\nUngependa kupokea taarifa za hali ya hewa kila siku kwa {location}?"
-                else:
-                    response_text += f"\n\n━━━━━━━━━━━━━━━━━━━━\n\n*Daily Climate Alerts*\n\nWould you like to receive daily weather updates and risk alerts for {location}?"
-                
-                await update.message.reply_text(
-                    response_text,
-                    parse_mode='Markdown',
-                    reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton("✓ Yes" if result['language'] == 'english' else "✓ Ndio", callback_data="confirm_subscription"),
-                        InlineKeyboardButton("✗ No" if result['language'] == 'english' else "✗ Hapana", callback_data="no_subscription")
-                    ]])
-                )
-            else:
-                await update.message.reply_text(response_text, parse_mode='Markdown')
-            
-            # Save conversation to database
-            try:
-                from app.services.database import db_service
-                
-                # Get or create user
                 user_record = await db_service.get_or_create_telegram_user(
                     telegram_id=user.id,
                     username=user.username,
                     first_name=user.first_name
                 )
-                
+                if user_record and user_record.get('region'):
+                    user_location = user_record['region']
+                    logger.info(f"User has saved location: {user_location}")
+            except Exception as db_error:
+                logger.error(f"Could not get user record: {db_error}")
+            
+            # SMART: Use AI to extract location from message
+            detected_location = await greenpulse_ai.extract_location(user_message)
+            if detected_location:
+                user_location = detected_location
+                logger.info(f"AI detected location: {detected_location}")
+            
+            # Use the SAME GreenPulse AI as the website
+            # Pass location - AI will get ALL weather data and decide what to use
+            import asyncio
+            try:
+                result = await asyncio.wait_for(
+                    greenpulse_ai.ask(
+                        question=user_message,
+                        mode="community",
+                        location=user_location,
+                        include_weather=True,
+                        telegram_fast_mode=True  # AI knows to be fast and concise (30s target)
+                    ),
+                    timeout=120.0  # 120s safety timeout, but AI targets 30s response
+                )
+            except asyncio.TimeoutError:
+                logger.warning(f"AI timeout for message: {user_message[:100]}")
+                await update.message.reply_text(
+                    "Taking a bit longer than expected. Please try again or simplify your question."
+                )
+                return
+            
+            # Extract the answer text from the result dict
+            if result.get("success"):
+                response_text = result.get("answer", "I couldn't generate a response. Please try again.")
+            else:
+                response_text = "Sorry, I'm having trouble right now. Please try again."
+                logger.error(f"AI error: {result.get('error')}")
+            
+            # Send the response
+            try:
+                await update.message.reply_text(response_text, parse_mode='Markdown')
+            except Exception as md_error:
+                # If markdown fails, send as plain text
+                logger.warning(f"Markdown parse error, sending plain: {md_error}")
+                await update.message.reply_text(response_text)
+            
+            # Save detected location to database
+            if detected_location and user_record:
+                try:
+                    location_data = await gmaps_service.geocode_address(detected_location)
+                    if location_data:
+                        await db_service.update_user_location(
+                            user_id=user_record['id'],
+                            latitude=location_data.get('latitude'),
+                            longitude=location_data.get('longitude'),
+                            region=detected_location
+                        )
+                        logger.info(f"Saved location '{detected_location}' for user {user.id}")
+                except Exception as loc_error:
+                    logger.error(f"Could not save location: {loc_error}")
+            
+            # Save conversation to database
+            try:
                 if user_record:
-                    # Save detected name if provided
-                    if detected_name:
-                        try:
-                            await db_service.update_user_name(user_record['id'], detected_name)
-                            logger.info(f"✅ Saved name '{detected_name}' for Telegram user {user.id}")
-                        except Exception as name_error:
-                            logger.error(f"Could not save user name: {name_error}")
-                    
-                    # If location was detected, save it to database
-                    if location and not user_record.get('region'):
-                        try:
-                            # Check cache FIRST (free, instant!)
-                            from app.services.location_cache import get_cached_coordinates
-                            location_data = get_cached_coordinates(location)
-                            
-                            if location_data:
-                                logger.info(f"✅ Using cached coordinates for {location} (FREE!)")
-                            else:
-                                # Only call Google Maps API if not in cache
-                                from app.services.google_maps_service import gmaps_service
-                                location_data = await gmaps_service.geocode_address(location)
-                                logger.warning(f"💰 Called Google Maps API for {location} (costs $0.005)")
-                            
-                            if location_data:
-                                await db_service.update_user_location(
-                                    user_id=user_record['id'],
-                                    latitude=location_data.get('latitude'),
-                                    longitude=location_data.get('longitude'),
-                                    region=location
-                                )
-                                logger.info(f"✅ Saved typed location '{location}' for user {user.id}")
-                        except Exception as loc_save_error:
-                            logger.error(f"Could not save typed location: {loc_save_error}")
-                    # Save incoming message
                     await db_service.save_telegram_message({
                         "user_id": user_record["id"],
                         "telegram_id": user.id,
@@ -366,30 +277,21 @@ What would you like to know?
                         "message": user_message,
                         "direction": "incoming",
                         "ai_response": response_text,
-                        "language": result.get("language", "english")
+                        "language": "auto"
                     })
-                    
-                    logger.info(f"Saved Telegram conversation for user {user.id}")
-                else:
-                    logger.warning(f"Could not save conversation - user creation failed")
-                    
+                    logger.info(f"Saved conversation for user {user.id}")
             except Exception as db_error:
-                logger.error(f"Database save error: {db_error}", exc_info=True)
-                # Don't fail the chat if database save fails
+                logger.error(f"Database save error: {db_error}")
             
         except Exception as e:
             logger.error(f"Error in message handler: {e}", exc_info=True)
-            error_str = str(e)
-            
-            # Smart error messages
-            if '429' in error_str or 'Too Many Requests' in error_str:
-                await update.message.reply_text(
-                    "Rafiki, I'm getting too many requests right now.\n\nPlease try again in a few minutes."
-                )
-            else:
-                await update.message.reply_text(
-                    "Sorry, I had trouble with that.\n\nCould you rephrase your question?"
-                )
+            await update.message.reply_text(
+                "Sorry, I had trouble with that. Could you rephrase your question?"
+            )
+    
+    # NOTE: Removed hardcoded _extract_location_from_message() function
+    # Now using AI-based location extraction via greenpulse_ai.extract_location()
+    # This is smarter and knows ALL Kenya locations without maintenance
     
     async def handle_location(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle location sharing"""
@@ -397,9 +299,6 @@ What would you like to know?
         user = update.effective_user
         
         try:
-            from app.services.google_maps_service import gmaps_service
-            from app.services.database import db_service
-            
             # Reverse geocode to get region name
             region_data = await gmaps_service.reverse_geocode(
                 location.latitude,
@@ -427,9 +326,9 @@ What would you like to know?
                 logger.info(f"Saved location for user {user.id}: {region_name}")
                 
                 await update.message.reply_text(
-                    f"✅ Perfect! I've saved your location: *{region_name}*\n\n"
-                    "You'll now receive climate alerts for your area. I'll notify you about droughts, floods, and other risks.\n\n"
-                    "Feel free to ask me anything!",
+                    f"✅ Location saved: **{region_name}**\n\n"
+                    "I'll use this for localized environmental analysis.\n\n"
+                    "Ask me anything about weather, climate risks, land assessment, or environmental compliance!",
                     parse_mode='Markdown'
                 )
             else:
@@ -453,7 +352,7 @@ What would you like to know?
         
         if callback_data == "share_location":
             keyboard = [
-                [InlineKeyboardButton(" Share GPS Location", request_location=True)],
+                [InlineKeyboardButton("📍 Type My Location", callback_data="enter_location")],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             await query.message.reply_text(
@@ -480,24 +379,18 @@ What would you like to know?
             )
         elif callback_data == "enter_location":
             await query.message.reply_text(
-                "Just type your location and I'll set up alerts!\n\n"
+                "Just type your location (county or town).\n\n"
                 "Examples:\n"
                 "→ Nairobi\n"
                 "→ Kisumu\n"
                 "→ Mombasa"
             )
-        elif callback_data == "confirm_subscription":
+        elif callback_data == "confirm_location":
             await query.message.reply_text(
-                "✓ *Subscribed Successfully!*\n\n"
-                "You'll receive daily climate alerts and risk warnings for your area.\n\n"
-                "Feel free to ask me anything anytime!",
+                "✅ **Location Saved!**\n\n"
+                "I'll use this for localized environmental analysis.\n\n"
+                "Ask me anything!",
                 parse_mode='Markdown'
-            )
-        elif callback_data == "no_subscription":
-            await query.message.reply_text(
-                "No problem!\n\n"
-                "You can still chat with me anytime about climate, weather, or agriculture.\n\n"
-                "Just ask away!"
             )
     
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -513,9 +406,10 @@ What would you like to know?
         """Build and configure the Telegram bot application"""
         self.app = Application.builder().token(self.token).build()
         
-        # Command handlers (hidden from users, but work if typed)
+        # Command handlers
         self.app.add_handler(CommandHandler("start", self.start_command))
         self.app.add_handler(CommandHandler("help", self.help_command))
+        self.app.add_handler(CommandHandler("location", self.location_command))
         
         # Location handler (for sharing GPS)
         self.app.add_handler(MessageHandler(filters.LOCATION, self.handle_location))
@@ -551,16 +445,16 @@ What would you like to know?
         region = alert_data.get("region", "Your area")
         summary = alert_data.get("summary", "Climate alert detected")
         
-        message = f"""*{severity_emoji_map.get(severity, "ALERT")}: {risk_type.replace('_', ' ').title()}*
+        message = f"""**{severity_emoji_map.get(severity, "ALERT")}: {risk_type.replace('_', ' ').title()}**
 
-*Region:* {region}
-*Severity:* {severity.upper()}
+**Region:** {region}
+**Severity:** {severity.upper()}
 
 {summary}
 
 Stay safe and follow local advisories.
 
-_Terraguard - Guarding the Land_"""
+_GreenPulse AI - Environmental Intelligence for Kenya_"""
         
         try:
             # Use Bot API directly without requiring Application to be initialized
@@ -582,4 +476,4 @@ _Terraguard - Guarding the Land_"""
 
 
 # Global bot instance
-telegram_bot = TerragaurdTelegramBot()
+telegram_bot = GreenPulseTelegramBot()

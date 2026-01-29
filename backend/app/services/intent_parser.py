@@ -1,5 +1,4 @@
-"""
-AI Smart Response Generator for Terraguard
+"""AI Smart Response Generator for GreenPulse
 Revolutionary single-call approach that maximizes GPT-5 capabilities
 """
 from app.services.ai_service import ai_service
@@ -154,7 +153,7 @@ async def generate_revolutionary_response(
             from app.services.database import db_service
             if user_id:
                 # Fetch full user data
-                if platform == 'whatsapp':
+                if platform == 'sms':
                     user_data = await db_service.get_user_by_phone(user_context.get('phone_number'))
                 elif platform == 'telegram':
                     user_data = await db_service.get_user_by_telegram_id(user_context.get('user_id'))
@@ -171,7 +170,7 @@ async def generate_revolutionary_response(
     context_info = "\n".join(context_parts) if context_parts else "New user, no history"
     
     # System prompt focused on LAND DEGRADATION, CONSERVATION & REHABILITATION
-    system_prompt = f"""You are Terraguard AI - Africa's leading land conservation and climate resilience assistant.
+    system_prompt = f"""You are GreenPulse AI - Africa's leading land conservation and climate resilience assistant.
 
 CORE MISSION:
 Combat land degradation through education, awareness, and community engagement. Your purpose is to educate, alert, and inspire users across Kenya and Africa to conserve and rehabilitate land - promoting sustainable land use, soil protection, reforestation, and community-based environmental care.
@@ -214,7 +213,7 @@ TONE & APPROACH:
 
 CRITICAL RESPONSE REQUIREMENTS:
 - RESPOND WITHIN 10 SECONDS - keep answers concise and focused
-- For WhatsApp/SMS: Limit to 2-4 sentences for simple questions (100-200 words max)
+- For SMS: Limit to 2-4 sentences for simple questions (100-200 words max)
 - For complex questions: Provide key points only, avoid lengthy explanations
 - Use bullet points for lists to save space
 - NO emojis whatsoever

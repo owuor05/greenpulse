@@ -1,5 +1,4 @@
-"""
-Database service for Terraguard
+"""Database service for GreenPulse
 Handles all Supabase interactions
 """
 from supabase import create_client, Client
@@ -234,12 +233,12 @@ class DatabaseService:
     
     # CHAT HISTORY
     async def save_sms_message(self, message_data: Dict[str, Any]) -> bool:
-        """Save SMS/WhatsApp chat message"""
+        """Save SMS chat message"""
         try:
             self.client.table("sms_chat_history").insert(message_data).execute()
             return True
         except Exception as e:
-            logger.error(f"Error saving SMS/WhatsApp message: {e}")
+            logger.error(f"Error saving SMS message: {e}")
             return False
     
     async def save_telegram_message(self, message_data: Dict[str, Any]) -> bool:
@@ -273,7 +272,7 @@ class DatabaseService:
             logger.error(f"Error getting/creating Telegram user: {e}")
             return None
     
-    async def get_or_create_phone_user(self, phone_number: str, platform: str = "whatsapp") -> Optional[Dict[str, Any]]:
+    async def get_or_create_phone_user(self, phone_number: str, platform: str = "sms") -> Optional[Dict[str, Any]]:
         """Get or create user by phone number"""
         try:
             # Try to get existing user

@@ -143,7 +143,6 @@ class ClimateRiskService:
         """
         try:
             # Import messaging clients
-            from app.whatsapp.twilio_client import whatsapp_client
             from app.telegram.bot import telegram_bot
             
             users = await db_service.get_users_in_region(region)
@@ -171,25 +170,8 @@ class ClimateRiskService:
                         'summary': alert.get('description', 'Climate alert detected')
                     }
                     
-                    # Send WhatsApp alert
-                    if user.get('phone_number') and platform == 'whatsapp':
-                        try:
-                            success = await whatsapp_client.send_alert(
-                                user['phone_number'],
-                                alert_message_data
-                            )
-                            if success:
-                                logger.info(f"✅ Sent WhatsApp alert to {user['phone_number']}")
-                                sent_count += 1
-                            else:
-                                logger.warning(f"❌ Failed to send WhatsApp alert to {user['phone_number']}")
-                                failed_count += 1
-                        except Exception as wa_error:
-                            logger.error(f"WhatsApp error for {user['phone_number']}: {wa_error}")
-                            failed_count += 1
-                    
                     # Send Telegram alert
-                    elif user.get('telegram_id') and platform == 'telegram':
+                    if user.get('telegram_id') and platform == 'telegram':
                         try:
                             # For direct messages, telegram_id is the chat_id
                             chat_id = user.get('telegram_id')

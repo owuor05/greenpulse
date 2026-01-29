@@ -1,174 +1,324 @@
 """
-AI Chat Route - Stateless Q&A endpoint using OpenRouter (GPT-5 mini)
-No memory, no logging, just instant answers for farming questions
+GreenPulse AI Routes - Complete Environmental Intelligence API
+Uses the GreenPulse AI Intelligence Service for all capabilities
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
 from pydantic import BaseModel, Field
-from typing import Optional
-import os
-from openai import OpenAI
+from typing import Optional, Literal
 from collections import defaultdict
 from datetime import datetime, timedelta
 import asyncio
+import io
 
-router = APIRouter(prefix="/api/ai", tags=["AI Assistant"])
+# PDF extraction
+try:
+    from PyPDF2 import PdfReader
+    PDF_SUPPORT = True
+except ImportError as e:
+    PDF_SUPPORT = False
+    import logging
+    logging.getLogger(__name__).warning(f"PyPDF2 not available: {e}")
+
+# Import our intelligent AI service
+from app.services.ai_intelligence import greenpulse_ai
+
+router = APIRouter(prefix="/api/ai", tags=["AI Intelligence"])
 
 # Rate limiting: simple in-memory counter (IP-based)
 rate_limit_store = defaultdict(list)
-MAX_REQUESTS_PER_MINUTE = 10
+MAX_REQUESTS_PER_MINUTE = 20  # Increased for power users
 
-# System prompt for Terraguard AI - Land Conservation Focus
-SYSTEM_PROMPT = """You are Terraguard AI Assistant - Africa's land conservation and climate resilience expert.
-
-CORE MISSION:
-Combat land degradation through education, awareness, and community engagement. Educate, alert, and inspire users across Kenya and Africa to conserve and rehabilitate land.
-
-YOUR FOCUS AREAS:
-1. LAND DEGRADATION EDUCATION
-   - Explain causes: deforestation, overgrazing, poor farming practices, soil erosion
-   - Teach rehabilitation: terracing, tree planting, mulching, organic farming, cover crops
-   - Promote soil conservation: contour farming, agroforestry, composting
-
-2. CONSERVATION MESSAGING
-   - Encourage protection of forests, rivers, and soil
-   - Share African environmental wisdom: "Mazinga yetu ni urithi wetu" (Our environment is our heritage)
-   - Promote community-based environmental care
-   - Emphasize: "Plant one tree, save your soil"
-
-3. PRACTICAL CLIMATE ADVICE
-   - Provide drought, flood, and erosion warnings
-   - ALWAYS attach conservation advice to climate information
-   - Example: "Heavy rain expected - protect topsoil by planting cover crops or building contour lines"
-
-4. TREE PLANTING & REHABILITATION
-   - Recommend region-specific tree species that prevent erosion
-   - Promote tree planting drives and community nurseries
-   - Share success stories of land restoration
-
-RESPONSE STYLE:
-- Simple, hopeful, and practical language (suitable for SMS)
-- Mix English and Swahili naturally: "Tuchunge mazingira yetu. Let's care for our land."
-- Be concise: 2-4 sentences ideal, max 150 words
-- NO emojis
-- Focus on what people CAN DO
-- Connect every answer to land protection when relevant
-
-TOPICS YOU EXCEL AT:
-- Soil conservation and erosion control
-- Drought-resistant crops and water management
-- Tree planting for land rehabilitation
-- Climate-smart agriculture
-- Community reforestation initiatives
-- Sustainable land use practices
-- Organic farming and composting
-
-If asked about unrelated topics, politely redirect to land conservation, climate, or farming questions."""
-
-class QuestionRequest(BaseModel):
-    question: str = Field(..., min_length=3, max_length=500, description="User's question")
-
-class AnswerResponse(BaseModel):
-    answer: str
-    model: str
-    timestamp: str
 
 def check_rate_limit(ip: str) -> bool:
     """Simple IP-based rate limiting"""
     now = datetime.now()
     cutoff = now - timedelta(minutes=1)
-    
-    # Clean old entries
     rate_limit_store[ip] = [ts for ts in rate_limit_store[ip] if ts > cutoff]
-    
-    # Check limit
     if len(rate_limit_store[ip]) >= MAX_REQUESTS_PER_MINUTE:
         return False
-    
-    # Add current request
     rate_limit_store[ip].append(now)
     return True
 
-@router.post("/answer", response_model=AnswerResponse)
-async def get_ai_answer(
-    question_data: QuestionRequest,
-    request: Request
+
+def extract_text_from_pdf(file_content: bytes) -> str:
+    """Extract text from PDF file"""
+    if not PDF_SUPPORT:
+        raise HTTPException(
+            status_code=500, 
+            detail="PDF support not available. PyPDF2 may need to be installed. Contact admin."
+        )
+    try:
+        pdf_reader = PdfReader(io.BytesIO(file_content))
+        text = ""
+        for page in pdf_reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
+        return text.strip()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to extract text from PDF: {str(e)}")
+
+
+def extract_text_from_file(file_content: bytes, filename: str) -> str:
+    """Extract text from uploaded file based on type"""
+    filename_lower = filename.lower()
+    if filename_lower.endswith('.pdf'):
+        return extract_text_from_pdf(file_content)
+    elif filename_lower.endswith(('.txt', '.md', '.csv', '.json')):
+        try:
+            return file_content.decode('utf-8')
+        except UnicodeDecodeError:
+            return file_content.decode('latin-1')
+    else:
+        raise HTTPException(
+            status_code=400, 
+            detail="Unsupported file type. Supported: PDF, TXT, MD, CSV, JSON"
+        )
+
+
+# ═══════════════════════════════════════════════════════════════════
+# REQUEST/RESPONSE MODELS
+# ═══════════════════════════════════════════════════════════════════
+
+class QuestionRequest(BaseModel):
+    """Simple question request (backwards compatible)"""
+    question: str = Field(..., min_length=3, max_length=2000)
+
+
+class IntelligenceRequest(BaseModel):
+    """Full-featured intelligence request"""
+    question: str = Field(..., min_length=3, max_length=5000, description="Your question or scenario")
+    location: Optional[str] = Field(None, description="Kenya location for context (e.g., 'Nairobi', 'Mombasa', 'Kitui')")
+    mode: Literal["community", "professional"] = Field("community", description="Response style")
+    include_weather: bool = Field(True, description="Include real-time weather/climate data")
+
+
+class DecisionRequest(BaseModel):
+    """Decision analysis request - What-if scenarios"""
+    scenario: str = Field(..., min_length=10, max_length=5000, description="Describe the proposed action or scenario")
+    location: str = Field(..., description="Kenya location where action would take place")
+    mode: Literal["community", "professional"] = Field("professional", description="Response style")
+
+
+class RiskAssessmentRequest(BaseModel):
+    """Environmental risk scoring request"""
+    location: str = Field(..., description="Kenya location to assess")
+    activity: Optional[str] = Field(None, description="Specific activity or industry (e.g., 'farming', 'manufacturing', 'construction')")
+    mode: Literal["community", "professional"] = Field("professional", description="Response style")
+
+
+class ComplianceRequest(BaseModel):
+    """Regulatory compliance check request"""
+    activity: str = Field(..., description="Describe the business activity or operation")
+    location: Optional[str] = Field(None, description="Kenya location")
+    mode: Literal["community", "professional"] = Field("professional", description="Response style")
+
+
+class EnergyAdviceRequest(BaseModel):
+    """Energy transition and alternatives request"""
+    current_energy: str = Field(..., description="Current energy source and usage description")
+    location: Optional[str] = Field(None, description="Kenya location for renewable potential")
+    budget_level: Literal["low", "medium", "high"] = Field("medium", description="Budget consideration")
+    mode: Literal["community", "professional"] = Field("professional", description="Response style")
+
+
+class FutureScenarioRequest(BaseModel):
+    """Future projection request - 5-10 year outlook"""
+    location: str = Field(..., description="Kenya location")
+    current_situation: Optional[str] = Field(None, description="Current land use or environmental situation")
+    proposed_action: Optional[str] = Field(None, description="What action (or inaction) to project")
+    years: int = Field(5, ge=1, le=20, description="Years into the future")
+    mode: Literal["community", "professional"] = Field("professional", description="Response style")
+
+
+# ═══════════════════════════════════════════════════════════════════
+# UNIFIED SMART ENDPOINT
+# ═══════════════════════════════════════════════════════════════════
+
+@router.post("/ask")
+async def unified_ai_ask(
+    request: Request,
+    question: str = Form(..., description="Your question about environment, climate, or Kenya"),
+    file: Optional[UploadFile] = File(None, description="Optional: PDF, TXT, MD, CSV, JSON (max 10MB)")
 ):
     """
-    Get an AI answer to a farming/climate question.
-    Stateless - no chat history or memory.
+    🤖 UNIFIED GREENPULSE AI ENDPOINT
+    
+    ONE endpoint that does EVERYTHING:
+    - Simple questions: "What's the weather in Nairobi?"
+    - Document analysis: Upload PDF + ask "What are the main risks?"
+    - Location-aware: AI automatically detects location from your question
+    - Risk assessment: "Environmental risks for my factory in Mombasa?"
+    - Compliance: "What permits do I need for quarrying in Machakos?"
+    - Energy advice: "Help me switch to solar power"
+    - Future scenarios: "What will Turkana look like in 10 years?"
+    - Any environmental question about Kenya
+    
+    The AI automatically detects location from your question and provides the right analysis.
+    
+    Parameters:
+    - question: Your question (required) - include location in your question for context
+    - file: Upload document for analysis (optional, max 10MB)
+    
+    Supported files: PDF, TXT, MD, CSV, JSON
     """
-    # Rate limit check
     client_ip = request.client.host
     if not check_rate_limit(client_ip):
-        raise HTTPException(
-            status_code=429,
-            detail="Too many requests. Please wait a minute before asking again."
-        )
+        raise HTTPException(status_code=429, detail="Too many requests. Please wait a minute.")
     
-    # Validate question
-    question = question_data.question.strip()
-    if not question:
-        raise HTTPException(status_code=400, detail="Question cannot be empty")
+    document_content = None
+    file_info = None
     
-    # Get OpenRouter credentials from env
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    base_url = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
-    model = os.getenv("OPENROUTER_MODEL", "openai/gpt-5-mini")
+    # Handle optional file upload
+    if file and file.filename:
+        try:
+            file_content = await file.read()
+            file_size_mb = len(file_content) / (1024 * 1024)
+            
+            if len(file_content) > 10 * 1024 * 1024:  # 10MB limit
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"File too large ({file_size_mb:.2f}MB). Maximum 10MB allowed."
+                )
+            
+            document_content = extract_text_from_file(file_content, file.filename)
+            file_info = {
+                "filename": file.filename,
+                "size_kb": round(len(file_content) / 1024, 1),
+                "size_mb": round(len(file_content) / (1024 * 1024), 2),
+                "chars_extracted": len(document_content) if document_content else 0
+            }
+        except HTTPException:
+            raise  # Re-raise HTTP exceptions
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"File processing error: {str(e)}")
     
-    if not api_key:
-        raise HTTPException(
-            status_code=500,
-            detail="AI service not configured. Please contact support."
-        )
+    # Use AI to extract location from the question (same as Telegram bot)
+    location = await greenpulse_ai.extract_location(question)
     
-    try:
-        # Initialize OpenAI client with OpenRouter config
-        client = OpenAI(
-            api_key=api_key,
-            base_url=base_url
-        )
-        
-        # Call the model - no timeout, no token limit for complete answers
-        response = await asyncio.to_thread(
-            client.chat.completions.create,
-            model=model,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": question}
-            ],
-            # No max_tokens - AI provides complete answers naturally
-            temperature=0.7,
-        )
-        
-        answer = response.choices[0].message.content.strip()
-        
-        return AnswerResponse(
-            answer=answer,
-            model=model,
-            timestamp=datetime.now().isoformat()
-        )
-        
-    except Exception as e:
-        # Log error but don't expose internals
-        print(f"AI Error: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to get AI response. Please try again in a moment."
-        )
+    # Call the unified GreenPulse AI
+    result = await greenpulse_ai.ask(
+        question=question,
+        mode="community",  # Always community mode for simplicity
+        location=location,
+        document_content=document_content,
+        include_weather=location is not None  # Auto-include weather if location detected
+    )
+    
+    if not result.get("success"):
+        raise HTTPException(status_code=500, detail=result.get("error", "AI service error"))
+    
+    # Add file info and detected location to response
+    response = {**result}
+    if file_info:
+        response["file_analyzed"] = file_info
+    if location:
+        response["detected_location"] = location
+    
+    return response
+
+
+# ═══════════════════════════════════════════════════════════════════
+# LEGACY ENDPOINTS (Removed - Use /ask instead)
+# ═══════════════════════════════════════════════════════════════════
+# 
+# All specific endpoints have been consolidated into the smart /ask endpoint:
+# - /intelligence → Use /ask with location parameter
+# - /decision-analysis → Use /ask with "analyze this scenario:" question
+# - /risk-assessment → Use /ask with "assess risks for:" question  
+# - /compliance-check → Use /ask with "what permits/compliance for:" question
+# - /energy-advice → Use /ask with "energy recommendations for:" question
+# - /future-scenario → Use /ask with "predict future scenario:" question
+# - /analyze-document → Use /ask with file upload
+#
+# The AI automatically detects what you need - no need for separate endpoints!
+# ═══════════════════════════════════════════════════════════════════
+
 
 @router.get("/status")
 async def ai_status():
-    """Check if AI service is configured and ready"""
+    """Check AI service status - simplified unified API"""
+    import os
     api_key = os.getenv("OPENROUTER_API_KEY")
-    model = os.getenv("OPENROUTER_MODEL", "openai/gpt-5-mini")
+    model = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-2024-11-20")
     
     return {
-        "status": "configured" if api_key else "not_configured",
+        "status": "operational" if api_key else "not_configured",
         "model": model if api_key else None,
+        "version": "3.0.0",
+        "name": "GreenPulse Environmental Intelligence",
+        "api_design": "Simplified - ONE smart endpoint handles everything",
         "rate_limit": f"{MAX_REQUESTS_PER_MINUTE} requests/minute",
-        "features": {
-            "stateless": True,
-            "no_memory": True,
-            "agriculture_focused": True
-        }
+        "main_endpoint": "/api/ai/ask",
+        "capabilities": "All environmental analysis via natural language - the AI detects what you need automatically",
+        "features": [
+            "Environmental Q&A with real weather data",
+            "Document analysis (PDF, TXT, MD, CSV, JSON)", 
+            "Risk assessment and compliance guidance",
+            "Energy transition recommendations",
+            "Future scenario projections",
+            "Location-aware responses for Kenya",
+            "Both community and professional response modes"
+        ],
+        "data_sources": {
+            "weather": "Google Weather API (real-time + 7-day forecast)",
+            "climate": "NASA POWER (30-day historical trends)",
+            "geocoding": "Google Maps Geocoding"
+        },
+        "response_modes": ["community", "professional"],
+        "supported_files": ["PDF", "TXT", "MD", "CSV", "JSON"],
+        "max_file_size_mb": 10,
+        "pdf_support": PDF_SUPPORT,
+        "region_focus": "Kenya"
+    }
+
+
+@router.get("/capabilities")
+async def list_capabilities():
+    """
+    GreenPulse AI capabilities - now simplified to ONE smart endpoint.
+    """
+    return {
+        "name": "GreenPulse Environmental Intelligence",
+        "tagline": "Kenya's AI-Powered Environmental Decision Support System",
+        "api_philosophy": "ONE endpoint does everything - the AI is smart enough to understand what you need",
+        "main_endpoint": {
+            "url": "/api/ai/ask",
+            "method": "POST",
+            "description": "Send any environmental question, with optional file upload and location context. The AI automatically detects and handles all types of analysis.",
+            "parameters": {
+                "question": "Your question (required) - can be simple or complex",
+                "location": "Kenya location for context (optional)",
+                "mode": "community or professional response style (optional)",
+                "file": "Upload document for analysis (optional, max 10MB)"
+            }
+        },
+        "what_it_handles": [
+            "Weather & climate questions - 'What's the weather in Nairobi?'",
+            "Risk assessment - 'Environmental risks for my factory in Mombasa?'", 
+            "Decision analysis - 'Should I plant maize in Kitui right now?'",
+            "Compliance guidance - 'What permits do I need for quarrying?'",
+            "Energy advice - 'Help me switch to solar power'",
+            "Future scenarios - 'What will Turkana look like in 10 years?'",
+            "Document analysis - Upload any PDF + ask questions about it",
+            "Location-specific advice - Automatically gets real weather/climate data",
+            "Any environmental question about Kenya"
+        ],
+        "smart_features": [
+            "Language detection - responds in the same language you write",
+            "Auto-context - fetches weather data when you mention locations", 
+            "File analysis - upload PDFs, get comprehensive environmental analysis",
+            "Risk scoring - automatically provides LOW/MEDIUM/HIGH/CRITICAL ratings",
+            "Regulation awareness - knows Kenyan environmental laws (NEMA, EMCA)",
+            "Data integration - combines Google Weather + NASA climate data",
+            "Dual modes - community (simple) or professional (formal) responses"
+        ],
+        "legacy_note": "All specific endpoints (/intelligence, /decision-analysis, etc.) have been consolidated into /ask for simplicity",
+        "response_modes": {
+            "community": "Simple, clear language matching your language (English if you write English, Swahili if you write Swahili)",
+            "professional": "Formal, structured, data-driven responses for business and reports"
+        },
+        "supported_files": ["PDF", "TXT", "MD", "CSV", "JSON"],
+        "max_file_size": "10MB",
+        "region_focus": "Kenya (counties, climate zones, regulations)"
     }
