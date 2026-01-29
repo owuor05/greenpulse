@@ -23,11 +23,6 @@ class Settings(BaseSettings):
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
     OPENROUTER_MODEL: str = "openai/gpt-4o-2024-11-20"
     
-    # WhatsApp - Twilio
-    TWILIO_ACCOUNT_SID: str = ""
-    TWILIO_AUTH_TOKEN: str = ""
-    TWILIO_WHATSAPP_NUMBER: str = ""
-    
     # Telegram Bot
     TELEGRAM_BOT_TOKEN: str = ""
     TELEGRAM_BOT_USERNAME: str = "greenpulse_bot"
@@ -57,6 +52,9 @@ class Settings(BaseSettings):
     ENABLE_SMS: bool = True
     ENABLE_AI_CHAT: bool = True
     ENABLE_BACKGROUND_TASKS: bool = True
+
+    # Cron Jobs
+    CRON_SECRET: str = ""
     
     class Config:
         env_file = ".env"

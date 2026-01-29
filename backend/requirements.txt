@@ -17,7 +17,6 @@ openai==1.57.4
 python-dotenv==1.0.1
 
 # SMS & Messaging
-twilio==9.3.7
 python-telegram-bot==21.8
 
 # Data Processing

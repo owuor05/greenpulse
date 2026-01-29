@@ -153,7 +153,7 @@ async def generate_revolutionary_response(
             from app.services.database import db_service
             if user_id:
                 # Fetch full user data
-                if platform == 'whatsapp':
+                if platform == 'sms':
                     user_data = await db_service.get_user_by_phone(user_context.get('phone_number'))
                 elif platform == 'telegram':
                     user_data = await db_service.get_user_by_telegram_id(user_context.get('user_id'))
@@ -213,7 +213,7 @@ TONE & APPROACH:
 
 CRITICAL RESPONSE REQUIREMENTS:
 - RESPOND WITHIN 10 SECONDS - keep answers concise and focused
-- For WhatsApp/SMS: Limit to 2-4 sentences for simple questions (100-200 words max)
+- For SMS: Limit to 2-4 sentences for simple questions (100-200 words max)
 - For complex questions: Provide key points only, avoid lengthy explanations
 - Use bullet points for lists to save space
 - NO emojis whatsoever

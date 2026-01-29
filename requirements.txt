@@ -1,0 +1,3 @@
+# Railway/Railpack deploy helper for monorepo
+# Root-level requirements file so Railpack detects Python at repo root.
+-r backend/requirements.txt

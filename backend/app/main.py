@@ -11,7 +11,6 @@ load_dotenv()
 
 # Import routers
 from app.routes import climate_router
-from app.routes.webhooks import router as webhooks_router
 from app.routes.ai import router as ai_router
 from app.routes.cron import router as cron_router
 from app.routes.land_data import router as land_data_router
@@ -74,7 +73,7 @@ async def health_check():
             "api": "running",
             "database": "connected",
             "telegram_bot": "active",
-            "whatsapp": "active"
+            "whatsapp": "disabled"
         },
         "features": {
             "ai_chat": os.getenv("ENABLE_AI_CHAT", "True") == "True",
@@ -86,7 +85,6 @@ async def health_check():
 
 # Include routers
 app.include_router(climate_router)
-app.include_router(webhooks_router)
 app.include_router(ai_router)
 app.include_router(cron_router)
 app.include_router(land_data_router)
