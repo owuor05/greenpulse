@@ -9,12 +9,19 @@ from pathlib import Path
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent))
 
+# Load environment variables BEFORE importing app modules
+from dotenv import load_dotenv
+load_dotenv()
+
 from app.data.google_weather import google_weather_client
 from app.data.nasa_power import nasa_client
-from app.services.ai_service import ai_service
+from app.services.ai_intelligence import GreenPulseAI
 from app.services.google_maps_service import gmaps_service
 from app.config import settings
 import httpx
+
+# Create fresh instance after env is loaded
+greenpulse_ai = GreenPulseAI()
 
 # Test coordinates (Nairobi, Kenya)
 TEST_LAT = -1.286389
@@ -104,31 +111,34 @@ async def test_nasa_power_api():
 
 
 async def test_ai_service():
-    """Test OpenRouter AI Service"""
+    """Test GreenPulse AI Intelligence Service"""
     print("\n" + "="*70)
-    print("🤖 TESTING AI SERVICE (OpenRouter GPT-4o)")
+    print("🤖 TESTING GREENPULSE AI INTELLIGENCE (OpenRouter GPT-4o)")
     print("="*70)
     
     try:
-        test_prompt = "Explain in one sentence what agroforestry is."
-        system_prompt = "You are a conservation expert. Be brief and clear."
-        
-        response = await ai_service.chat_response_with_system(
-            user_message=test_prompt,
-            system_prompt=system_prompt
+        # Test the new intelligence service with location context
+        result = await greenpulse_ai.ask(
+            question="What is the current weather situation and any farming advice?",
+            mode="community",
+            location="Nairobi, Kenya",
+            include_weather=True
         )
         
-        if response and len(response) > 10:
-            print("✅ AI Service: SUCCESS")
-            print(f"   📝 Test Question: {test_prompt}")
-            print(f"   💬 AI Response: {response[:150]}...")
+        if result.get("success") and result.get("answer") and len(result.get("answer")) > 50:
+            print("✅ AI Intelligence Service: SUCCESS")
+            print(f"   📍 Location: Nairobi, Kenya")
+            print(f"   🌤️  Weather Data Used: {result.get('data_used', {}).get('current_weather', False)}")
+            print(f"   📊 Climate Data Used: {result.get('data_used', {}).get('climate_30_day', False)}")
+            print(f"   💬 AI Response Preview: {result['answer'][:200]}...")
             return True
         else:
-            print("❌ AI Service: FAILED - No response or too short")
+            print("❌ AI Intelligence Service: FAILED - No response or too short")
+            print(f"   Error: {result.get('error', 'Unknown')}")
             return False
             
     except Exception as e:
-        print(f"❌ AI Service: ERROR - {str(e)}")
+        print(f"❌ AI Intelligence Service: ERROR - {str(e)}")
         return False
 
 
