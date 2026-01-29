@@ -249,10 +249,9 @@ What would you like to know?
                     logger.info(f"Detected location from message: {detected_location}")
             
             # Use the SAME GreenPulse AI as the website
-            # Mode: community (simple, casual, may use Swahili)
             import asyncio
             try:
-                response_text = await asyncio.wait_for(
+                result = await asyncio.wait_for(
                     greenpulse_ai.ask(
                         question=user_message,
                         mode="community",
@@ -268,8 +267,20 @@ What would you like to know?
                 )
                 return
             
+            # Extract the answer text from the result dict
+            if result.get("success"):
+                response_text = result.get("answer", "I couldn't generate a response. Please try again.")
+            else:
+                response_text = "Sorry, I'm having trouble right now. Please try again."
+                logger.error(f"AI error: {result.get('error')}")
+            
             # Send the response
-            await update.message.reply_text(response_text, parse_mode='Markdown')
+            try:
+                await update.message.reply_text(response_text, parse_mode='Markdown')
+            except Exception as md_error:
+                # If markdown fails, send as plain text
+                logger.warning(f"Markdown parse error, sending plain: {md_error}")
+                await update.message.reply_text(response_text)
             
             # Save detected location to database
             if detected_location and user_record:
