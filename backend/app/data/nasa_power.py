@@ -148,6 +148,98 @@ class NASAPowerClient:
             logger.error(f"NASA POWER monthly data error: {e}")
             return None
     
+    async def get_yearly_climate(
+        self,
+        latitude: float,
+        longitude: float
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Get 1-year historical climate summary for trend analysis
+        
+        Returns monthly summaries for the past 12 months
+        """
+        from datetime import datetime
+        
+        # End at previous month (NASA POWER doesn't have current month yet)
+        now = datetime.now()
+        # Go back to last complete month
+        if now.month == 1:
+            end_date = datetime(now.year - 1, 12, 1)
+        else:
+            end_date = datetime(now.year, now.month - 1, 1)
+        
+        # Start 12 months before that
+        if end_date.month == 12:
+            start_date = datetime(end_date.year, 1, 1)
+        else:
+            start_date = datetime(end_date.year - 1, end_date.month + 1, 1)
+        
+        try:
+            # Get monthly averages for the past year
+            params_str = "T2M,T2M_MAX,T2M_MIN,PRECTOTCORR,RH2M"
+            url = f"{self.base_url}/monthly/point"
+            
+            params = {
+                "parameters": params_str,
+                "community": "AG",
+                "longitude": longitude,
+                "latitude": latitude,
+                "start": start_date.strftime("%Y%m"),
+                "end": end_date.strftime("%Y%m"),
+                "format": "JSON"
+            }
+            
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.get(url, params=params)
+                response.raise_for_status()
+                
+                data = response.json()
+                raw_params = data.get("properties", {}).get("parameter", {})
+                
+                if not raw_params:
+                    return None
+                
+                # Process into monthly summaries
+                months_data = {}
+                
+                # Get temperature data
+                temp_data = raw_params.get("T2M", {})
+                temp_max_data = raw_params.get("T2M_MAX", {})
+                temp_min_data = raw_params.get("T2M_MIN", {})
+                precip_data = raw_params.get("PRECTOTCORR", {})
+                humidity_data = raw_params.get("RH2M", {})
+                
+                for month_key in temp_data.keys():
+                    if temp_data.get(month_key, -999) != -999:
+                        months_data[month_key] = {
+                            'avg_temp_celsius': round(temp_data.get(month_key, 0), 1),
+                            'max_temp_celsius': round(temp_max_data.get(month_key, 0), 1),
+                            'min_temp_celsius': round(temp_min_data.get(month_key, 0), 1),
+                            'precipitation_mm': round(precip_data.get(month_key, 0) * 30, 1),  # Monthly total
+                            'humidity_percent': round(humidity_data.get(month_key, 0), 1)
+                        }
+                
+                # Calculate annual averages
+                if months_data:
+                    all_temps = [m['avg_temp_celsius'] for m in months_data.values()]
+                    all_precip = [m['precipitation_mm'] for m in months_data.values()]
+                    
+                    return {
+                        'period': f"{start_date.strftime('%b %Y')} to {end_date.strftime('%b %Y')}",
+                        'annual_avg_temp_celsius': round(sum(all_temps) / len(all_temps), 1),
+                        'annual_total_precipitation_mm': round(sum(all_precip), 1),
+                        'wettest_month': max(months_data.items(), key=lambda x: x[1]['precipitation_mm'])[0] if months_data else None,
+                        'driest_month': min(months_data.items(), key=lambda x: x[1]['precipitation_mm'])[0] if months_data else None,
+                        'hottest_month': max(months_data.items(), key=lambda x: x[1]['max_temp_celsius'])[0] if months_data else None,
+                        'monthly_data': months_data
+                    }
+                
+                return None
+        
+        except Exception as e:
+            logger.error(f"NASA POWER yearly data error: {e}")
+            return None
+
     def analyze_drought_risk(self, climate_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Analyze drought risk from NASA POWER data

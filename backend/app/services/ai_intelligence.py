@@ -284,7 +284,7 @@ RESPONSE MODE: PROFESSIONAL
         return base_prompt + mode_prompt
     
     async def _get_location_context(self, location: str) -> Dict[str, Any]:
-        """Fetch real data for a Kenya location"""
+        """Fetch comprehensive real data for a Kenya location"""
         context = {}
         
         try:
@@ -300,9 +300,20 @@ RESPONSE MODE: PROFESSIONAL
                     'formatted_address': geo_data.get('formatted_address', location)
                 }
                 
-                # Get current weather from Google Weather API
-                weather = await google_weather_client.get_current_weather(lat, lon)
-                if weather:
+                # Fetch all data in parallel for speed
+                import asyncio
+                weather_task = google_weather_client.get_current_weather(lat, lon)
+                forecast_task = google_weather_client.get_forecast(lat, lon, days=7)
+                climate_30_task = nasa_client.get_recent_30_days(lat, lon)
+                climate_year_task = nasa_client.get_yearly_climate(lat, lon)
+                
+                weather, forecast, climate_30, climate_year = await asyncio.gather(
+                    weather_task, forecast_task, climate_30_task, climate_year_task,
+                    return_exceptions=True
+                )
+                
+                # Current weather from Google Weather API
+                if weather and not isinstance(weather, Exception):
                     context['current_weather'] = {
                         'temperature_celsius': weather.get('temperature'),
                         'feels_like_celsius': weather.get('feels_like'),
@@ -314,13 +325,17 @@ RESPONSE MODE: PROFESSIONAL
                         'is_daytime': weather.get('is_daytime')
                     }
                 
-                # Get 30-day climate data from NASA POWER
-                climate = await nasa_client.get_recent_30_days(lat, lon)
-                if climate:
-                    # Calculate averages
-                    temps = [v for v in climate.get('T2M', {}).values() if v != -999]
-                    precip = [v for v in climate.get('PRECTOTCORR', {}).values() if v != -999]
-                    humidity = [v for v in climate.get('RH2M', {}).values() if v != -999]
+                # 7-day weather forecast from Google Weather API
+                if forecast and not isinstance(forecast, Exception):
+                    forecast_list = forecast.get('forecast_list', [])
+                    if forecast_list:
+                        context['weather_forecast_7_day'] = forecast_list[:7]
+                
+                # 30-day climate data from NASA POWER
+                if climate_30 and not isinstance(climate_30, Exception):
+                    temps = [v for v in climate_30.get('T2M', {}).values() if v != -999]
+                    precip = [v for v in climate_30.get('PRECTOTCORR', {}).values() if v != -999]
+                    humidity = [v for v in climate_30.get('RH2M', {}).values() if v != -999]
                     
                     context['climate_30_day'] = {
                         'avg_temperature_celsius': round(sum(temps)/len(temps), 1) if temps else None,
@@ -332,13 +347,17 @@ RESPONSE MODE: PROFESSIONAL
                     }
                     
                     # Risk analysis
-                    drought = nasa_client.analyze_drought_risk(climate)
-                    flood = nasa_client.analyze_flood_risk(climate)
+                    drought = nasa_client.analyze_drought_risk(climate_30)
+                    flood = nasa_client.analyze_flood_risk(climate_30)
                     
                     context['risk_assessment'] = {
                         'drought': drought,
                         'flood': flood
                     }
+                
+                # 1-year historical climate from NASA POWER
+                if climate_year and not isinstance(climate_year, Exception):
+                    context['climate_1_year'] = climate_year
         
         except Exception as e:
             logger.error(f"Error fetching location context: {e}")
@@ -351,7 +370,7 @@ RESPONSE MODE: PROFESSIONAL
             return ""
         
         lines = ["\n═══════════════════════════════════════════════════════════════════"]
-        lines.append("REAL-TIME DATA CONTEXT (Use this in your response)")
+        lines.append("REAL-TIME DATA CONTEXT (Use this data in your response)")
         lines.append("═══════════════════════════════════════════════════════════════════")
         
         if 'location' in context:
@@ -370,18 +389,47 @@ RESPONSE MODE: PROFESSIONAL
             lines.append(f"   UV Index: {w.get('uv_index')}")
             lines.append(f"   Cloud Cover: {w.get('cloud_cover_percent')}%")
         
+        # 7-DAY WEATHER FORECAST
+        if 'weather_forecast_7_day' in context:
+            lines.append(f"\n🔮 7-DAY WEATHER FORECAST (Google Weather API):")
+            for day in context['weather_forecast_7_day']:
+                date = day.get('date', 'N/A')
+                high = day.get('high_celsius', 'N/A')
+                low = day.get('low_celsius', 'N/A')
+                precip = day.get('precipitation_probability', 0)
+                conditions = day.get('conditions', '')
+                lines.append(f"   {date}: {low}°C - {high}°C, {conditions}, {precip}% rain chance")
+        
         if 'climate_30_day' in context:
             c = context['climate_30_day']
-            lines.append(f"\n📊 CLIMATE DATA (NASA POWER - Last 30 Days):")
+            lines.append(f"\n📊 RECENT CLIMATE (NASA POWER - Last 30 Days):")
             lines.append(f"   Avg Temperature: {c.get('avg_temperature_celsius')}°C")
             lines.append(f"   Temperature Range: {c.get('min_temperature')}°C to {c.get('max_temperature')}°C")
             lines.append(f"   Total Precipitation: {c.get('total_precipitation_mm')} mm")
             lines.append(f"   Days Without Rain: {c.get('days_without_rain')}")
             lines.append(f"   Avg Humidity: {c.get('avg_humidity_percent')}%")
         
+        # 1-YEAR HISTORICAL CLIMATE
+        if 'climate_1_year' in context:
+            y = context['climate_1_year']
+            lines.append(f"\n📈 HISTORICAL CLIMATE (NASA POWER - Past 12 Months):")
+            lines.append(f"   Period: {y.get('period', 'N/A')}")
+            lines.append(f"   Annual Avg Temperature: {y.get('annual_avg_temp_celsius')}°C")
+            lines.append(f"   Annual Total Rainfall: {y.get('annual_total_precipitation_mm')} mm")
+            lines.append(f"   Wettest Month: {y.get('wettest_month', 'N/A')}")
+            lines.append(f"   Driest Month: {y.get('driest_month', 'N/A')}")
+            lines.append(f"   Hottest Month: {y.get('hottest_month', 'N/A')}")
+            
+            # Show monthly breakdown
+            monthly = y.get('monthly_data', {})
+            if monthly:
+                lines.append(f"   Monthly Breakdown:")
+                for month, data in sorted(monthly.items())[-6:]:  # Last 6 months
+                    lines.append(f"     {month}: {data.get('avg_temp_celsius')}°C, {data.get('precipitation_mm')}mm rain")
+        
         if 'risk_assessment' in context:
             r = context['risk_assessment']
-            lines.append(f"\n⚠️ RISK ASSESSMENT:")
+            lines.append(f"\n⚠️ CURRENT RISK ASSESSMENT:")
             if 'drought' in r:
                 d = r['drought']
                 lines.append(f"   Drought Risk: {d.get('severity', 'unknown').upper()}")
@@ -394,6 +442,13 @@ RESPONSE MODE: PROFESSIONAL
                 lines.append(f"   - Heavy rain days: {f.get('heavy_rain_days', 'N/A')}")
         
         lines.append("\n═══════════════════════════════════════════════════════════════════")
+        lines.append("RESPONSE BEHAVIOR:")
+        lines.append("- Answer the specific question asked - be direct and concise")
+        lines.append("- Use your knowledge when data is missing - you know Kenya well")
+        lines.append("- Be conversational and interactive like a smart assistant")
+        lines.append("- No long essays unless detailed analysis is specifically requested")
+        lines.append("- If you don't have exact data, reason intelligently from what you know")
+        lines.append("═══════════════════════════════════════════════════════════════════")
         
         return "\n".join(lines)
     

@@ -130,7 +130,8 @@ class GoogleWeatherClient:
             return None
             
         try:
-            url = f"{self.base_url}/dailyForecast:lookup"
+            # Correct endpoint: forecast/days:lookup
+            url = f"{self.base_url}/forecast/days:lookup"
             
             params = {
                 "location.latitude": latitude,
@@ -139,15 +140,39 @@ class GoogleWeatherClient:
                 "key": self.api_key
             }
             
-            async with httpx.AsyncClient(timeout=10.0) as client:
+            async with httpx.AsyncClient(timeout=15.0) as client:
                 response = await client.get(url, params=params)
-                response.raise_for_status()
+                
+                if response.status_code != 200:
+                    logger.error(f"Google Weather Forecast API error: {response.status_code}")
+                    return None
                 
                 data = response.json()
                 
+                # Parse the forecastDays array
+                forecast_days = data.get("forecastDays", [])
+                parsed_forecast = []
+                
+                for day in forecast_days:
+                    display_date = day.get("displayDate", {})
+                    daytime = day.get("daytimeForecast", {})
+                    
+                    parsed_forecast.append({
+                        "date": f"{display_date.get('year')}-{display_date.get('month', 1):02d}-{display_date.get('day', 1):02d}",
+                        "high_celsius": day.get("maxTemperature", {}).get("degrees"),
+                        "low_celsius": day.get("minTemperature", {}).get("degrees"),
+                        "precipitation_probability": daytime.get("precipitation", {}).get("probability", {}).get("percent", 0),
+                        "precipitation_mm": daytime.get("precipitation", {}).get("qpf", {}).get("quantity", 0),
+                        "conditions": daytime.get("weatherCondition", {}).get("description", {}).get("text", ""),
+                        "humidity": daytime.get("relativeHumidity"),
+                        "uv_index": daytime.get("uvIndex"),
+                        "wind_speed": daytime.get("wind", {}).get("speed", {}).get("value"),
+                        "cloud_cover": daytime.get("cloudCover")
+                    })
+                
                 return {
-                    "location": data.get("location"),
-                    "forecast_list": data.get("dailyForecasts", [])
+                    "timezone": data.get("timeZone", {}).get("id"),
+                    "forecast_list": parsed_forecast
                 }
         
         except Exception as e:
