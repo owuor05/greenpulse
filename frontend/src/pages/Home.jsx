@@ -13,7 +13,7 @@ function Home() {
         <div 
           className="absolute inset-0" 
           style={{
-            background: "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(34, 197, 94, 0.9) 0%, rgba(5, 150, 105, 0.95) 50%, rgb(4, 120, 87) 100%)"
+            background: "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)"
           }}
         ></div>
         {/* <div
@@ -30,7 +30,7 @@ function Home() {
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-sans">
             GreenPulse
           </h1>
-          <p className="text-2xl md:text-3xl mb-4 font-semibold">
+          <p className="text-2xl md:text-3xl mb-4 font-semibold" style={{ color: "#064e3b" }}>
             Guarding the Land. Mazingira yetu ni urithi wetu.
           </p>
           <p className="text-lg md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
@@ -57,40 +57,52 @@ function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-center z-10">
           <div className="p-6">
-            <div className="text-4xl font-bold text-gray-900 mb-2">24/7</div>
-            <p className="text-gray-600">Climate Monitoring</p>
+            <div className="text-4xl font-bold text-white mb-2">24/7</div>
+            <p className="text-green-100">Climate Monitoring</p>
           </div>
           <div className="p-6">
-            <div className="text-4xl font-bold text-gray-900 mb-2">47</div>
-            <p className="text-gray-600">Counties in Kenya</p>
+            <div className="text-4xl font-bold text-white mb-2">47</div>
+            <p className="text-green-100">Counties in Kenya</p>
           </div>
           <div className="p-6">
-            <div className="text-4xl font-bold text-gray-900 mb-2">NASA</div>
-            <p className="text-gray-600">Powered Data</p>
+            <div className="text-4xl font-bold text-white mb-2">NASA</div>
+            <p className="text-green-100">Powered Data</p>
           </div>
           <div className="p-6">
-            <div className="text-4xl font-bold text-gray-900 mb-2">AI</div>
-            <p className="text-gray-600">Conservation Guidance</p>
+            <div className="text-4xl font-bold text-white mb-2">AI</div>
+            <p className="text-green-100">Conservation Guidance</p>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-4 text-white">
             How GreenPulse Protects Your Land
           </h2>
-          <p className="text-center text-gray-600 mb-12 text-lg">
+          <p className="text-center text-green-200 mb-12 text-lg">
             Conservation intelligence and education delivered right to your phone
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-xl hover:bg-white transition">
               <h3 className="text-2xl font-bold mb-3 text-gray-800">
                 Real-Time Risk Detection
               </h3>
@@ -101,7 +113,7 @@ function Home() {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-xl hover:bg-white transition">
               <h3 className="text-2xl font-bold mb-3 text-gray-800">
                 AI-Powered Conservation Advice
               </h3>
@@ -112,7 +124,7 @@ function Home() {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-xl hover:bg-white transition">
               <h3 className="text-2xl font-bold mb-3 text-gray-800">
                 Chat Alerts & Education
               </h3>
@@ -123,7 +135,7 @@ function Home() {
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-xl hover:bg-white transition">
               <h3 className="text-2xl font-bold mb-3 text-gray-800">
                 Location-Specific Alerts
               </h3>
@@ -134,7 +146,7 @@ function Home() {
             </div>
 
             {/* Feature 5 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-xl hover:bg-white transition">
               <h3 className="text-2xl font-bold mb-3 text-gray-800">
                 Conservation Education
               </h3>
@@ -145,7 +157,7 @@ function Home() {
             </div>
 
             {/* Feature 6 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 hover:shadow-xl hover:bg-white transition">
               <h3 className="text-2xl font-bold mb-3 text-gray-800">
                 Community Reports
               </h3>
@@ -159,16 +171,22 @@ function Home() {
       </section>
 
       {/* Subscription Section */}
-      <section id="subscribe" className="py-16 px-4 bg-gradient-to-r from-green-600 to-emerald-600">
-        <div className="max-w-4xl mx-auto text-center">
+      <section id="subscribe" className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(5, 15, 12) 0%, rgb(10, 25, 20) 20%, rgb(5, 40, 30) 40%, rgb(2, 50, 40) 60%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
           <h2 className="text-4xl font-bold mb-4 text-white">
             Get Conservation Alerts & Education
           </h2>
-          <p className="text-xl mb-8 text-green-100">
+          <p className="text-xl mb-8 text-green-200">
             Stay informed with real-time climate alerts and conservation advice delivered directly to your Telegram 
           </p>
 
-          <div className="bg-white rounded-xl shadow-2xl p-8 md:p-12">
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8 md:p-12">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">
               click to connect with our AI-powered bots:
             </h3>
@@ -234,9 +252,15 @@ function Home() {
       </section>
 
       {/* Impact Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgb(4, 120, 87) 0%, rgba(5, 150, 105, 0.9) 20%, rgba(22, 163, 74, 0.8) 35%, rgb(10, 30, 25) 55%, rgb(5, 15, 12) 70%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">
             Built for Kenyan Communities
           </h2>
 
@@ -249,35 +273,35 @@ function Home() {
               />
             </div>
             <div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">
+              <h3 className="text-2xl font-bold mb-4 text-white">
                 Why TerraGuard Matters
               </h3>
-              <ul className="space-y-4 text-gray-600 text-lg">
+              <ul className="space-y-4 text-gray-200 text-lg">
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold text-xl">✓</span>
+                  <span className="text-green-400 font-bold text-xl">✓</span>
                   <span>
-                    <strong>Early Warning:</strong> Get alerts 7-14 days before
+                    <strong className="text-white">Early Warning:</strong> Get alerts 7-14 days before
                     climate events impact your land soil or crops. Stay prepared, protect your farm, and plan ahead.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold text-xl">✓</span>
+                  <span className="text-green-400 font-bold text-xl">✓</span>
                   <span>
-                    <strong>Land Health Insights:</strong> Track soil and vegetation trends in your area,
+                    <strong className="text-white">Land Health Insights:</strong> Track soil and vegetation trends in your area,
                     get AI-guided conservation tips, and learn how to restore degraded land through tree planting, terracing, and other sustainable methods.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold text-xl">✓</span>
+                  <span className="text-green-400 font-bold text-xl">✓</span>
                   <span>
-                    <strong>Local Language:</strong> Accessible in English and Swahili, with more local languages coming soon, 
+                    <strong className="text-white">Local Language:</strong> Accessible in English and Swahili, with more local languages coming soon, 
                     making vital environmental knowledge available to every farmer and community member.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-green-600 font-bold text-xl">✓</span>
+                  <span className="text-green-400 font-bold text-xl">✓</span>
                   <span>
-                    <strong>100% Free:</strong>TerraGuard is completely free, ensuring that every farmer, student, 
+                    <strong className="text-white">100% Free:</strong> TerraGuard is completely free, ensuring that every farmer, student, 
                     and community leader can access real-time climate and land protection information.
                   </span>
                 </li>
@@ -288,12 +312,18 @@ function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-emerald-600 to-green-700">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h2 className="text-4xl font-bold mb-4 text-white drop-shadow-lg">
             Ready to Protect Your Land?
           </h2>
-          <p className="text-xl mb-8 text-green-100">
+          <p className="text-xl mb-8 text-green-100 drop-shadow">
             Join thousands already learning conservation with TerraGuard
           </p>
           <a

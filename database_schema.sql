@@ -256,3 +256,48 @@ SELECT 'Land data cache table created successfully!' as message;
 -- Success message
 SELECT 'Terraguard database schema created successfully!' as message,
        'Tables: 7 | Indexes: 18 | RLS Policies: 5' as summary;
+
+-- ============================================
+-- Storage Bucket for Report Attachments (PDF files)
+-- ============================================
+
+-- Create storage bucket for report attachments
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+    'report-attachments', 
+    'report-attachments', 
+    true,
+    10485760, -- 10MB limit
+    ARRAY['application/pdf']
+)
+ON CONFLICT (id) DO UPDATE SET
+    public = true,
+    file_size_limit = 10485760,
+    allowed_mime_types = ARRAY['application/pdf'];
+
+-- Allow public read access to report attachments
+CREATE POLICY "Public read access for report attachments" 
+ON storage.objects FOR SELECT 
+USING (bucket_id = 'report-attachments');
+
+-- Allow anyone to upload report attachments
+CREATE POLICY "Allow uploads to report attachments" 
+ON storage.objects FOR INSERT 
+WITH CHECK (bucket_id = 'report-attachments');
+
+-- Allow anyone to update their uploads (for upsert)
+CREATE POLICY "Allow updates to report attachments" 
+ON storage.objects FOR UPDATE 
+USING (bucket_id = 'report-attachments');
+
+-- Add attachment_url column to community_reports table
+ALTER TABLE community_reports 
+ADD COLUMN IF NOT EXISTS attachment_url TEXT;
+
+-- Create index for attachment lookups
+CREATE INDEX IF NOT EXISTS idx_reports_attachment 
+ON community_reports(attachment_url) 
+WHERE attachment_url IS NOT NULL;
+
+-- Success message
+SELECT 'Storage bucket for report attachments created successfully!' as message;

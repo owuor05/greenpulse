@@ -1,13 +1,20 @@
 import axios from "axios";
 
+// Get the API base URL from environment variables
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://terraguard-api.onrender.com";
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://greenpulse-production-370c.up.railway.app";
 
+console.log("API Base URL:", API_BASE_URL);
+
+// Create axios instance with base configuration
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 120000, // 2 minutes timeout for AI responses
 });
 
 // Climate Risk Services
@@ -33,14 +40,13 @@ export const riskService = {
 
 // Alerts Services
 export const alertsService = {
-  getAlerts: async (region = null) => {
-    const params = region ? { region } : {};
-    const response = await api.get("/api/alerts", { params });
+  getAll: async () => {
+    const response = await api.get("/api/alerts");
     return response.data;
   },
 
-  getAlertById: async (alertId) => {
-    const response = await api.get(`/api/alerts/${alertId}`);
+  getByRegion: async (region) => {
+    const response = await api.get(`/api/alerts/region/${region}`);
     return response.data;
   },
 };
@@ -86,13 +92,70 @@ export const reportsService = {
 
 // AI Service
 export const aiService = {
-  askQuestion: async (question) => {
-    const response = await api.post("/api/ai/answer", { question });
-    return response.data;
+  // Ask a question to the AI assistant (with optional file attachment)
+  askQuestion: async (question, file = null) => {
+    console.log("Sending question to AI:", question, file ? `with file: ${file.name}` : "");
+
+    try {
+      // If file is attached, use FormData for multipart upload
+      if (file) {
+        const formData = new FormData();
+        formData.append("question", question);
+        formData.append("file", file);
+
+        console.log("Uploading file for AI analysis:", file.name);
+
+        // Use the document analysis endpoint
+        const response = await api.post("/api/ai/analyze-document", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          timeout: 180000, // 3 minutes for document processing
+        });
+
+        console.log("Document analysis response:", response.data);
+        return response.data;
+      }
+
+      // Regular JSON request without file
+      const response = await api.post("/api/ai/ask", { question: question });
+      return response.data;
+    } catch (error) {
+      console.error("AI Service Error:", error.response?.data || error.message || error);
+      throw error;
+    }
   },
 
-  getStatus: async () => {
-    const response = await api.get("/api/ai/status");
+  // Upload and analyze a document separately
+  analyzeDocument: async (file, question = "") => {
+    console.log("Analyzing document:", file.name);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    if (question) {
+      formData.append("question", question);
+    }
+
+    try {
+      const response = await api.post("/api/ai/analyze-document", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 180000,
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Document Analysis Error:", error.response?.data || error);
+      throw error;
+    }
+  },
+};
+
+// Land Data Service
+export const landDataService = {
+  analyze: async (location) => {
+    const response = await api.post("/api/land-data/analyze", { location });
     return response.data;
   },
 };

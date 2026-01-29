@@ -8,30 +8,42 @@ function About() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6">About GreenPulse</h1>
-          <p className="text-2xl text-green-100">
-            Empowering African farmers with AI-powered climate intelligence
+    <div className="min-h-screen font-sans">
+      {/* Hero Section - White to Green radial */}
+      <section className="relative py-20 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h1 className="text-5xl font-bold mb-6 text-blac drop-shadow-lg">About GreenPulse</h1>
+          <p className="text-2xl text-green-100 drop-shadow">
+            GreenPulse AI is a smart, fast, and analytical AI system designed to help governments, businesses, communities, and institutions in Kenya understand environmental conditions, assess risks, ensure compliance, and make climate-smart decisions using data, reasoning, and scientific knowledge.
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Mission Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-8 text-gray-800">
+      {/* Mission Section - Flowing green */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-8 text-white">
             Our Mission
           </h2>
-          <p className="text-xl text-gray-700 leading-relaxed text-center mb-8">
+          <p className="text-xl text-green-100 leading-relaxed text-center mb-8">
             GreenPulse exists to protect African farmers from climate-related
             losses by providing early warnings, actionable insights, and expert
             guidance powered by artificial intelligence and real-time satellite
             data.
           </p>
-          <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-r-lg">
+          <div className="bg-white/95 backdrop-blur-sm border-l-4 border-green-600 p-6 rounded-r-lg">
             <p className="text-lg text-gray-800 italic">
               "We believe every farmer deserves access to the same climate
               intelligence that large agricultural corporations use. GreenPulse
@@ -42,14 +54,20 @@ function About() {
         </div>
       </section>
 
-      {/* The Problem */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
+      {/* The Problem - Green to Dark */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-6xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">
             The Problem We're Solving
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-3 text-gray-800">
                 Climate Uncertainty
               </h3>
@@ -58,7 +76,7 @@ function About() {
                 need advance warning to prepare and adapt.
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-3 text-gray-800">
                 Information Gap
               </h3>
@@ -67,7 +85,7 @@ function About() {
                 of rural farmers only have basic phones.
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-3 text-gray-800">
                 Economic Losses
               </h3>
@@ -80,10 +98,16 @@ function About() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
+      {/* How It Works - Dark/Black */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(5, 15, 12) 0%, rgb(10, 25, 20) 20%, rgb(5, 40, 30) 40%, rgb(2, 50, 40) 60%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">
             How GreenPulse Works
           </h2>
           <div className="space-y-8">
@@ -92,10 +116,10 @@ function About() {
                 1
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">
+                <h3 className="text-xl font-bold mb-2 text-white">
                   Data Collection
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   We pull real-time climate data from NASA POWER satellites,
                   which monitor rainfall, temperature, soil moisture, and other
                   critical factors across Africa daily.
@@ -108,10 +132,10 @@ function About() {
                 2
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">
+                <h3 className="text-xl font-bold mb-2 text-white">
                   AI Analysis
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   Our AI algorithms (powered by DeepSeek) analyze the data to
                   detect drought conditions, flood risks, and temperature
                   extremes before they become critical.
@@ -124,10 +148,10 @@ function About() {
                 3
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">
+                <h3 className="text-xl font-bold mb-2 text-white">
                   Alert Generation
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   When risks are detected, our AI generates clear, actionable
                   alerts in plain language, with specific recommendations for
                   your region and crop type.
@@ -140,10 +164,10 @@ function About() {
                 4
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">
+                <h3 className="text-xl font-bold mb-2 text-white">
                   Multi-Channel Delivery
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   Alerts are delivered via Telegram, WhatsApp, and displayed on
                   our web platform. You choose how you want to receive
                   information.
@@ -156,10 +180,10 @@ function About() {
                 5
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-800">
+                <h3 className="text-xl font-bold mb-2 text-white">
                   Interactive Support
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   You can ask follow-up questions via chat. Our AI provides
                   personalized advice based on your location, crops, and current
                   conditions.
@@ -170,39 +194,44 @@ function About() {
         </div>
       </section>
 
-      {/* Technology Stack */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
+      {/* Technology Stack - Dark to Green radial */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgb(4, 120, 87) 0%, rgba(5, 150, 105, 0.9) 20%, rgba(22, 163, 74, 0.8) 35%, rgb(10, 30, 25) 55%, rgb(5, 15, 12) 70%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-12 text-white">
             Technology Powering GreenPulse
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">NASA POWER</p>
               <p className="text-sm text-gray-600">Satellite Data</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">DeepSeek AI</p>
               <p className="text-sm text-gray-600">Intelligence</p>
             </div>
-
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">FastAPI</p>
               <p className="text-sm text-gray-600">Backend</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">React</p>
               <p className="text-sm text-gray-600">Web Platform</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">Telegram</p>
               <p className="text-sm text-gray-600">Bot API</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">WhatsApp</p>
               <p className="text-sm text-gray-600">Business API</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow p-6 text-center hover:bg-white transition">
               <p className="font-semibold text-gray-800">Google Maps</p>
               <p className="text-sm text-gray-600">Geocoding</p>
             </div>
@@ -210,10 +239,16 @@ function About() {
         </div>
       </section>
 
-      {/* Connect Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-8 text-gray-800">
+      {/* Connect Section - Green flowing */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto z-10">
+          <h2 className="text-4xl font-bold text-center mb-8 text-white">
             Connect With GreenPulse
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -245,11 +280,17 @@ function About() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 px-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Join the Movement</h2>
-          <p className="text-xl mb-8 text-green-100">
+      {/* CTA - Green to White radial */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h2 className="text-4xl font-bold mb-4 text-white drop-shadow-lg">Join the Movement</h2>
+          <p className="text-xl mb-8 text-green-100 drop-shadow">
             Be part of the climate-smart farming revolution in Africa
           </p>
           <Link

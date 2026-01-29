@@ -107,65 +107,83 @@ function Education() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 to-green-700 text-white py-16 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">Education Hub</h1>
-          <p className="text-xl text-green-100">
+    <div className="min-h-screen font-sans">
+      {/* Header - White to Green radial gradient */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto text-center z-10">
+          <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg" style={{ color: 'black' }}>Education Hub</h1>
+          <p className="text-xl text-green-100 drop-shadow">
             Learn climate-smart farming practices and build resilience
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Category filters removed per request */}
-
-      {/* Articles Grid */}
-      <div className="max-w-7xl mx-auto py-12 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article) => (
-            <div
-              key={article.id}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
-            >
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-semibold text-green-700">
-                    {article.category}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {article.readTime}
-                  </span>
+      {/* Articles Grid - Flowing green gradient */}
+      <section className="relative py-12 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {articles.map((article) => (
+              <div
+                key={article.id}
+                className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md hover:shadow-xl hover:bg-white transition overflow-hidden"
+              >
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm font-semibold text-green-700">
+                      {article.category}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {article.readTime}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                    {article.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4">{article.excerpt}</p>
+                  <Link
+                    to={`/education/${article.slug}`}
+                    className="inline-block text-green-700 font-semibold hover:text-green-800 transition"
+                  >
+                    Read Article →
+                  </Link>
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  {article.title}
-                </h3>
-                <p className="text-gray-600 mb-4">{article.excerpt}</p>
-                <Link
-                  to={`/education/${article.slug}`}
-                  className="inline-block text-green-700 font-semibold hover:text-green-800 transition"
-                >
-                  Read Article →
-                </Link>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Additional Resources */}
-      <div className="bg-green-50 py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+      {/* Additional Resources - Green to Dark gradient */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto z-10">
+          <h2 className="text-3xl font-bold text-center mb-8 text-white">
             Additional Resources
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-2 text-gray-800">
                 Video Tutorials
               </h3>
@@ -173,7 +191,7 @@ function Education() {
                 Watch step-by-step guides on farming techniques (Coming Soon)
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-2 text-gray-800">
                 Downloadable Guides
               </h3>
@@ -182,7 +200,7 @@ function Education() {
                 Soon)
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-2 text-gray-800">
                 Ask Our AI
               </h3>
@@ -209,7 +227,7 @@ function Education() {
                 </a>
               </div>
             </div>
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-2 text-gray-800">
                 Community Forums
               </h3>
@@ -219,15 +237,71 @@ function Education() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* CTA */}
-      <div className="bg-gradient-to-r from-emerald-600 to-green-700 text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">
+      {/* Middle Dark Section - Dark/Black transition */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(5, 15, 12) 0%, rgb(10, 25, 20) 20%, rgb(5, 40, 30) 40%, rgb(2, 50, 40) 60%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h2 className="text-3xl font-bold mb-4 text-white">
+            Knowledge is Power
+          </h2>
+          <p className="text-xl text-green-200 mb-8">
+            Empowering Kenyan communities with the information they need to protect and rehabilitate their land
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-green-400 mb-2">7+</div>
+              <p className="text-green-100">Educational Articles</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-green-400 mb-2">AI</div>
+              <p className="text-green-100">Powered Assistance</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-green-400 mb-2">Free</div>
+              <p className="text-green-100">Forever Access</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Impact Section - Dark to Green radial */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgb(4, 120, 87) 0%, rgba(5, 150, 105, 0.9) 20%, rgba(22, 163, 74, 0.8) 35%, rgb(10, 30, 25) 55%, rgb(5, 15, 12) 70%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h2 className="text-3xl font-bold mb-4 text-white">
+            Learn From Experts
+          </h2>
+          <p className="text-xl text-gray-200 mb-8">
+            Our articles are written by agricultural scientists, environmental experts, and local practitioners with deep knowledge of Kenyan landscapes
+          </p>
+        </div>
+      </section>
+
+      {/* CTA - Green to White radial at bottom right */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-lg">
             Stay Informed, Stay Protected
           </h2>
-          <p className="text-xl mb-8 text-green-100">
+          <p className="text-xl mb-8 text-green-100 drop-shadow">
             Subscribe to get climate alerts and the latest farming tips
           </p>
           <Link
@@ -237,7 +311,7 @@ function Education() {
             Subscribe Now
           </Link>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

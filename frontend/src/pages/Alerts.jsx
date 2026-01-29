@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { loadGoogleMaps } from "../utils/googleMaps";
 import KenyaRiskMap from "../components/KenyaRiskMap";
+import ReactMarkdown from "react-markdown";
 
 function Alerts() {
   // Land Data Explorer state
@@ -72,11 +73,11 @@ function Alerts() {
     setLandError("");
 
     try {
-      console.log('Sending request to:', "https://terraguard-api.onrender.com/api/land-data/analyze");
+      console.log('Sending request to:', "https://greenpulse-production-370c.up.railway.app/api/land-data/analyze");
       console.log('With location:', locationName);
       
       const response = await axios.post(
-        "https://terraguard-api.onrender.com/api/land-data/analyze",
+        "https://greenpulse-production-370c.up.railway.app/api/land-data/analyze",
         { location: locationName }
       );
       
@@ -107,7 +108,7 @@ function Alerts() {
 
     try {
       const response = await axios.post(
-        "https://terraguard-api.onrender.com/api/land-data/analyze",
+        "https://greenpulse-production-370c.up.railway.app/api/land-data/analyze",
         { location: landLocation.trim() }
       );
       setLandData(response.data.data);
@@ -152,33 +153,43 @@ function Alerts() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 to-green-700 text-white py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+    <div className="min-h-screen font-sans">
+      {/* Header - White to Green radial */}
+      <section className="relative py-20 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto text-center z-10">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg" style={{ color: 'black' }}>
             Active Climate Alerts
           </h1>
-          <p className="text-xl md:text-2xl text-green-100">
+          <p className="text-xl md:text-2xl text-green-100 drop-shadow">
             Real-time warnings for drought, floods, and extreme weather across
             Kenya
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Filters removed as requested */}
-
-      {/* Land Data Explorer Section */}
-      <div id="land-data-explorer" className="bg-white py-16 px-4 border-t-4 border-green-600">
-        <div className="max-w-7xl mx-auto">
+      {/* Land Data Explorer Section - Flowing green */}
+      <section id="land-data-explorer" className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto z-10">
           <div className="text-center mb-10">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white" style={{ color: 'black' }}>
               Land Data Explorer
             </h2>
-            <p className="text-xl text-gray-700">
+            <p className="text-xl text-green-100">
               Get comprehensive climate data, risk analysis, and AI-powered insights for any location in Kenya
             </p>
-            <p className="text-sm text-gray-600 mt-3 max-w-3xl mx-auto">
+            <p className="text-sm text-green-200 mt-3 max-w-3xl mx-auto">
               Critical areas are identified using NASA POWER data: <strong>Drought</strong> (less than 2mm daily rainfall + 20+ days without rain) and <strong>Flood</strong> (100mm+ daily rainfall or 5+ heavy rain days)
             </p>
           </div>
@@ -191,14 +202,14 @@ function Alerts() {
                 value={landLocation}
                 onChange={(e) => setLandLocation(e.target.value)}
                 placeholder="Enter location (e.g., Nairobi, Kitui, Webuye...)"
-                className="flex-1 px-6 py-4 text-lg rounded-lg border-2 border-green-500 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200"
+                className="flex-1 px-6 py-4 text-lg rounded-lg border-2 border-white/50 bg-white/95 backdrop-blur-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white/50"
                 disabled={landLoading}
                 ref={inputRef}
               />
               <button
                 type="submit"
                 disabled={landLoading}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                className="bg-white hover:bg-green-50 text-green-700 px-8 py-4 rounded-lg font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
               >
                 {landLoading ? "Analyzing..." : "Analyze"}
               </button>
@@ -215,8 +226,8 @@ function Alerts() {
           {/* Loading State */}
           {landLoading && (
             <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-              <p className="mt-4 text-gray-700">Fetching climate data from NASA POWER...</p>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+              <p className="mt-4 text-green-100">Fetching climate data from NASA POWER...</p>
             </div>
           )}
 
@@ -224,20 +235,20 @@ function Alerts() {
           {landData && !landLoading && (
             <div className="max-w-6xl mx-auto">
               {/* Location Header */}
-              <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-t-xl p-6 border-2 border-green-500 shadow-lg">
-                <h3 className="text-3xl font-bold mb-2 text-white">
+              <div className="bg-white/95 backdrop-blur-sm rounded-t-xl p-6 border-2 border-green-300 shadow-lg">
+                <h3 className="text-3xl font-bold mb-2 text-gray-900">
                   {landData.location_name.charAt(0).toUpperCase() + landData.location_name.slice(1)}
                 </h3>
-                <p className="text-green-100 text-lg">
+                <p className="text-gray-600 text-lg">
                   Coordinates: {landData.latitude?.toFixed(4) || 'N/A'}°, {landData.longitude?.toFixed(4) || 'N/A'}°
                 </p>
                 {landData.cached && (
-                  <p className="text-green-200 text-sm mt-2">Cached data (updated within 24 hours)</p>
+                  <p className="text-green-600 text-sm mt-2">Cached data (updated within 24 hours)</p>
                 )}
               </div>
 
               {/* Main Data Grid */}
-              <div className="bg-gray-50 border-x-2 border-green-500 p-6 shadow-lg">
+              <div className="bg-white/90 backdrop-blur-sm border-x-2 border-green-300 p-6 shadow-lg">
                 {/* Temperature Card */}
                 <div className="bg-white border-2 border-green-300 rounded-xl p-6 mb-6 shadow-md">
                   <div className="flex items-center justify-between">
@@ -395,8 +406,24 @@ function Alerts() {
                   <h4 className="text-xl font-bold text-gray-900 mb-4">
                     AI-Powered Conservation Analysis
                   </h4>
-                  <div className="text-gray-800 leading-relaxed text-base whitespace-pre-line">
-                    {landData.ai_summary}
+                  <div className="prose prose-gray max-w-none text-gray-800 leading-relaxed">
+                    <ReactMarkdown
+                      components={{
+                        h1: ({node, ...props}) => <h1 className="text-2xl font-bold text-gray-900 mt-4 mb-2" {...props} />,
+                        h2: ({node, ...props}) => <h2 className="text-xl font-bold text-gray-900 mt-4 mb-2" {...props} />,
+                        h3: ({node, ...props}) => <h3 className="text-lg font-semibold text-gray-800 mt-3 mb-2" {...props} />,
+                        p: ({node, ...props}) => <p className="mb-3 text-gray-700 leading-relaxed" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc list-inside mb-3 space-y-1 ml-2" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-3 space-y-1 ml-2" {...props} />,
+                        li: ({node, ...props}) => <li className="text-gray-700" {...props} />,
+                        strong: ({node, ...props}) => <strong className="font-semibold text-gray-900" {...props} />,
+                        em: ({node, ...props}) => <em className="italic" {...props} />,
+                        blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-green-500 pl-4 italic text-gray-600 my-3" {...props} />,
+                        code: ({node, ...props}) => <code className="bg-gray-100 px-1 py-0.5 rounded text-sm" {...props} />,
+                      }}
+                    >
+                      {landData.ai_summary}
+                    </ReactMarkdown>
                   </div>
                   <div className="mt-6 pt-4 border-t border-gray-200 text-sm text-gray-600">
                     <p>Data Source: {landData.data_source} | Last 30 days analyzed</p>
@@ -406,7 +433,7 @@ function Alerts() {
               </div>
 
               {/* Footer Actions */}
-              <div className="bg-green-600 border-2 border-green-500 rounded-b-xl p-6 text-center shadow-lg">
+              <div className="bg-green-700 border-2 border-green-600 rounded-b-xl p-6 text-center shadow-lg">
                 <p className="text-white mb-4 text-lg">Want real-time alerts for this location?</p>
                 <Link
                   to="/#subscribe"
@@ -418,24 +445,24 @@ function Alerts() {
             </div>
           )}
 
-          {/* Info Section */}
+          {/* Info Section when no data */}
           {!landData && !landLoading && (
             <div className="max-w-4xl mx-auto text-center mt-12">
               <div className="grid md:grid-cols-3 gap-6 text-left">
-                <div className="bg-white border-2 border-green-500 rounded-xl p-6 shadow-md">
-                  <h4 className="font-bold text-lg mb-2 text-green-600">Real NASA Data</h4>
+                <div className="bg-white/95 backdrop-blur-sm border-2 border-white/50 rounded-xl p-6 shadow-md hover:bg-white transition">
+                  <h4 className="font-bold text-lg mb-2 text-green-700">Real NASA Data</h4>
                   <p className="text-gray-700 text-sm">
                     30 days of temperature and precipitation data from NASA POWER
                   </p>
                 </div>
-                <div className="bg-white border-2 border-green-500 rounded-xl p-6 shadow-md">
-                  <h4 className="font-bold text-lg mb-2 text-green-600">Risk Analysis</h4>
+                <div className="bg-white/95 backdrop-blur-sm border-2 border-white/50 rounded-xl p-6 shadow-md hover:bg-white transition">
+                  <h4 className="font-bold text-lg mb-2 text-green-700">Risk Analysis</h4>
                   <p className="text-gray-700 text-sm">
                     Automated drought and flood risk detection with severity levels
                   </p>
                 </div>
-                <div className="bg-white border-2 border-green-500 rounded-xl p-6 shadow-md">
-                  <h4 className="font-bold text-lg mb-2 text-green-600">AI Insights</h4>
+                <div className="bg-white/95 backdrop-blur-sm border-2 border-white/50 rounded-xl p-6 shadow-md hover:bg-white transition">
+                  <h4 className="font-bold text-lg mb-2 text-green-700">AI Insights</h4>
                   <p className="text-gray-700 text-sm">
                     Practical recommendations from AI for farmers and land managers
                   </p>
@@ -444,33 +471,63 @@ function Alerts() {
             </div>
           )}
         </div>
-      </div>
+      </section>
 
-      {/* Kenya Risk Map Section */}
-      <div className="bg-gray-50 py-16 px-4 border-t-4 border-green-600">
-        <div className="max-w-7xl mx-auto">
+      {/* Kenya Risk Map Section - Green to Dark */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto z-10">
           <KenyaRiskMap onCountyClick={handleCountyClick} />
         </div>
-      </div>
+      </section>
 
-      {/* Info Section */}
-      <div className="bg-green-50 border-t-4 border-green-600 py-12 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">
+      {/* Info Section - Dark to Green radial */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgb(4, 120, 87) 0%, rgba(5, 150, 105, 0.9) 20%, rgba(22, 163, 74, 0.8) 35%, rgb(10, 30, 25) 55%, rgb(5, 15, 12) 70%, rgb(0, 0, 0) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h3 className="text-2xl font-bold text-white mb-4">
             Want alerts delivered to your phone?
           </h3>
-          <p className="text-gray-700 mb-6 text-lg">
+          <p className="text-gray-200 mb-6 text-lg">
             Subscribe to receive instant notifications when new alerts are
-            issued for your region via Telegram or WhatsApp.
+            issued for your region via Telegram 
+          </p>
+        </div>
+      </section>
+
+      {/* CTA - Green to White radial */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)"
+          }}
+        ></div>
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-lg">
+            Stay Protected with Real-Time Alerts
+          </h2>
+          <p className="text-xl mb-8 text-green-100 drop-shadow">
+            Get instant climate warnings delivered to your phone - completely free
           </p>
           <Link
             to="/#subscribe"
-            className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+            className="inline-block bg-white text-green-700 px-8 py-3 rounded-lg font-bold hover:bg-green-50 transition shadow-lg"
           >
             Subscribe Now - It's Free!
           </Link>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

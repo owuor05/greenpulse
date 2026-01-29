@@ -74,4 +74,8 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .bg-red {
+    background-color: red;
+  }
 }

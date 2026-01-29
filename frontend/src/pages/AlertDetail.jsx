@@ -29,7 +29,7 @@ function AlertDetail() {
       if (alertObj?.region) {
         try {
           const landResponse = await axios.post(
-            "https://terraguard-api.onrender.com/api/land-data/analyze",
+            "https://greenpulse-production-370c.up.railway.app/api/land-data/analyze",
             { location: alertObj.region }
           );
           setLandData(landResponse.data.data);
