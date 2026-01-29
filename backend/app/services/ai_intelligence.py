@@ -280,6 +280,12 @@ RESPONSE MODE: COMMUNITY
 - Use relatable examples (farming, local businesses)
 - Keep responses concise and direct
 - Encourage community action and collective responsibility
+
+FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
+- DO NOT use markdown headers (# ## ### ####) - they don't render
+- Use **bold text** for titles and emphasis instead
+- Use bullet points (•) or dashes (-) for lists
+- Keep formatting simple and clean
 """
         else:  # professional
             mode_prompt = """
@@ -294,6 +300,12 @@ RESPONSE MODE: PROFESSIONAL
 - Reference regulations and standards by name
 - Provide executive summaries for complex analyses
 - Include risk assessments and recommendations clearly separated
+
+FORMATTING (IMPORTANT - for Telegram/SMS compatibility):
+- DO NOT use markdown headers (# ## ### ####) - they don't render
+- Use **bold text** for titles and section headers instead
+- Use numbered lists (1. 2. 3.) or bullet points for structure
+- Keep formatting clean and readable
 """
         
         return base_prompt + mode_prompt

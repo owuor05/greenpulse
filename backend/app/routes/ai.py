@@ -227,62 +227,6 @@ async def unified_ai_ask(
 # ═══════════════════════════════════════════════════════════════════
 
 
-@router.post("/chat")
-async def chat_with_context(
-    request: Request,
-    question: str = Form(...),
-    location: Optional[str] = Form(None),
-    mode: str = Form("community"),
-    file: Optional[UploadFile] = File(None)
-):
-    """
-    💬 UNIFIED CHAT ENDPOINT
-    
-    Single endpoint that handles:
-    - Simple questions
-    - Location-based queries
-    - Document analysis
-    - All in one request
-    
-    Perfect for frontend integration.
-    """
-    client_ip = request.client.host
-    if not check_rate_limit(client_ip):
-        raise HTTPException(status_code=429, detail="Too many requests. Please wait a minute.")
-    
-    document_content = None
-    file_info = None
-    
-    # Handle optional file
-    if file and file.filename:
-        file_content = await file.read()
-        if len(file_content) > 10 * 1024 * 1024:
-            raise HTTPException(status_code=400, detail="File too large. Maximum 10MB.")
-        document_content = extract_text_from_file(file_content, file.filename)
-        file_info = {
-            "filename": file.filename,
-            "size_kb": round(len(file_content) / 1024, 1),
-            "chars_extracted": len(document_content)
-        }
-    
-    result = await greenpulse_ai.ask(
-        question=question,
-        mode=mode if mode in ["community", "professional"] else "community",
-        location=location,
-        document_content=document_content,
-        include_weather=location is not None
-    )
-    
-    if not result.get("success"):
-        raise HTTPException(status_code=500, detail=result.get("error", "AI service error"))
-    
-    response = {**result}
-    if file_info:
-        response["file_analyzed"] = file_info
-    
-    return response
-
-
 @router.get("/status")
 async def ai_status():
     """Check AI service status - simplified unified API"""
