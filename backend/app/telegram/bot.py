@@ -98,8 +98,7 @@ This helps me give you:
 ━━━━━━━━━━━━━━━━━━━━"""
                 
                 keyboard = [
-                    [InlineKeyboardButton("Share My Location", request_location=True)],
-                    [InlineKeyboardButton("Type Location", callback_data="enter_location")],
+                    [InlineKeyboardButton("📍 Type My Location", callback_data="enter_location")],
                 ]
                 reply_markup = InlineKeyboardMarkup(keyboard)
                 
@@ -180,8 +179,7 @@ What would you like to know?
     async def subscribe_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle location sharing for subscriptions"""
         keyboard = [
-            [InlineKeyboardButton(" Share My GPS Location", request_location=True)],
-            [InlineKeyboardButton(" Type My Location", callback_data="enter_location")],
+            [InlineKeyboardButton("📍 Type My Location", callback_data="enter_location")],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -452,7 +450,7 @@ What would you like to know?
         
         if callback_data == "share_location":
             keyboard = [
-                [InlineKeyboardButton(" Share GPS Location", request_location=True)],
+                [InlineKeyboardButton("📍 Type My Location", callback_data="enter_location")],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             await query.message.reply_text(
