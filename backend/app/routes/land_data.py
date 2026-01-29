@@ -109,69 +109,32 @@ async def analyze_land_data(request: LandDataRequest):
         current_temp_display = f"{current_temp:.1f}°C" if current_temp is not None else "N/A"
         feels_like_display = f"{feels_like:.1f}°C" if feels_like is not None else "N/A"
         
-        # Step 7: Generate comprehensive AI summary focusing on land degradation and conservation
-        ai_prompt = f"""You are an environmental and climate conservation expert analyzing conditions for {location_name}, Kenya. 
-Your focus is on understanding land degradation, soil health, vegetation cover, and local conservation strategies 
-that support both communities and ecosystems.
+        # Step 7: Generate concise AI summary (2 paragraphs max, 100-150 words for speed)
+        ai_prompt = f"""Analyze environmental conditions for {location_name}, Kenya.
 
-Location: {location_name}, Kenya
-Coordinates: {latitude}, {longitude}
-
-Current Climate Data:
-- Current Temperature: {current_temp_display} (feels like {feels_like_display})
-- Drought Risk (Last 30 days): {drought_analysis.get('severity', 'none').upper()} - {drought_analysis.get('days_without_rain', 0)} days without rain, avg {drought_analysis.get('avg_precipitation_mm', 0):.2f}mm/day
-- Flood Risk: {flood_analysis.get('severity', 'none').upper()} - {flood_analysis.get('max_daily_precipitation_mm', 0):.1f}mm max rainfall, {flood_analysis.get('heavy_rain_days', 0)} heavy rain days
+**Current Data:**
+- Temperature: {current_temp_display} (feels like {feels_like_display})
+- Drought Risk: {drought_analysis.get('severity', 'none').upper()} ({drought_analysis.get('days_without_rain', 0)} days without rain, avg {drought_analysis.get('avg_precipitation_mm', 0):.2f}mm/day)
+- Flood Risk: {flood_analysis.get('severity', 'none').upper()} ({flood_analysis.get('max_daily_precipitation_mm', 0):.1f}mm max daily rainfall)
 - Active Alerts: {len(active_alerts)}
 
-Task:
-Write a comprehensive 300-500 word analysis in exactly 4 paragraphs:
+**Write exactly 2 paragraphs (100-150 words total):**
 
-PARAGRAPH 1 (Climate and Land Condition Overview):
-Provide a detailed overview of {location_name}'s climate and land condition over the past decade. 
-Discuss rainfall patterns, drought and flood frequency, vegetation loss, soil erosion, and other signs of land degradation. 
-Mention any known conservation efforts or local environmental challenges. Be comprehensive and informative (4-6 sentences).
+PARAGRAPH 1 - Environmental Assessment:
+Summarize current environmental conditions in {location_name}. State the climate risk level, what it means for land stability, water resources, and ecosystems. Be specific and data-driven.
 
-PARAGRAPH 2 (Current Situation Analysis):
-Analyze the current data above to explain what the situation means for soil stability, vegetation, 
-and water availability. Identify potential risks to farming, grazing, and local livelihoods, and describe their 
-short-term implications. Be specific about severity and impact (4-5 sentences).
+PARAGRAPH 2 - Decision Recommendations:
+Provide 3-4 key recommendations for decision-makers (governments, businesses, or landowners). Focus on risk mitigation, compliance considerations, and actionable next steps.
 
-PARAGRAPH 3 (Land Rehabilitation and Conservation Actions):
-Provide exactly 5 practical, region-appropriate actions that local communities or farmers can take to conserve 
-and rehabilitate land in {location_name}. Mix short-term actions (e.g., mulching, contour farming) with 
-long-term strategies (e.g., agroforestry, afforestation, sustainable grazing). Format as numbered list with 
-detailed explanations for each action (5 items, each 2-3 sentences).
+**Requirements:**
+- Maximum 150 words total
+- Professional tone for decision-makers
+- No emojis
+- Be specific to {location_name}"""
 
-PARAGRAPH 4 (Specific Climate Risk Mitigation):
-{"Provide exactly 5 actionable drought mitigation measures tailored to {location_name}. Focus on water conservation, soil moisture retention, drought-resistant crops and trees, and community water harvesting. Format as numbered list with practical details (5 items, each 2-3 sentences)." if drought_analysis['severity'].lower() in ['high', 'critical'] else ""}
-{"Provide exactly 5 actionable flood preparedness measures tailored to {location_name}. Focus on soil protection from erosion, water drainage systems, contour farming, terracing, and vegetation barriers. Format as numbered list with practical details (5 items, each 2-3 sentences)." if flood_analysis['severity'].lower() in ['high', 'critical'] else ""}
-{"Provide guidance on maintaining soil health and preventing land degradation in {location_name} under normal conditions. Include crop rotation, organic farming, tree integration, and community conservation practices. Format as 5 numbered items with details (5 items, each 2-3 sentences)." if drought_analysis['severity'].lower() not in ['high', 'critical'] and flood_analysis['severity'].lower() not in ['high', 'critical'] else ""}
-
-CRITICAL REQUIREMENTS:
-- Total length: 400-500 words across all 4 paragraphs
-- Use clear, informative paragraphs and numbered lists
-- NO emojis whatsoever
-- Focus on land health, conservation, and rehabilitation practices
-- Be region-specific, practical, and educational
-- Include specific tree species, crops, and techniques appropriate for {location_name}
-- Use African environmental wisdom and Swahili phrases where appropriate
-- Emphasize community-based conservation and collective action"""
-
-        system_prompt = """You are GreenPulse's Lead Environmental Conservation Expert specializing in land degradation, 
-soil rehabilitation, and community-based conservation across Kenya and East Africa. 
-
-Your expertise includes:
-- Land degradation assessment and rehabilitation strategies
-- Soil conservation and erosion control techniques
-- Agroforestry and reforestation for different ecological zones
-- Climate-smart agriculture and sustainable land management
-- Community mobilization for environmental conservation
-- Indigenous and modern conservation practices
-- Region-specific tree species and crop recommendations
-
-Provide comprehensive, detailed analysis (400-500 words) that educates and empowers communities to protect 
-and rehabilitate their land. Be thorough, practical, and inspiring. No emojis. Mix English and Swahili naturally 
-when using environmental wisdom phrases."""
+        system_prompt = """You are GreenPulse AI - an environmental intelligence system for Kenya. 
+Provide concise, professional environmental assessments for decision-makers.
+Be data-driven, specific, and actionable. Maximum 150 words."""
 
         ai_summary_response = await ai_service.chat_response_with_system(
             user_message=ai_prompt,
