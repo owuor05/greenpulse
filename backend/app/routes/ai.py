@@ -14,8 +14,10 @@ import io
 try:
     from PyPDF2 import PdfReader
     PDF_SUPPORT = True
-except ImportError:
+except ImportError as e:
     PDF_SUPPORT = False
+    import logging
+    logging.getLogger(__name__).warning(f"PyPDF2 not available: {e}")
 
 # Import our intelligent AI service
 from app.services.ai_intelligence import greenpulse_ai
@@ -41,7 +43,10 @@ def check_rate_limit(ip: str) -> bool:
 def extract_text_from_pdf(file_content: bytes) -> str:
     """Extract text from PDF file"""
     if not PDF_SUPPORT:
-        raise HTTPException(status_code=500, detail="PDF support not available")
+        raise HTTPException(
+            status_code=500, 
+            detail="PDF support not available. PyPDF2 may need to be installed. Contact admin."
+        )
     try:
         pdf_reader = PdfReader(io.BytesIO(file_content))
         text = ""
