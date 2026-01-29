@@ -1,6 +1,9 @@
-"""Telegram Bot for GreenPulse
-Handles climate alerts and AI chat via Telegram
-Uses the same GreenPulse AI Intelligence as the website
+"""Telegram Bot for GreenPulse AI
+
+GreenPulse AI is a smart, fast, and analytical AI system designed to help
+governments, businesses, communities, and institutions in Kenya understand
+environmental conditions, assess risks, ensure compliance, and make
+climate-smart decisions using data, reasoning, and scientific knowledge.
 """
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -23,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 class GreenPulseTelegramBot:
     """
-    Telegram bot for climate risk alerts and AI assistance
+    Telegram bot for GreenPulse AI - Environmental Intelligence for Kenya
     """
     
     def __init__(self):
@@ -51,152 +54,132 @@ class GreenPulseTelegramBot:
                 # User already set up - show normal welcome
                 welcome_message = f"""Hello {user.first_name}! 👋
 
-Your location: *{user_record['region']}* ✅
+Welcome to **GreenPulse AI** - Environmental Intelligence for Kenya.
+
+Your location: **{user_record['region']}** ✅
 
 ━━━━━━━━━━━━━━━━━━━━
 
-*Ask me anything:*
-• "What's the weather forecast?"
-• "Best crops for this season?"
-• "How to prepare for drought?"
+**I can help you with:**
+• Environmental decision analysis
+• Climate & weather intelligence
+• Regulatory compliance (NEMA, EMCA)
+• Land & water risk assessment
+• Energy transition planning
 
 ━━━━━━━━━━━━━━━━━━━━
+
+**Examples:**
+• "What's the weather in Nakuru?"
+• "Is this land suitable for construction?"
+• "What NEMA permits do I need for a factory?"
+• "Analyze climate risks for my farm"
 
 _Just type your question!_"""
                 
                 await update.message.reply_text(welcome_message, parse_mode='Markdown')
             
             else:
-                # NEW USER - Ask for location FIRST
-                welcome_message = f"""Hello {user.first_name}!
+                # NEW USER - Welcome with new identity
+                welcome_message = f"""Hello {user.first_name}! 👋
 
-Welcome to *GreenPulse* - Your AI climate assistant for Africa.
-
-━━━━━━━━━━━━━━━━━━━━
-
-*I can help you with:*
-
-• Climate risk alerts
-• Weather forecasts  
-• Crop recommendations
-• Land management tips
+Welcome to **GreenPulse AI** - Environmental Intelligence for Kenya.
 
 ━━━━━━━━━━━━━━━━━━━━
 
-**FIRST: Please share your location!**
+**I can help you with:**
 
-This helps me give you:
-✓ Accurate forecasts
-✓ Region-specific alerts  
-✓ Localized advice
+• Environmental decision analysis
+• Climate & weather intelligence  
+• Regulatory compliance (NEMA, EMCA)
+• Land & water risk assessment
+• Energy transition planning
 
 ━━━━━━━━━━━━━━━━━━━━
 
-*How to share:*
+**Examples:**
+• "What's the weather in Nakuru?"
+• "Is this land suitable for construction?"
+• "What NEMA permits do I need?"
+• "Analyze climate risks for my farm"
 
-1. Tap "Share My Location" below
-2. Or type your town/county
-   (e.g., "Nairobi", "Kitui")
+━━━━━━━━━━━━━━━━━━━━
 
-━━━━━━━━━━━━━━━━━━━━"""
-                
-                keyboard = [
-                    [InlineKeyboardButton("📍 Type My Location", callback_data="enter_location")],
-                ]
-                reply_markup = InlineKeyboardMarkup(keyboard)
+_Just type your question to get started!_"""
                 
                 await update.message.reply_text(
                     welcome_message,
-                    parse_mode='Markdown',
-                    reply_markup=reply_markup
+                    parse_mode='Markdown'
                 )
         
         except Exception as e:
             logger.error(f"Error in start command: {e}")
             # Fallback
-            welcome_message = f"""Hello {user.first_name}!
+            welcome_message = f"""Hello {user.first_name}! 👋
 
-Welcome to *GreenPulse* - Your AI climate assistant for Africa.
+Welcome to **GreenPulse AI** - Environmental Intelligence for Kenya.
 
+**I can help you with:**
+• Environmental decision analysis
+• Climate & weather intelligence
+• Regulatory compliance (NEMA, EMCA)
+• Land & water risk assessment
 
-*I can help you with:*
-
-• Climate risk alerts
-• Weather forecasts  
-• Crop recommendations
-• Land management tips
-• Climate adaptation strategies
-
-
-*Just chat naturally!*
+**Just chat naturally!**
 
 Examples:
 → "What's the weather in Nairobi?"
-→ "Best crops for dry season?"
-→ "How to prepare for drought?"
-
-To get daily alerts, tell me your location:
-→ "I'm in Kisumu"
-
+→ "What NEMA permits do I need?"
+→ "Analyze risks for land in Kitui"
 
 _Ninaweza pia kusaidia kwa Kiswahili!_
 
 How can I help you today?"""
             
-            keyboard = [
-                [
-                    InlineKeyboardButton(" Share My Location", callback_data="share_location"),
-                    InlineKeyboardButton(" Learn More", callback_data="education"),
-                ],
-            ]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            
             await update.message.reply_text(
-                welcome_message, 
-                reply_markup=reply_markup,
+                welcome_message,
                 parse_mode='Markdown'
             )
     
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /help command - Only if user explicitly asks"""
-        help_text = """
-*GreenPulse Bot Help*
+        """Handle /help command"""
+        help_text = """**GreenPulse AI Help**
 
-Just chat with me naturally! I understand questions like:
-• "What's the weather forecast?"
-• "How do I conserve water on my farm?"
-• "Best crops for Nakuru region?"
-• "Tell me about soil degradation"
+I'm an environmental intelligence system for Kenya. Just chat naturally!
 
-*Special Actions:*
-• Share your location to get climate alerts
-• Send photos of crop issues for analysis
-• Ask about any climate or agriculture topic
+**I can help with:**
+• Weather & climate analysis
+• Environmental impact assessment
+• NEMA & regulatory compliance
+• Land suitability & risk analysis
+• Energy transition planning
+• Agricultural advice
 
-*Privacy:* Type "delete my data" to remove your information
+**Examples:**
+• "What's the weather in Mombasa?"
+• "What permits do I need for a factory?"
+• "Analyze flood risk in Kisumu"
+• "Is this land suitable for farming?"
+
+**Tips:**
+• Include location for better answers
+• Upload documents for analysis
+• Ask "what-if" scenarios
 
 What would you like to know?
 """
         await update.message.reply_text(help_text, parse_mode='Markdown')
     
-    async def subscribe_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle location sharing for subscriptions"""
-        keyboard = [
-            [InlineKeyboardButton("📍 Type My Location", callback_data="enter_location")],
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        
+    async def location_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle /location command - set user location"""
         await update.message.reply_text(
-            "To get climate alerts for your area, I need to know your location.\n\nYou can either share your GPS location or just tell me your county/town (e.g., 'Nairobi', 'Mombasa'):",
-            reply_markup=reply_markup
+            "To set your location, just tell me your county or town.\n\n"
+            "Examples:\n"
+            "→ Nairobi\n"
+            "→ Mombasa\n"
+            "→ Kisumu\n\n"
+            "Or share your GPS location using the attachment button."
         )
-    
-    async def alerts_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle alerts request"""
-        await update.message.reply_text(
-            "Let me check the latest climate alerts in your area...\n\n(Connecting to database...)"
-        )
-        # TODO: Fetch from database
     
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle all regular messages - Smart AI with automatic location detection"""
@@ -356,9 +339,9 @@ What would you like to know?
                 logger.info(f"Saved location for user {user.id}: {region_name}")
                 
                 await update.message.reply_text(
-                    f"✅ Perfect! I've saved your location: *{region_name}*\n\n"
-                    "You'll now receive climate alerts for your area. I'll notify you about droughts, floods, and other risks.\n\n"
-                    "Feel free to ask me anything!",
+                    f"✅ Location saved: **{region_name}**\n\n"
+                    "I'll use this for localized environmental analysis.\n\n"
+                    "Ask me anything about weather, climate risks, land assessment, or environmental compliance!",
                     parse_mode='Markdown'
                 )
             else:
@@ -409,24 +392,18 @@ What would you like to know?
             )
         elif callback_data == "enter_location":
             await query.message.reply_text(
-                "Just type your location and I'll set up alerts!\n\n"
+                "Just type your location (county or town).\n\n"
                 "Examples:\n"
                 "→ Nairobi\n"
                 "→ Kisumu\n"
                 "→ Mombasa"
             )
-        elif callback_data == "confirm_subscription":
+        elif callback_data == "confirm_location":
             await query.message.reply_text(
-                "✓ *Subscribed Successfully!*\n\n"
-                "You'll receive daily climate alerts and risk warnings for your area.\n\n"
-                "Feel free to ask me anything anytime!",
+                "✅ **Location Saved!**\n\n"
+                "I'll use this for localized environmental analysis.\n\n"
+                "Ask me anything!",
                 parse_mode='Markdown'
-            )
-        elif callback_data == "no_subscription":
-            await query.message.reply_text(
-                "No problem!\n\n"
-                "You can still chat with me anytime about climate, weather, or agriculture.\n\n"
-                "Just ask away!"
             )
     
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -442,9 +419,10 @@ What would you like to know?
         """Build and configure the Telegram bot application"""
         self.app = Application.builder().token(self.token).build()
         
-        # Command handlers (hidden from users, but work if typed)
+        # Command handlers
         self.app.add_handler(CommandHandler("start", self.start_command))
         self.app.add_handler(CommandHandler("help", self.help_command))
+        self.app.add_handler(CommandHandler("location", self.location_command))
         
         # Location handler (for sharing GPS)
         self.app.add_handler(MessageHandler(filters.LOCATION, self.handle_location))
@@ -480,16 +458,16 @@ What would you like to know?
         region = alert_data.get("region", "Your area")
         summary = alert_data.get("summary", "Climate alert detected")
         
-        message = f"""*{severity_emoji_map.get(severity, "ALERT")}: {risk_type.replace('_', ' ').title()}*
+        message = f"""**{severity_emoji_map.get(severity, "ALERT")}: {risk_type.replace('_', ' ').title()}**
 
-*Region:* {region}
-*Severity:* {severity.upper()}
+**Region:** {region}
+**Severity:** {severity.upper()}
 
 {summary}
 
 Stay safe and follow local advisories.
 
-_GreenPulse - Guarding the Land_"""
+_GreenPulse AI - Environmental Intelligence for Kenya_"""
         
         try:
             # Use Bot API directly without requiring Application to be initialized
