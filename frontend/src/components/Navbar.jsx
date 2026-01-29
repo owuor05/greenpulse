@@ -24,11 +24,11 @@ function Navbar() {
           <Link to="/" className="flex items-center space-x-2">
             <img 
               src="/logo.png" 
-              alt="TerraGuard Logo" 
+              alt="GreenPulse Logo" 
               className="w-8 h-8 rounded-lg object-contain"
             />
             <span className="font-display font-bold text-xl text-gray-900">
-              Terraguard
+              GreenPulse
             </span>
           </Link>
 
