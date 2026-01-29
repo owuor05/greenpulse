@@ -129,9 +129,19 @@ function AIPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-600 to-green-700 text-white py-20 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-3">TerraGuard AI Assistant</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-3">GreenPulse AI Assistant</h1>
           <p className="text-lg md:text-xl text-green-100">
-            Your guide to land conservation, soil health, and climate-smart farming across Kenya
+           Accepts industry reports and operational data.
+
+          Answers “what if” questions about planned actions.
+
+          Predicts environmental impact.
+
+          Ensures regulatory compliance.
+
+          Suggests mitigation strategies and alternative energy options.
+
+          Helps businesses understand future environmental conditions of an area.
           </p>
         </div>
       </div>
@@ -194,7 +204,7 @@ function AIPage() {
               <div className="flex justify-start">
                 <div className="max-w-[75%]">
                   <div className="text-xs text-gray-500 mb-1 px-1">
-                    TerraGuard AI
+                    GreenPulse
                   </div>
                   <div className="inline-block text-gray-600">Thinking...</div>
                 </div>
