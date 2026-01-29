@@ -31,19 +31,23 @@ async def test_google_weather_api():
     try:
         weather_data = await google_weather_client.get_current_weather(TEST_LAT, TEST_LON)
         
-        if weather_data:
+        if weather_data and weather_data.get('temperature') is not None:
             print("✅ Google Weather API: SUCCESS")
             print(f"   📍 Location: {TEST_LOCATION}")
             print(f"   🌡️  Temperature: {weather_data.get('temperature')}°C")
             print(f"   🌡️  Feels Like: {weather_data.get('feels_like')}°C")
             print(f"   💧 Humidity: {weather_data.get('humidity')}%")
             print(f"   💨 Wind Speed: {weather_data.get('wind_speed')} km/h")
+            print(f"   💨 Wind Direction: {weather_data.get('wind_direction', 'N/A')}")
             print(f"   ☁️  Conditions: {weather_data.get('conditions', 'N/A')}")
             print(f"   🌧️  Precipitation: {weather_data.get('precipitation', 0)}mm")
             print(f"   ☀️  UV Index: {weather_data.get('uv_index', 'N/A')}")
+            print(f"   ☁️  Cloud Cover: {weather_data.get('cloud_cover', 'N/A')}%")
+            print(f"   🌞 Daytime: {'Yes' if weather_data.get('is_daytime') else 'No'}")
             return True
         else:
-            print("❌ Google Weather API: FAILED - No data returned")
+            print("❌ Google Weather API: FAILED - No data returned or API not enabled")
+            print("   💡 Make sure Weather API is enabled in Google Cloud Console")
             return False
             
     except Exception as e:
@@ -168,11 +172,18 @@ async def test_land_data_endpoint():
             )
             
             if response.status_code == 200:
-                data = response.json()
+                payload = response.json()
+                data = payload.get("data") if isinstance(payload, dict) else None
                 print("✅ Land Data Endpoint: SUCCESS")
+                if not isinstance(data, dict):
+                    print("❌ Land Data Endpoint: FAILED - Unexpected response shape")
+                    print(f"   Payload keys: {list(payload.keys()) if isinstance(payload, dict) else type(payload)}")
+                    return False
+
                 print(f"   📍 Location: {data.get('location_name')}")
                 print(f"   🌡️  Current Temperature: {data.get('current_temperature_celsius')}°C (Google Weather)")
                 print(f"   🌡️  Feels Like: {data.get('feels_like_celsius')}°C")
+                print(f"   🔎 Temp Status: {data.get('temperature_status', 'N/A')}")
                 print(f"   ⚠️  Drought Risk: {data.get('climate_risks', {}).get('drought', {}).get('severity', 'N/A').upper()}")
                 print(f"   💧 Flood Risk: {data.get('climate_risks', {}).get('flood', {}).get('severity', 'N/A').upper()}")
                 print(f"   📊 Data Sources:")
@@ -189,7 +200,12 @@ async def test_land_data_endpoint():
                     print(f"   🤖 AI Summary: Generated ({len(ai_summary)} characters)")
                 else:
                     print(f"   ⚠️  AI Summary: Missing or too short")
-                
+
+                # Require temperature when Google Weather is the only source
+                if data.get('current_temperature_celsius') is None:
+                    print("❌ Land Data Endpoint: FAILED - Temperature missing (Google Weather not working)")
+                    return False
+
                 return True
             else:
                 print(f"❌ Land Data Endpoint: FAILED - Status {response.status_code}")

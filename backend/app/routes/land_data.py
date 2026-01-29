@@ -111,21 +111,19 @@ async def analyze_land_data(request: LandDataRequest):
         db_alerts = await db_service.get_active_alerts(location_name)
         active_alerts.extend(db_alerts)
         
-        # Step 6: Get current temperature from Google Weather API
+        # Step 6: Get current temperature from Google Weather API (temperature ONLY source)
         weather_data = await google_weather_client.get_current_weather(latitude, longitude)
-        if weather_data and weather_data.get('temperature'):
+        if weather_data and weather_data.get('temperature') is not None:
             current_temp = weather_data['temperature']
             feels_like = weather_data.get('feels_like', current_temp)
+            weather_ok = True
         else:
-            # Fallback to NASA if Google Weather fails
-            temp_data = climate_data.get("T2M", {})
-            if temp_data:
-                recent_temps = list(temp_data.values())[-7:]  # Last 7 days
-                current_temp = sum(float(t) for t in recent_temps if t != -999) / len(recent_temps)
-                feels_like = current_temp
-            else:
-                current_temp = None
-                feels_like = None
+            current_temp = None
+            feels_like = None
+            weather_ok = False
+
+        current_temp_display = f"{current_temp:.1f}°C" if current_temp is not None else "N/A"
+        feels_like_display = f"{feels_like:.1f}°C" if feels_like is not None else "N/A"
         
         # Step 7: Generate comprehensive AI summary focusing on land degradation and conservation
         ai_prompt = f"""You are an environmental and climate conservation expert analyzing conditions for {location_name}, Kenya. 
@@ -136,7 +134,7 @@ Location: {location_name}, Kenya
 Coordinates: {latitude}, {longitude}
 
 Current Climate Data:
-- Current Temperature: {current_temp:.1f}°C (feels like {feels_like:.1f}°C)
+- Current Temperature: {current_temp_display} (feels like {feels_like_display})
 - Drought Risk (Last 30 days): {drought_analysis.get('severity', 'none').upper()} - {drought_analysis.get('days_without_rain', 0)} days without rain, avg {drought_analysis.get('avg_precipitation_mm', 0):.2f}mm/day
 - Flood Risk: {flood_analysis.get('severity', 'none').upper()} - {flood_analysis.get('max_daily_precipitation_mm', 0):.1f}mm max rainfall, {flood_analysis.get('heavy_rain_days', 0)} heavy rain days
 - Active Alerts: {len(active_alerts)}
@@ -203,8 +201,9 @@ when using environmental wisdom phrases."""
             "location_name": location_name,
             "latitude": latitude,
             "longitude": longitude,
-            "current_temperature_celsius": round(current_temp, 1) if current_temp else None,
-            "feels_like_celsius": round(feels_like, 1) if feels_like else None,
+            "current_temperature_celsius": round(current_temp, 1) if current_temp is not None else None,
+            "feels_like_celsius": round(feels_like, 1) if feels_like is not None else None,
+            "temperature_status": "ok" if weather_ok else "unavailable",
             "climate_risks": {
                 "drought": drought_analysis,
                 "flood": flood_analysis
@@ -217,7 +216,7 @@ when using environmental wisdom phrases."""
             },
             "ai_summary": ai_summary,
             "data_source": {
-                "temperature": "OpenWeatherMap API (Real-time)" if weather_data else "NASA POWER (7-day average)",
+                "temperature": "Google Maps Weather API (Real-time)",
                 "climate_analysis": "NASA POWER (30-day trends)"
             },
             "analyzed_at": datetime.now(timezone.utc).isoformat()

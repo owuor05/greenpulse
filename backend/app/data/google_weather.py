@@ -1,7 +1,7 @@
 """
-Google Maps Platform API Client for Weather Data
-Uses Geocoding API + Places API for location-based weather
-Note: Google doesn't have a dedicated Weather API. This uses OpenWeatherMap API as alternative.
+Google Maps Weather API Client
+Provides current weather conditions using Google Maps Platform Weather API
+https://developers.google.com/maps/documentation/weather
 """
 import httpx
 from typing import Dict, Any, Optional
@@ -13,15 +13,13 @@ logger = logging.getLogger(__name__)
 
 class GoogleWeatherClient:
     """
-    Client for getting weather data using OpenWeatherMap API
-    (Free alternative since Google Maps doesn't have dedicated Weather API)
+    Client for Google Maps Platform Weather API
+    Requires GOOGLE_MAPS_API_KEY with Weather API enabled
     """
     
     def __init__(self):
-        # OpenWeatherMap free API - requires OPENWEATHER_API_KEY in .env
-        # Sign up at: https://openweathermap.org/api
-        self.api_key = getattr(settings, 'OPENWEATHER_API_KEY', '')
-        self.base_url = "https://api.openweathermap.org/data/2.5"
+        self.api_key = settings.GOOGLE_MAPS_API_KEY
+        self.base_url = "https://weather.googleapis.com/v1"
     
     async def get_current_weather(
         self,
@@ -29,7 +27,7 @@ class GoogleWeatherClient:
         longitude: float
     ) -> Optional[Dict[str, Any]]:
         """
-        Get current weather conditions for a location using OpenWeatherMap API
+        Get current weather conditions for a location using Google Weather API
         
         Args:
             latitude: Latitude coordinate
@@ -37,104 +35,108 @@ class GoogleWeatherClient:
             
         Returns:
             Dict with current weather data including:
-            - temperature (current, feels_like)
-            - humidity
-            - wind speed
-            - conditions
+            - temperature (°C)
+            - feels_like (°C)
+            - humidity (%)
+            - wind_speed (km/h)
+            - conditions (description)
+            - uv_index
             - precipitation
         """
         if not self.api_key:
-            logger.warning("OpenWeather API key not configured, using fallback values")
-            # Return estimated values for Kenya region
-            return {
-                "temperature": 22.0,  # Average Kenya temperature
-                "feels_like": 23.0,
-                "humidity": 60,
-                "wind_speed": 10,
-                "conditions": "Partly Cloudy",
-                "precipitation": 0,
-                "pressure": 1013,
-                "visibility": 10000,
-                "uv_index": 8
-            }
+            logger.warning("Google Maps API key not configured")
+            return None
         
         try:
-            url = f"{self.base_url}/weather"
+            url = f"{self.base_url}/currentConditions:lookup"
             
             params = {
-                "lat": latitude,
-                "lon": longitude,
-                "appid": self.api_key,
-                "units": "metric"  # Celsius
+                "location.latitude": latitude,
+                "location.longitude": longitude,
+                "unitsSystem": "METRIC",
+                "key": self.api_key
             }
             
             async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.get(url, params=params)
                 
-                if response.status_code == 404:
-                    logger.error(f"OpenWeather API HTTP error: {response.status_code}")
+                if response.status_code != 200:
+                    error_body: str
+                    try:
+                        error_body = str(response.json())
+                    except Exception:
+                        error_body = response.text
+
+                    logger.error(
+                        "Google Weather API error %s - %s",
+                        response.status_code,
+                        (error_body[:800] + "...") if len(error_body) > 800 else error_body,
+                    )
                     return None
                     
-                response.raise_for_status()
-                
                 data = response.json()
                 
-                # Parse OpenWeatherMap API response
-                main = data.get("main", {})
-                wind = data.get("wind", {})
-                weather = data.get("weather", [{}])[0]
+                # Parse Google Weather API response
+                temperature_data = data.get("temperature", {})
+                feels_like_data = data.get("feelsLikeTemperature", {})
+                wind_data = data.get("wind", {})
+                weather_condition = data.get("weatherCondition", {})
+                precipitation_data = data.get("precipitation", {})
                 
                 return {
-                    "temperature": main.get("temp"),
-                    "feels_like": main.get("feels_like"),
-                    "humidity": main.get("humidity"),
-                    "wind_speed": wind.get("speed"),
-                    "wind_direction": wind.get("deg"),
-                    "conditions": weather.get("description", "").title(),
-                    "precipitation": data.get("rain", {}).get("1h", 0),  # Last hour rainfall
-                    "pressure": main.get("pressure"),
-                    "visibility": data.get("visibility", 0) / 1000,  # Convert to km
-                    "uv_index": None,  # UVI requires separate API call
-                    "timestamp": data.get("dt")
+                    "temperature": temperature_data.get("degrees"),
+                    "feels_like": feels_like_data.get("degrees"),
+                    "humidity": data.get("relativeHumidity"),
+                    "wind_speed": wind_data.get("speed", {}).get("value"),
+                    "wind_direction": wind_data.get("direction", {}).get("cardinal"),
+                    "conditions": weather_condition.get("description", {}).get("text", ""),
+                    "precipitation": precipitation_data.get("qpf", {}).get("quantity", 0),
+                    "pressure": data.get("airPressure", {}).get("meanSeaLevelMillibars"),
+                    "visibility": data.get("visibility", {}).get("distance"),
+                    "uv_index": data.get("uvIndex"),
+                    "cloud_cover": data.get("cloudCover"),
+                    "dew_point": data.get("dewPoint", {}).get("degrees"),
+                    "is_daytime": data.get("isDaytime", True),
+                    "timestamp": data.get("currentTime")
                 }
         
         except httpx.HTTPStatusError as e:
-            logger.error(f"OpenWeather API HTTP error: {e.response.status_code} - {e.response.text}")
+            logger.error(f"Google Weather API HTTP error: {e.response.status_code} - {e.response.text[:200]}")
             return None
         except Exception as e:
-            logger.error(f"OpenWeather API error: {e}")
+            logger.error(f"Google Weather API error: {e}")
             return None
+    
     
     async def get_forecast(
         self,
         latitude: float,
         longitude: float,
-        days: int = 5
+        days: int = 7
     ) -> Optional[Dict[str, Any]]:
         """
-        Get weather forecast for a location using OpenWeatherMap API
+        Get weather forecast for a location using Google Weather API
         
         Args:
             latitude: Latitude coordinate
             longitude: Longitude coordinate
-            days: Number of days to forecast (max 5 for free tier)
+            days: Number of days to forecast (up to 10)
             
         Returns:
             Dict with forecast data
         """
         if not self.api_key:
-            logger.warning("OpenWeather API key not configured, skipping forecast")
+            logger.warning("Google Maps API key not configured")
             return None
             
         try:
-            url = f"{self.base_url}/forecast"
+            url = f"{self.base_url}/dailyForecast:lookup"
             
             params = {
-                "lat": latitude,
-                "lon": longitude,
-                "appid": self.api_key,
-                "units": "metric",
-                "cnt": days * 8  # 8 forecasts per day (3-hour intervals)
+                "location.latitude": latitude,
+                "location.longitude": longitude,
+                "days": min(days, 10),  # Max 10 days
+                "key": self.api_key
             }
             
             async with httpx.AsyncClient(timeout=10.0) as client:
@@ -144,12 +146,12 @@ class GoogleWeatherClient:
                 data = response.json()
                 
                 return {
-                    "location": data.get("city", {}).get("name"),
-                    "forecast_list": data.get("list", [])
+                    "location": data.get("location"),
+                    "forecast_list": data.get("dailyForecasts", [])
                 }
         
         except Exception as e:
-            logger.error(f"OpenWeather forecast API error: {e}")
+            logger.error(f"Google Weather forecast API error: {e}")
             return None
 
 
