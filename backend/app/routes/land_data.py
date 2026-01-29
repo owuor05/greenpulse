@@ -44,26 +44,10 @@ async def analyze_land_data(request: LandDataRequest):
     """
     try:
         location_name = request.location.strip()
-        
-        # Step 1: Check cache first (24-hour expiry)
-        cached_data = await db_service.get_cached_land_data(location_name)
-        
-        if cached_data:
-            logger.info(f"Returning cached data for {location_name}")
-            return {
-                "success": True,
-                "location": location_name,
-                "data": cached_data,
-                "cached": True,
-                "cache_age_hours": (
-                    datetime.now(timezone.utc)
-                    - datetime.fromisoformat(
-                        cached_data['created_at'].replace('Z', '+00:00')
-                    )
-                ).total_seconds() / 3600
-            }
-        
-        # Step 2: Geocode location
+
+        # NOTE: Caching disabled to keep results fully dynamic.
+
+        # Step 1: Geocode location
         logger.info(f"Fetching fresh data for {location_name}")
         
         location_data = await gmaps_service.geocode_address(location_name)
@@ -222,22 +206,7 @@ when using environmental wisdom phrases."""
             "analyzed_at": datetime.now(timezone.utc).isoformat()
         }
         
-        # Step 9: Save to cache (24-hour expiry)
-        await db_service.save_land_data_cache({
-            "location_name": location_name,
-            "latitude": latitude,
-            "longitude": longitude,
-            "temperature_data": {"current_celsius": current_temp},
-            "climate_risks": {
-                "drought": drought_analysis,
-                "flood": flood_analysis
-            },
-            "active_alerts": active_alerts,
-            "historical_data": land_data["historical_data"],
-            "ai_summary": ai_summary
-        })
-        
-        logger.info(f"✅ Successfully analyzed and cached data for {location_name}")
+        logger.info(f"✅ Successfully analyzed data for {location_name}")
         
         return {
             "success": True,
