@@ -191,20 +191,6 @@ What would you like to know?
         await context.bot.send_chat_action(chat_id=chat_id, action="typing")
         
         try:
-            # Quick greetings - respond instantly
-            greetings = ['hello', 'hi', 'hey', 'habari', 'mambo', 'niaje', 'sasa', 'jambo']
-            if user_message.lower().strip() in greetings:
-                responses = [
-                    f"Hello {user.first_name}! How can I help you today?",
-                    f"Hi! Ask me about weather, farming, or land management.",
-                    f"Habari {user.first_name}! Naweza kukusaidia namna gani?",
-                    f"Hey! Ready to help. What's your question?"
-                ]
-                import random
-                response = random.choice(responses)
-                await update.message.reply_text(response)
-                return
-            
             logger.info(f"Processing message from {user.id}: {user_message[:100]}")
             
             # Get user's saved location from database
