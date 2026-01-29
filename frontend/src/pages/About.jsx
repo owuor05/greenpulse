@@ -12,7 +12,7 @@ function About() {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-6">About TerraGuard</h1>
+          <h1 className="text-5xl font-bold mb-6">About GreenPulse</h1>
           <p className="text-2xl text-green-100">
             Empowering African farmers with AI-powered climate intelligence
           </p>
@@ -26,7 +26,7 @@ function About() {
             Our Mission
           </h2>
           <p className="text-xl text-gray-700 leading-relaxed text-center mb-8">
-            TerraGuard exists to protect African farmers from climate-related
+            GreenPulse exists to protect African farmers from climate-related
             losses by providing early warnings, actionable insights, and expert
             guidance powered by artificial intelligence and real-time satellite
             data.
@@ -34,7 +34,7 @@ function About() {
           <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-r-lg">
             <p className="text-lg text-gray-800 italic">
               "We believe every farmer deserves access to the same climate
-              intelligence that large agricultural corporations use. TerraGuard
+              intelligence that large agricultural corporations use. GreenPulse
               democratizes this technology, making it free and accessible via
               simple chat tools many farmers already use."
             </p>
@@ -84,7 +84,7 @@ function About() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            How TerraGuard Works
+            How GreenPulse Works
           </h2>
           <div className="space-y-8">
             <div className="flex gap-6 items-start">
@@ -174,7 +174,7 @@ function About() {
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Technology Powering TerraGuard
+            Technology Powering GreenPulse
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="bg-white rounded-lg shadow p-6 text-center">
@@ -214,7 +214,7 @@ function About() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-8 text-gray-800">
-            Connect With TerraGuard
+            Connect With GreenPulse
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <a
@@ -224,7 +224,7 @@ function About() {
               className="bg-blue-500 text-white p-8 rounded-xl shadow-lg hover:bg-blue-600 transition text-center"
             >
               <h3 className="text-xl font-bold mb-2">Telegram Bot</h3>
-              <p className="text-blue-100">@TerraGuard_Bot</p>
+              <p className="text-blue-100">@GreenPulse_Bot</p>
             </a>
             <a
               href="https://wa.me/14155238886?text=join%20actual-mother"

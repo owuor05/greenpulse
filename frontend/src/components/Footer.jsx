@@ -12,7 +12,7 @@ function Footer() {
                 <span className="text-white font-bold text-xl">T</span>
               </div>
               <span className="font-display font-bold text-xl text-white">
-                Terraguard
+                GreenPulse
               </span>
             </div>
             <p className="text-sm text-gray-400">
@@ -108,7 +108,7 @@ function Footer() {
                   href="mailto:info@terraguard.com"
                   className="hover:text-primary-400 transition-colors"
                 >
-                  info@terraguard.com
+                  info@greenpulse.com
                 </a>
               </li>
 
@@ -123,8 +123,7 @@ function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
           <p>
-            &copy; {new Date().getFullYear()} Terraguard. Built for Land ReGen
-            Hackathon 2025.
+            &copy; {new Date().getFullYear()} GreenPulse. 
           </p>
         </div>
       </div>

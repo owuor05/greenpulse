@@ -586,7 +586,7 @@ function Reports() {
           <p className="text-xl mb-8 text-green-100">
             Get instant alerts and share observations via messaging
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <a
               href="https://t.me/TerraGuard_Bot"
               target="_blank"
@@ -594,14 +594,6 @@ function Reports() {
               className="bg-white text-green-600 px-8 py-3 rounded-lg font-bold hover:bg-green-50 transition"
             >
               Telegram Bot
-            </a>
-            <a
-              href="https://wa.me/14155238886?text=join%20actual-mother"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-green-600 px-8 py-3 rounded-lg font-bold hover:bg-green-50 transition"
-            >
-              WhatsApp
             </a>
           </div>
         </div>

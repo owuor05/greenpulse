@@ -10,8 +10,13 @@ function Home() {
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-sans">
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-700 opacity-90"></div>
-        <div
+        <div 
+          className="absolute inset-0" 
+          style={{
+            background: "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(34, 197, 94, 0.9) 0%, rgba(5, 150, 105, 0.95) 50%, rgb(4, 120, 87) 100%)"
+          }}
+        ></div>
+        {/* <div
           className="absolute inset-0 opacity-20"
           style={{
             backgroundImage:
@@ -19,11 +24,11 @@ function Home() {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        ></div>
+        ></div> */}
 
         <div className="relative max-w-7xl mx-auto text-center text-white z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-sans">
-            TerraGuard
+            GreenPulse
           </h1>
           <p className="text-2xl md:text-3xl mb-4 font-semibold">
             Guarding the Land. Mazingira yetu ni urithi wetu.
@@ -77,7 +82,7 @@ function Home() {
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
-            How TerraGuard Protects Your Land
+            How GreenPulse Protects Your Land
           </h2>
           <p className="text-center text-gray-600 mb-12 text-lg">
             Conservation intelligence and education delivered right to your phone
@@ -160,15 +165,15 @@ function Home() {
             Get Conservation Alerts & Education
           </h2>
           <p className="text-xl mb-8 text-green-100">
-            Stay informed with real-time climate alerts and conservation advice delivered directly to your Telegram or WhatsApp
+            Stay informed with real-time climate alerts and conservation advice delivered directly to your Telegram 
           </p>
 
           <div className="bg-white rounded-xl shadow-2xl p-8 md:p-12">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">
-              Choose Your Preferred Platform
+              click to connect with our AI-powered bots:
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="grid md:grid-cols-1 gap-6 mb-8 max-w-md mx-auto">
               {/* Telegram */}
               <a
                 href="https://t.me/TerraGuard_Bot"
@@ -179,19 +184,6 @@ function Home() {
                 <div className="text-xl font-bold">Open Telegram Bot</div>
                 <p className="text-blue-100 text-sm">
                   Get instant alerts and chat with our AI conservation assistant
-                </p>
-              </a>
-
-              {/* WhatsApp */}
-              <a
-                href="https://wa.me/14155238886?text=join%20actual-mother"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-green-500 text-white p-8 rounded-xl font-semibold hover:bg-green-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex flex-col items-center gap-4"
-              >
-                <div className="text-xl font-bold">Open WhatsApp</div>
-                <p className="text-green-100 text-sm">
-                  Receive alerts and ask conservation questions anytime
                 </p>
               </a>
             </div>
