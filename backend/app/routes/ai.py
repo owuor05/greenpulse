@@ -133,10 +133,10 @@ class FutureScenarioRequest(BaseModel):
 @router.post("/ask")
 async def unified_ai_ask(
     request: Request,
-    question: str = Form(...),
-    location: Optional[str] = Form(None),
-    mode: str = Form("community"),
-    file: Optional[UploadFile] = File(None)
+    question: str = Form(..., description="Your question about environment, climate, or Kenya"),
+    location: Optional[str] = Form(None, description="Optional: Kenya location (e.g., 'Nairobi')"),
+    mode: Optional[str] = Form(None, description="Optional: 'community' or 'professional'"),
+    file: Optional[UploadFile] = File(None, description="Optional: PDF, TXT, MD, CSV, JSON (max 10MB)")
 ):
     """
     🤖 UNIFIED GREENPULSE AI ENDPOINT
@@ -155,8 +155,8 @@ async def unified_ai_ask(
     
     Parameters:
     - question: Your question (required)
-    - location: Kenya location for context (optional)
-    - mode: "community" (simple) or "professional" (formal) 
+    - location: Kenya location for context (optional - AI can also detect from question)
+    - mode: "community" (simple) or "professional" (formal) - defaults to community
     - file: Upload document for analysis (optional, max 10MB)
     
     Supported files: PDF, TXT, MD, CSV, JSON
@@ -165,6 +165,16 @@ async def unified_ai_ask(
     if not check_rate_limit(client_ip):
         raise HTTPException(status_code=429, detail="Too many requests. Please wait a minute.")
     
+    # Clean up location - handle empty strings and placeholder values
+    if location and location.strip().lower() in ["", "string", "null", "none"]:
+        location = None
+    
+    # Clean up mode - default to community if invalid
+    if not mode or mode.strip().lower() not in ["community", "professional"]:
+        mode = "community"
+    else:
+        mode = mode.strip().lower()
+    
     document_content = None
     file_info = None
     
@@ -172,13 +182,19 @@ async def unified_ai_ask(
     if file and file.filename:
         try:
             file_content = await file.read()
+            file_size_mb = len(file_content) / (1024 * 1024)
+            
             if len(file_content) > 10 * 1024 * 1024:  # 10MB limit
-                raise HTTPException(status_code=400, detail="File too large. Maximum 10MB.")
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"File too large ({file_size_mb:.2f}MB). Maximum 10MB allowed."
+                )
             
             document_content = extract_text_from_file(file_content, file.filename)
             file_info = {
                 "filename": file.filename,
                 "size_kb": round(len(file_content) / 1024, 1),
+                "size_mb": round(len(file_content) / (1024 * 1024), 2),
                 "chars_extracted": len(document_content) if document_content else 0
             }
         except HTTPException:
@@ -186,15 +202,11 @@ async def unified_ai_ask(
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"File processing error: {str(e)}")
     
-    # Validate mode
-    if mode not in ["community", "professional"]:
-        mode = "community"
-    
     # Call the unified GreenPulse AI
     result = await greenpulse_ai.ask(
         question=question,
         mode=mode,
-        location=location,
+        location=location if location else None,
         document_content=document_content,
         include_weather=location is not None  # Auto-include weather if location provided
     )
