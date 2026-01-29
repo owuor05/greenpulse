@@ -17,8 +17,8 @@ router = APIRouter(prefix="/api/ai", tags=["AI Assistant"])
 rate_limit_store = defaultdict(list)
 MAX_REQUESTS_PER_MINUTE = 10
 
-# System prompt for Terraguard AI - Land Conservation Focus
-SYSTEM_PROMPT = """You are Terraguard AI Assistant - Africa's land conservation and climate resilience expert.
+# System prompt for GreenPulse AI - Land Conservation Focus
+SYSTEM_PROMPT = """You are GreenPulse AI Assistant - Africa's land conservation and climate resilience expert.
 
 CORE MISSION:
 Combat land degradation through education, awareness, and community engagement. Educate, alert, and inspire users across Kenya and Africa to conserve and rehabilitate land.

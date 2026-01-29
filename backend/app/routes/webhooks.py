@@ -63,7 +63,7 @@ async def whatsapp_webhook_verification():
     Webhook verification endpoint
     Used by Twilio to verify the webhook URL is active
     """
-    return {"status": "active", "service": "Terraguard WhatsApp Webhook"}
+    return {"status": "active", "service": "GreenPulse WhatsApp Webhook"}
 
 
 @router.post("/telegram")

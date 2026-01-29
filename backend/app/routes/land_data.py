@@ -166,7 +166,7 @@ CRITICAL REQUIREMENTS:
 - Use African environmental wisdom and Swahili phrases where appropriate
 - Emphasize community-based conservation and collective action"""
 
-        system_prompt = """You are Terraguard's Lead Environmental Conservation Expert specializing in land degradation, 
+        system_prompt = """You are GreenPulse's Lead Environmental Conservation Expert specializing in land degradation, 
 soil rehabilitation, and community-based conservation across Kenya and East Africa. 
 
 Your expertise includes:

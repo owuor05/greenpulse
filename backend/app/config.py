@@ -1,6 +1,4 @@
-"""
-Configuration management for Terraguard Backend
-"""
+"""Configuration management for GreenPulse Backend"""
 from pydantic_settings import BaseSettings
 from typing import List
 import os
@@ -9,7 +7,7 @@ class Settings(BaseSettings):
     """Application settings"""
     
     # App Config
-    APP_NAME: str = "Terraguard API"
+    APP_NAME: str = "GreenPulse API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
     HOST: str = "0.0.0.0"
@@ -32,7 +30,7 @@ class Settings(BaseSettings):
     
     # Telegram Bot
     TELEGRAM_BOT_TOKEN: str = ""
-    TELEGRAM_BOT_USERNAME: str = "terraguard_bot"
+    TELEGRAM_BOT_USERNAME: str = "greenpulse_bot"
     
     # Google Maps API
     GOOGLE_MAPS_API_KEY: str

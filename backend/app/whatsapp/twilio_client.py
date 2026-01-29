@@ -1,5 +1,4 @@
-"""
-Twilio WhatsApp Client for Terraguard
+"""Twilio WhatsApp Client for GreenPulse
 Handles WhatsApp messaging via Twilio API
 """
 from twilio.rest import Client
@@ -21,7 +20,14 @@ class TwilioWhatsAppClient:
         self.account_sid = settings.TWILIO_ACCOUNT_SID
         self.auth_token = settings.TWILIO_AUTH_TOKEN
         self.whatsapp_number = settings.TWILIO_WHATSAPP_NUMBER
-        self.client = Client(self.account_sid, self.auth_token)
+        self.client = None
+        if self.account_sid and self.auth_token:
+            self.client = Client(self.account_sid, self.auth_token)
+        else:
+            logger.warning(
+                "Twilio WhatsApp client not configured (missing TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN). "
+                "WhatsApp sending will be disabled."
+            )
     
     async def send_message(
         self,
@@ -41,6 +47,12 @@ class TwilioWhatsAppClient:
             Dict with success status and message SID
         """
         try:
+            if not self.client:
+                return {
+                    'success': False,
+                    'error': 'Twilio credentials not configured'
+                }
+
             # Format WhatsApp number
             if not to_number.startswith('whatsapp:'):
                 to_number = f'whatsapp:{to_number}'
@@ -112,7 +124,7 @@ class TwilioWhatsAppClient:
 
 Reply with questions or type HELP.
 
-_Terraguard - Guarding the Land_""".strip()
+_GreenPulse - Guarding the Land_""".strip()
         
         result = await self.send_message(phone_number, message)
         return result.get('success', False)
@@ -128,7 +140,7 @@ _Terraguard - Guarding the Land_""".strip()
         Returns:
             True if sent successfully
         """
-        message = f"""*Welcome to Terraguard!*
+        message = f"""*Welcome to GreenPulse!*
 
 You're subscribed to climate alerts for:
 *{region}*
@@ -193,11 +205,11 @@ _Stay informed, stay resilient!_""".strip()
             if message_lower in ['stop', 'unsubscribe', 'cancel']:
                 if user:
                     await db_service.unsubscribe_user(user['id'])
-                    return "You've been unsubscribed from Terraguard alerts. Reply START to resubscribe anytime."
+                    return "You've been unsubscribed from GreenPulse alerts. Reply START to resubscribe anytime."
                 return "You're not currently subscribed."
             
             if message_lower in ['start', 'subscribe', 'begin']:
-                return """*Welcome to Terraguard!*
+                return """*Welcome to GreenPulse!*
 
 I'll help you with climate alerts, weather forecasts, and farming tips!
 
@@ -211,7 +223,7 @@ Using this format helps me correctly identify your location and provide accurate
 """
             
             if message_lower in ['help', 'info', '?']:
-                return """*Terraguard Help*
+                return """*GreenPulse Help*
 
 *Commands:*
 - STOP - Unsubscribe from alerts
@@ -309,7 +321,7 @@ We're here to help!""".strip()
                         
                             welcome_msg = f"""*Perfect, {user_name}!*
 
-You're now subscribed to Terraguard for *{location}*!
+You're now subscribed to GreenPulse for *{location}*!
 
 
 *You'll receive alerts for:*

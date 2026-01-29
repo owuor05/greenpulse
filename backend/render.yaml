@@ -1,7 +1,7 @@
 services:
   # FastAPI Web Service
   - type: web
-    name: terraguard-api
+    name: greenpulse-api
     env: python
     region: oregon
     plan: free
@@ -12,7 +12,7 @@ services:
 
   # Telegram Bot Background Worker
   - type: worker
-    name: terraguard-telegram-bot
+    name: greenpulse-telegram-bot
     env: python
     region: oregon
     plan: free

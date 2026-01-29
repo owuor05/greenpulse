@@ -1,5 +1,4 @@
-"""
-Database service for Terraguard
+"""Database service for GreenPulse
 Handles all Supabase interactions
 """
 from supabase import create_client, Client

@@ -36,7 +36,7 @@ async def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
-        "service": "Terraguard Climate API",
+        "service": "GreenPulse Climate API",
         "version": "1.0.0"
     }
 

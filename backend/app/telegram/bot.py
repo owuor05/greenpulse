@@ -1,5 +1,4 @@
-"""
-Telegram Bot for Terraguard
+"""Telegram Bot for GreenPulse
 Handles climate alerts and AI chat via Telegram
 """
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -19,7 +18,7 @@ import json
 logger = logging.getLogger(__name__)
 
 
-class TerragaurdTelegramBot:
+class GreenPulseTelegramBot:
     """
     Telegram bot for climate risk alerts and AI assistance
     """
@@ -68,7 +67,7 @@ _Just type your question!_"""
                 # NEW USER - Ask for location FIRST
                 welcome_message = f"""Hello {user.first_name}!
 
-Welcome to *Terraguard* - Your AI climate assistant for Africa.
+Welcome to *GreenPulse* - Your AI climate assistant for Africa.
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -115,7 +114,7 @@ This helps me give you:
             # Fallback
             welcome_message = f"""Hello {user.first_name}!
 
-Welcome to *Terraguard* - Your AI climate assistant for Africa.
+Welcome to *GreenPulse* - Your AI climate assistant for Africa.
 
 
 *I can help you with:*
@@ -159,7 +158,7 @@ How can I help you today?"""
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /help command - Only if user explicitly asks"""
         help_text = """
-*Terraguard Bot Help*
+*GreenPulse Bot Help*
 
 Just chat with me naturally! I understand questions like:
 • "What's the weather forecast?"
@@ -560,7 +559,7 @@ What would you like to know?
 
 Stay safe and follow local advisories.
 
-_Terraguard - Guarding the Land_"""
+_GreenPulse - Guarding the Land_"""
         
         try:
             # Use Bot API directly without requiring Application to be initialized
@@ -582,4 +581,4 @@ _Terraguard - Guarding the Land_"""
 
 
 # Global bot instance
-telegram_bot = TerragaurdTelegramBot()
+telegram_bot = GreenPulseTelegramBot()

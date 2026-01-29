@@ -1,5 +1,4 @@
-"""
-OpenRouter AI Service for Terraguard
+"""OpenRouter AI Service for GreenPulse
 Uses DeepSeek R1 0528 (Free) model
 """
 import httpx
@@ -18,8 +17,8 @@ class OpenRouterService:
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://terraguard.com",
-            "X-Title": "Terraguard Climate AI"
+            "HTTP-Referer": "https://greenpulse.vercel.app",
+            "X-Title": "GreenPulse Climate AI"
         }
     
     async def generate_alert_summary(self, risk_data: dict) -> dict:
@@ -33,7 +32,7 @@ class OpenRouterService:
             Dict with summary, causes, preventive_measures, immediate_actions
         """
         prompt = f"""
-You are Terraguard AI - Africa's land conservation and climate resilience expert.
+You are GreenPulse AI - Africa's land conservation and climate resilience expert.
 
 MISSION: Combat land degradation through education and practical conservation advice.
 
@@ -80,7 +79,7 @@ Keep language accessible for SMS users. Emphasize: "Plant one tree, save your so
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are Terraguard AI - providing climate risk analysis with a focus on land conservation, soil protection, and rehabilitation for African communities. Combat land degradation through every alert. Be practical, hopeful, and action-oriented."
+                    "content": "You are GreenPulse AI - providing climate risk analysis with a focus on land conservation, soil protection, and rehabilitation for African communities. Combat land degradation through every alert. Be practical, hopeful, and action-oriented."
                 },
                 {
                     "role": "user",
@@ -138,7 +137,7 @@ Keep language accessible for SMS users. Emphasize: "Plant one tree, save your so
         Returns:
             AI response string
         """
-        system_context = """You are Terraguard AI - Africa's land conservation and climate resilience assistant.
+        system_context = """You are GreenPulse AI - Africa's land conservation and climate resilience assistant.
 
 CORE MISSION: Combat land degradation through education, awareness, and community engagement.
 
