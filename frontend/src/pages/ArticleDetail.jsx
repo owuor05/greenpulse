@@ -419,46 +419,38 @@ function ArticleDetail() {
               </p>
             </Link>
             <a
-              href="https://t.me/TerraGuard_Bot"
+              href="https://t.me/GreenPulse_AI_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition group"
             >
               <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition">
-                Ask Our AI Assistant
+                Ask GreenPulse AI
               </h3>
               <p className="text-gray-600 mt-2">
-                Get personalized advice about this topic from our AI-powered
-                farming assistant.
+                Get climate intelligence and environmental insights from our AI assistant.
               </p>
             </a>
           </div>
         </div>
 
-        {/* Subscription CTA */}
+        {/* CTA */}
         <div className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl shadow-lg p-8 text-white">
           <h2 className="text-2xl font-bold mb-4">
-            Stay Updated with TerraGuard
+            Connect with GreenPulse AI
           </h2>
           <p className="text-lg mb-6">
-            Get the latest climate alerts, educational content, and farming tips
-            delivered to you.
+            Get instant climate intelligence and environmental insights via Telegram.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
             <a
-              href="https://t.me/TerraGuard_Bot"
+              href="https://t.me/GreenPulse_AI_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-center"
             >
-              Follow on Telegram
+              Open Telegram Bot
             </a>
-            <a
-              href="https://wa.me/14155238886?text=join%20actual-mother"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition text-center"
-            >
               Join WhatsApp Updates
             </a>
           </div>

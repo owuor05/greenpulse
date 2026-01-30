@@ -274,12 +274,12 @@ function AIPage() {
                     Ask me about:
                   </p>
                   <p className="text-sm">
-                    Land conservation • Soil health • Tree planting • Erosion
-                    control
+                    Emissions analysis • Climate risk assessment • Regional
+                    impact • Environmental compliance
                   </p>
                   <p className="text-sm">
-                    Climate-smart farming • Drought mitigation • Sustainable
-                    agriculture
+                    Location-specific insights • Scenario planning • Water
+                    stress • Land degradation
                   </p>
                 </div>
               )}
@@ -633,12 +633,12 @@ function AIPage() {
                 <div className="text-gray-500 text-center mt-20">
                   <p className="text-lg mb-2">Ask me about:</p>
                   <p className="text-sm">
-                    Land conservation • Soil health • Tree planting • Erosion
-                    control
+                    Emissions analysis • Climate risk assessment • Regional
+                    impact • Environmental compliance
                   </p>
                   <p className="text-sm">
-                    Climate-smart farming • Drought mitigation • Sustainable
-                    agriculture
+                    Location-specific insights • Scenario planning • Water
+                    stress • Land degradation
                   </p>
                 </div>
               )}
@@ -967,13 +967,13 @@ function AIPage() {
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
           <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-lg">
-            Prefer Messaging Apps?
+            Try GreenPulse AI on Telegram
           </h2>
           <p className="text-xl mb-8 text-green-100 drop-shadow">
-            Chat with our AI assistant on Telegram or WhatsApp
+            Get instant climate intelligence via our Telegram bot
           </p>
           <a
-            href="https://t.me/TerraGuard_Bot"
+            href="https://t.me/GreenPulse_AI_bot"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-white text-green-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-green-50 transition shadow-lg"

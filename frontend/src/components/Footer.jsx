@@ -9,14 +9,14 @@ function Footer() {
           <div className="col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">T</span>
+                <span className="text-white font-bold text-xl">G</span>
               </div>
               <span className="font-display font-bold text-xl text-white">
                 GreenPulse
               </span>
             </div>
             <p className="text-sm text-gray-400">
-              Guarding the Land. Empowering the People.
+              When climate data meets intelligence, action becomes possible.
             </p>
           </div>
 
@@ -105,10 +105,10 @@ function Footer() {
               <li className="text-sm">
                 <span className="text-gray-400">Email:</span>{" "}
                 <a
-                  href="mailto:info@terraguard.com"
+                  href="mailto:info@greenpulse.co.ke"
                   className="hover:text-primary-400 transition-colors"
                 >
-                  info@greenpulse.com
+                  info@greenpulse.co.ke
                 </a>
               </li>
 
@@ -122,9 +122,7 @@ function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-          <p>
-            &copy; {new Date().getFullYear()} GreenPulse. 
-          </p>
+          <p>&copy; {new Date().getFullYear()} GreenPulse.</p>
         </div>
       </div>
     </footer>

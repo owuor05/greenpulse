@@ -20,7 +20,9 @@ function About() {
         <div className="relative max-w-4xl mx-auto text-center z-10">
           <h1 className="text-5xl font-bold mb-6 text-blac drop-shadow-lg">About GreenPulse</h1>
           <p className="text-2xl text-green-100 drop-shadow">
-            GreenPulse AI is a smart, fast, and analytical AI system designed to help governments, businesses, communities, and institutions in Kenya understand environmental conditions, assess risks, ensure compliance, and make climate-smart decisions using data, reasoning, and scientific knowledge.
+            GreenPulse is a B2B climate intelligence platform that helps companies analyze emissions, 
+            understand how their activities affect different regions, and use AI-driven insights to 
+            manage climate risk, compliance, and environmental impact.
           </p>
         </div>
       </section>
@@ -38,17 +40,15 @@ function About() {
             Our Mission
           </h2>
           <p className="text-xl text-green-100 leading-relaxed text-center mb-8">
-            GreenPulse exists to protect African farmers from climate-related
-            losses by providing early warnings, actionable insights, and expert
-            guidance powered by artificial intelligence and real-time satellite
-            data.
+            GreenPulse exists to provide businesses, communities, and decision-makers 
+            with climate data and AI-driven intelligence to understand, manage, and 
+            reduce environmental and climate impact across Kenya.
           </p>
           <div className="bg-white/95 backdrop-blur-sm border-l-4 border-green-600 p-6 rounded-r-lg">
             <p className="text-lg text-gray-800 italic">
-              "We believe every farmer deserves access to the same climate
-              intelligence that large agricultural corporations use. GreenPulse
-              democratizes this technology, making it free and accessible via
-              simple chat tools many farmers already use."
+              "When climate data meets intelligence, action becomes possible. GreenPulse 
+              combines climate datasets, AI reasoning, and human insight to help businesses 
+              reduce environmental risk and help communities adapt to climate change."
             </p>
           </div>
         </div>
@@ -255,28 +255,19 @@ function About() {
             <a
               href="https://t.me/TerraGuard_Bot"
               target="_blank"
+              rel="noopener norefGreenPulse_AI_bot"
+              target="_blank"
               rel="noopener noreferrer"
               className="bg-blue-500 text-white p-8 rounded-xl shadow-lg hover:bg-blue-600 transition text-center"
             >
               <h3 className="text-xl font-bold mb-2">Telegram Bot</h3>
-              <p className="text-blue-100">@GreenPulse_Bot</p>
-            </a>
-            <a
-              href="https://wa.me/14155238886?text=join%20actual-mother"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-green-500 text-white p-8 rounded-xl shadow-lg hover:bg-green-600 transition text-center"
-            >
-              <h3 className="text-xl font-bold mb-2">WhatsApp</h3>
-              <p className="text-green-100">+1 415 523 8886</p>
+              <p className="text-blue-100">@GreenPulse_AI_bot</p>
             </a>
             <Link
-              to="/#subscribe"
-              className="md:col-span-2 inline-block bg-white text-green-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-green-50 transition shadow-lg text-center"
+              to="/ai"
+              className="inline-block bg-white text-green-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-green-50 transition shadow-lg text-center"
             >
-              Get Started Free
-            </Link>
-          </div>
+              Try GreenPulse AI
         </div>
       </section>
 
@@ -298,11 +289,12 @@ function About() {
             className="inline-block bg-white text-green-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-green-50 transition shadow-lg"
           >
             Get Started Free
-          </Link>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-export default About;
+          </Link>Ready for Climate Intelligence?</h2>
+          <p className="text-xl mb-8 text-green-100 drop-shadow">
+            When climate data meets intelligence, action becomes possible
+          </p>
+          <Link
+            to="/ai"
+            className="inline-block bg-white text-green-700 px-10 py-4 rounded-lg font-bold text-lg hover:bg-green-50 transition shadow-lg"
+          >
+            Try GreenPulse AI

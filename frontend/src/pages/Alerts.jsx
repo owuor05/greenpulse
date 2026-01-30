@@ -685,13 +685,13 @@ function Alerts() {
               {/* Footer Actions */}
               <div className="bg-green-700 border-2 border-green-600 rounded-b-xl p-6 text-center shadow-lg">
                 <p className="text-white mb-4 text-lg">
-                  Want real-time alerts for this location?
+                  Need climate intelligence for other locations?
                 </p>
                 <Link
-                  to="/#subscribe"
+                  to="/ai"
                   className="inline-block bg-white hover:bg-gray-100 text-green-700 px-8 py-3 rounded-lg font-bold transition shadow-md hover:shadow-lg"
                 >
-                  Subscribe for Free Alerts
+                  Try GreenPulse AI
                 </Link>
               </div>
             </div>
@@ -744,15 +744,7 @@ function Alerts() {
           }}
         ></div>
         <div className="relative max-w-7xl mx-auto z-10">
-          {landData && landData.latitude && landData.longitude ? (
-            <KenyaRiskMap onCountyClick={handleCountyClick} />
-          ) : (
-            <div className="text-center text-white py-12">
-              <p className="text-lg">
-                Analyze a location to see detailed map data
-              </p>
-            </div>
-          )}
+          <KenyaRiskMap onCountyClick={handleCountyClick} />
         </div>
       </section>
 
@@ -767,12 +759,19 @@ function Alerts() {
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
           <h3 className="text-2xl font-bold text-white mb-4">
-            Want alerts delivered to your phone?
+            Connect with GreenPulse AI
           </h3>
           <p className="text-gray-200 mb-6 text-lg">
-            Subscribe to receive instant notifications when new alerts are
-            issued for your region via Telegram
+            Get instant climate intelligence via our Telegram bot
           </p>
+          <a
+            href="https://t.me/GreenPulse_AI_bot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-green-700 px-8 py-3 rounded-lg font-bold hover:bg-green-50 transition shadow-lg"
+          >
+            Open Telegram Bot
+          </a>
         </div>
       </section>
 
@@ -787,17 +786,16 @@ function Alerts() {
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
           <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-lg">
-            Stay Protected with Real-Time Alerts
+            Climate Data Meets Intelligence
           </h2>
           <p className="text-xl mb-8 text-green-100 drop-shadow">
-            Get instant climate warnings delivered to your phone - completely
-            free
+            When climate data meets intelligence, action becomes possible
           </p>
           <Link
-            to="/#subscribe"
+            to="/ai"
             className="inline-block bg-white text-green-700 px-8 py-3 rounded-lg font-bold hover:bg-green-50 transition shadow-lg"
           >
-            Subscribe Now - It's Free!
+            Try GreenPulse AI Now
           </Link>
         </div>
       </section>

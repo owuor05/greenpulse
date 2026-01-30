@@ -530,24 +530,16 @@ function AlertDetail() {
         <div className="mt-8 bg-gradient-to-r from-green-700 to-emerald-600 rounded-xl shadow-lg p-8 text-white">
           <h2 className="text-2xl font-bold mb-4">Need More Help?</h2>
           <p className="text-lg mb-6">
-            Chat with our AI assistant for personalized advice about this alert:
+            Chat with GreenPulse AI for personalized climate intelligence:
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
             <a
-              href="https://t.me/TerraGuard_Bot"
+              href="https://t.me/GreenPulse_AI_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-center"
             >
               Chat on Telegram
-            </a>
-            <a
-              href="https://wa.me/14155238886?text=join%20actual-mother"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition text-center"
-            >
-              Chat on WhatsApp
             </a>
           </div>
         </div>
