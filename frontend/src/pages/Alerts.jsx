@@ -216,7 +216,7 @@ function Alerts() {
   return (
     <div className="min-h-screen font-sans">
       {/* Header - White to Green radial */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-12 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -241,7 +241,7 @@ function Alerts() {
       {/* Land Data Explorer Section - Flowing green */}
       <section
         id="land-data-explorer"
-        className="relative py-16 px-4 overflow-hidden"
+        className="relative py-10 px-4 overflow-hidden"
       >
         <div
           className="absolute inset-0"
@@ -735,7 +735,7 @@ function Alerts() {
       </section>
 
       {/* Kenya Risk Map Section - Green to Dark */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -749,7 +749,7 @@ function Alerts() {
       </section>
 
       {/* Info Section - Dark to Green radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -776,7 +776,7 @@ function Alerts() {
       </section>
 
       {/* CTA - Green to White radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{

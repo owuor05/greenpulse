@@ -213,15 +213,27 @@ function AIPage() {
     setIsFullscreen(!isFullscreen);
   };
 
-  // Close fullscreen on Escape key
+  // Close fullscreen on Escape key and lock background scroll
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape" && isFullscreen) {
         setIsFullscreen(false);
       }
     };
+
+    // Lock/unlock body scroll based on fullscreen state
+    if (isFullscreen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
     window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+      // Ensure scroll is restored when component unmounts
+      document.body.style.overflow = "unset";
+    };
   }, [isFullscreen]);
 
   return (
@@ -566,7 +578,7 @@ function AIPage() {
       )}
 
       {/* Header - White to Green radial */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-12 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -938,7 +950,7 @@ function AIPage() {
       </section>
 
       {/* Info Section - Dark to Green radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -974,7 +986,7 @@ function AIPage() {
       </section>
 
       {/* CTA - Green to White radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
