@@ -300,7 +300,7 @@ function AIPage() {
                     <div
                       className={`inline-block rounded-xl px-4 py-3 ${
                         m.role === "user"
-                          ? "bg-green-600 text-white"
+                          ? "bg-gray-100 text-gray-900"
                           : "bg-gray-800 text-gray-100"
                       }`}
                     >
@@ -445,8 +445,13 @@ function AIPage() {
                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
-                  <span className="text-sm text-green-300 flex-1 truncate">
-                    {selectedFile.name}
+                  <span
+                    className="text-sm text-green-300 flex-1 truncate max-w-[200px]"
+                    title={selectedFile.name}
+                  >
+                    {selectedFile.name.length > 35
+                      ? selectedFile.name.substring(0, 35) + "..."
+                      : selectedFile.name}
                   </span>
                   <span className="text-xs text-green-400">
                     ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
@@ -663,7 +668,9 @@ function AIPage() {
                       )}
                       <div
                         className={`inline-block ${
-                          m.role === "user" ? "text-gray-900" : "text-gray-900"
+                          m.role === "user"
+                            ? "bg-gray-100 rounded-xl px-4 py-3 text-gray-900"
+                            : "text-gray-900"
                         }`}
                       >
                         {m.role === "assistant" ? (
@@ -799,8 +806,15 @@ function AIPage() {
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-                <span className="text-sm text-green-700 flex-1 truncate">
-                  📎 {selectedFile.name} - Ready to analyze
+                <span
+                  className="text-sm text-green-700 flex-1 truncate max-w-[250px]"
+                  title={selectedFile.name}
+                >
+                  📎{" "}
+                  {selectedFile.name.length > 40
+                    ? selectedFile.name.substring(0, 40) + "..."
+                    : selectedFile.name}{" "}
+                  - Ready to analyze
                 </span>
                 <span className="text-xs text-green-600">
                   ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
