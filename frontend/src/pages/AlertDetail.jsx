@@ -24,13 +24,17 @@ function AlertDetail() {
       // API returns { success, alert }
       const alertObj = data?.alert || data;
       setAlert(alertObj);
-      
+
       // Fetch comprehensive land data for this alert's region
       if (alertObj?.region) {
         try {
+          const API_BASE_URL =
+            import.meta.env.VITE_API_URL ||
+            import.meta.env.VITE_API_BASE_URL ||
+            "https://greenpulse-production-370c.up.railway.app";
           const landResponse = await axios.post(
-            "https://greenpulse-production-370c.up.railway.app/api/land-data/analyze",
-            { location: alertObj.region }
+            `${API_BASE_URL}/api/land-data/analyze`,
+            { location: alertObj.region },
           );
           setLandData(landResponse.data.data);
         } catch (landErr) {
@@ -102,7 +106,9 @@ function AlertDetail() {
     if (typeof val !== "string") return val;
     const s = val.trim();
     if (!s) return s;
-    const looksJson = (s.startsWith("{") && s.endsWith("}")) || (s.startsWith("[") && s.endsWith("]"));
+    const looksJson =
+      (s.startsWith("{") && s.endsWith("}")) ||
+      (s.startsWith("[") && s.endsWith("]"));
     if (!looksJson) return val;
     try {
       return JSON.parse(s);
@@ -127,7 +133,9 @@ function AlertDetail() {
     if (typeof parsed === "object" && parsed) {
       if (typeof parsed.summary === "string") return parsed.summary;
       if (typeof parsed.text === "string") return parsed.text;
-      const firstString = Object.values(parsed).find((x) => typeof x === "string");
+      const firstString = Object.values(parsed).find(
+        (x) => typeof x === "string",
+      );
       return firstString || null;
     }
     return typeof parsed === "string" ? parsed : null;
@@ -187,16 +195,25 @@ function AlertDetail() {
         className={`${getSeverityColor(alert.severity)} text-white py-16 px-4`}
       >
         <div className="max-w-4xl mx-auto">
-          <Link to="/alerts" className="inline-block text-white/90 hover:text-white underline mb-4">
+          <Link
+            to="/alerts"
+            className="inline-block text-white/90 hover:text-white underline mb-4"
+          >
             Back to all alerts
           </Link>
           <div className="flex items-center gap-4 mb-4">
             <div>
               <h1 className="text-4xl font-bold mb-2">{alert.title}</h1>
               <div className="flex flex-wrap gap-2 mt-2">
-                <span className="bg-white/15 px-3 py-1 rounded text-sm">Region: {alert.region}</span>
-                <span className="bg-white/15 px-3 py-1 rounded text-sm capitalize">Risk: {alert.risk_type}</span>
-                <span className="bg-white/15 px-3 py-1 rounded text-sm uppercase font-semibold">{alert.severity} severity</span>
+                <span className="bg-white/15 px-3 py-1 rounded text-sm">
+                  Region: {alert.region}
+                </span>
+                <span className="bg-white/15 px-3 py-1 rounded text-sm capitalize">
+                  Risk: {alert.risk_type}
+                </span>
+                <span className="bg-white/15 px-3 py-1 rounded text-sm uppercase font-semibold">
+                  {alert.severity} severity
+                </span>
               </div>
             </div>
           </div>
@@ -212,7 +229,9 @@ function AlertDetail() {
             <div className="bg-white border-2 border-green-300 rounded-xl p-6 mb-6 shadow-md">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm text-gray-600 mb-1 font-semibold">Current Temperature</p>
+                  <p className="text-sm text-gray-600 mb-1 font-semibold">
+                    Current Temperature
+                  </p>
                   <p className="text-5xl font-bold text-green-700">
                     {landData.current_temperature_celsius.toFixed(1)}°C
                   </p>
@@ -222,13 +241,15 @@ function AlertDetail() {
                 <div>
                   <p className="text-gray-600">Avg Max Temp (30d)</p>
                   <p className="text-lg font-bold text-gray-800">
-                    {landData.historical_data.avg_max_temperature_c.toFixed(1)}°C
+                    {landData.historical_data.avg_max_temperature_c.toFixed(1)}
+                    °C
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-600">Avg Precipitation (30d)</p>
                   <p className="text-lg font-bold text-gray-800">
-                    {landData.historical_data.avg_precipitation_mm.toFixed(1)} mm/day
+                    {landData.historical_data.avg_precipitation_mm.toFixed(1)}{" "}
+                    mm/day
                   </p>
                 </div>
               </div>
@@ -237,20 +258,30 @@ function AlertDetail() {
             {/* Climate Risks Grid */}
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               {/* Drought Risk */}
-              <div className={`border-2 rounded-xl p-6 shadow-md ${
-                landData.climate_risks.drought.severity.toLowerCase() === 'critical' || 
-                landData.climate_risks.drought.severity.toLowerCase() === 'high'
-                  ? 'bg-red-50 border-red-400'
-                  : getRiskBgColor(landData.climate_risks.drought.severity)
-              }`}>
+              <div
+                className={`border-2 rounded-xl p-6 shadow-md ${
+                  landData.climate_risks.drought.severity.toLowerCase() ===
+                    "critical" ||
+                  landData.climate_risks.drought.severity.toLowerCase() ===
+                    "high"
+                    ? "bg-red-50 border-red-400"
+                    : getRiskBgColor(landData.climate_risks.drought.severity)
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-xl font-bold text-gray-900">Drought Risk</h4>
-                  <span className={`text-2xl font-bold px-4 py-1 rounded-lg ${
-                    landData.climate_risks.drought.severity.toLowerCase() === 'critical' || 
-                    landData.climate_risks.drought.severity.toLowerCase() === 'high'
-                      ? 'bg-red-600 text-white'
-                      : getRiskColor(landData.climate_risks.drought.severity)
-                  }`}>
+                  <h4 className="text-xl font-bold text-gray-900">
+                    Drought Risk
+                  </h4>
+                  <span
+                    className={`text-2xl font-bold px-4 py-1 rounded-lg ${
+                      landData.climate_risks.drought.severity.toLowerCase() ===
+                        "critical" ||
+                      landData.climate_risks.drought.severity.toLowerCase() ===
+                        "high"
+                        ? "bg-red-600 text-white"
+                        : getRiskColor(landData.climate_risks.drought.severity)
+                    }`}
+                  >
                     {landData.climate_risks.drought.severity.toUpperCase()}
                   </span>
                 </div>
@@ -258,47 +289,66 @@ function AlertDetail() {
                   <div className="flex justify-between bg-white p-2 rounded">
                     <span className="text-gray-600">Avg Precipitation:</span>
                     <span className="font-bold text-gray-900">
-                      {landData.climate_risks.drought.avg_precipitation_mm.toFixed(2)} mm/day
+                      {landData.climate_risks.drought.avg_precipitation_mm.toFixed(
+                        2,
+                      )}{" "}
+                      mm/day
                     </span>
                   </div>
                   <div className="flex justify-between bg-white p-2 rounded">
                     <span className="text-gray-600">Days Without Rain:</span>
                     <span className="font-bold text-gray-900">
-                      {landData.climate_risks.drought.days_without_rain} / {landData.climate_risks.drought.total_days_analyzed}
+                      {landData.climate_risks.drought.days_without_rain} /{" "}
+                      {landData.climate_risks.drought.total_days_analyzed}
                     </span>
                   </div>
                   <div className="flex justify-between bg-white p-2 rounded">
                     <span className="text-gray-600">Avg Max Temperature:</span>
                     <span className="font-bold text-gray-900">
-                      {landData.climate_risks.drought.avg_max_temperature_c.toFixed(1)}°C
+                      {landData.climate_risks.drought.avg_max_temperature_c.toFixed(
+                        1,
+                      )}
+                      °C
                     </span>
                   </div>
                 </div>
-                {(landData.climate_risks.drought.severity.toLowerCase() === 'critical' || 
-                  landData.climate_risks.drought.severity.toLowerCase() === 'high') && (
+                {(landData.climate_risks.drought.severity.toLowerCase() ===
+                  "critical" ||
+                  landData.climate_risks.drought.severity.toLowerCase() ===
+                    "high") && (
                   <div className="mt-4 pt-3 border-t border-red-300">
                     <p className="text-red-800 font-semibold text-sm">
-                      WARNING: Critical Threshold: &lt;2mm daily rain + 20+ dry days
+                      WARNING: Critical Threshold: &lt;2mm daily rain + 20+ dry
+                      days
                     </p>
                   </div>
                 )}
               </div>
 
               {/* Flood Risk */}
-              <div className={`border-2 rounded-xl p-6 shadow-md ${
-                landData.climate_risks.flood.severity.toLowerCase() === 'critical' || 
-                landData.climate_risks.flood.severity.toLowerCase() === 'high'
-                  ? 'bg-red-50 border-red-400'
-                  : getRiskBgColor(landData.climate_risks.flood.severity)
-              }`}>
+              <div
+                className={`border-2 rounded-xl p-6 shadow-md ${
+                  landData.climate_risks.flood.severity.toLowerCase() ===
+                    "critical" ||
+                  landData.climate_risks.flood.severity.toLowerCase() === "high"
+                    ? "bg-red-50 border-red-400"
+                    : getRiskBgColor(landData.climate_risks.flood.severity)
+                }`}
+              >
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-xl font-bold text-gray-900">Flood Risk</h4>
-                  <span className={`text-2xl font-bold px-4 py-1 rounded-lg ${
-                    landData.climate_risks.flood.severity.toLowerCase() === 'critical' || 
-                    landData.climate_risks.flood.severity.toLowerCase() === 'high'
-                      ? 'bg-red-600 text-white'
-                      : getRiskColor(landData.climate_risks.flood.severity)
-                  }`}>
+                  <h4 className="text-xl font-bold text-gray-900">
+                    Flood Risk
+                  </h4>
+                  <span
+                    className={`text-2xl font-bold px-4 py-1 rounded-lg ${
+                      landData.climate_risks.flood.severity.toLowerCase() ===
+                        "critical" ||
+                      landData.climate_risks.flood.severity.toLowerCase() ===
+                        "high"
+                        ? "bg-red-600 text-white"
+                        : getRiskColor(landData.climate_risks.flood.severity)
+                    }`}
+                  >
                     {landData.climate_risks.flood.severity.toUpperCase()}
                   </span>
                 </div>
@@ -306,27 +356,37 @@ function AlertDetail() {
                   <div className="flex justify-between bg-white p-2 rounded">
                     <span className="text-gray-600">Total Precipitation:</span>
                     <span className="font-bold text-gray-900">
-                      {landData.climate_risks.flood.total_precipitation_mm.toFixed(1)} mm
+                      {landData.climate_risks.flood.total_precipitation_mm.toFixed(
+                        1,
+                      )}{" "}
+                      mm
                     </span>
                   </div>
                   <div className="flex justify-between bg-white p-2 rounded">
                     <span className="text-gray-600">Max Daily Rainfall:</span>
                     <span className="font-bold text-gray-900">
-                      {landData.climate_risks.flood.max_daily_precipitation_mm.toFixed(1)} mm
+                      {landData.climate_risks.flood.max_daily_precipitation_mm.toFixed(
+                        1,
+                      )}{" "}
+                      mm
                     </span>
                   </div>
                   <div className="flex justify-between bg-white p-2 rounded">
                     <span className="text-gray-600">Heavy Rain Days:</span>
                     <span className="font-bold text-gray-900">
-                      {landData.climate_risks.flood.heavy_rain_days} / {landData.climate_risks.flood.total_days_analyzed}
+                      {landData.climate_risks.flood.heavy_rain_days} /{" "}
+                      {landData.climate_risks.flood.total_days_analyzed}
                     </span>
                   </div>
                 </div>
-                {(landData.climate_risks.flood.severity.toLowerCase() === 'critical' || 
-                  landData.climate_risks.flood.severity.toLowerCase() === 'high') && (
+                {(landData.climate_risks.flood.severity.toLowerCase() ===
+                  "critical" ||
+                  landData.climate_risks.flood.severity.toLowerCase() ===
+                    "high") && (
                   <div className="mt-4 pt-3 border-t border-red-300">
                     <p className="text-red-800 font-semibold text-sm">
-                      WARNING: Critical Threshold: 100mm+ daily OR 5+ heavy rain days
+                      WARNING: Critical Threshold: 100mm+ daily OR 5+ heavy rain
+                      days
                     </p>
                   </div>
                 )}
@@ -342,8 +402,12 @@ function AlertDetail() {
                 {landData.ai_summary}
               </p>
               <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
-                <p>Data Source: {landData.data_source} | Last 30 days analyzed</p>
-                <p className="mt-1">Analyzed: {new Date(landData.analyzed_at).toLocaleString()}</p>
+                <p>
+                  Data Source: {landData.data_source} | Last 30 days analyzed
+                </p>
+                <p className="mt-1">
+                  Analyzed: {new Date(landData.analyzed_at).toLocaleString()}
+                </p>
               </div>
             </div>
           </>
@@ -372,7 +436,9 @@ function AlertDetail() {
             </p>
             <ul className="list-disc pl-6 space-y-2">
               {getArray(alert.preventive_measures).map((measure, index) => (
-                <li key={index} className="text-gray-800 text-lg">{measure}</li>
+                <li key={index} className="text-gray-800 text-lg">
+                  {measure}
+                </li>
               ))}
             </ul>
           </div>
@@ -387,7 +453,9 @@ function AlertDetail() {
             <p className="text-red-800 mb-4">Act now to minimize damage:</p>
             <ul className="list-disc pl-6 space-y-2">
               {getArray(alert.immediate_actions).map((action, index) => (
-                <li key={index} className="text-gray-800 text-lg">{action}</li>
+                <li key={index} className="text-gray-800 text-lg">
+                  {action}
+                </li>
               ))}
             </ul>
           </div>

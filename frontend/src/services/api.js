@@ -94,59 +94,44 @@ export const reportsService = {
 export const aiService = {
   // Ask a question to the AI assistant (with optional file attachment)
   askQuestion: async (question, file = null) => {
-    console.log("Sending question to AI:", question, file ? `with file: ${file.name}` : "");
+    console.log(
+      "🔵 Sending to AI:",
+      question,
+      file ? `with file: ${file.name}` : "text only",
+    );
 
     try {
-      // If file is attached, use FormData for multipart upload
+      // ALWAYS use FormData for /api/ai/ask endpoint (backend expects multipart/form-data)
+      const formData = new FormData();
+      formData.append("question", question);
+
       if (file) {
-        const formData = new FormData();
-        formData.append("question", question);
         formData.append("file", file);
-
-        console.log("Uploading file for AI analysis:", file.name);
-
-        // Use the document analysis endpoint
-        const response = await api.post("/api/ai/analyze-document", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          timeout: 180000, // 3 minutes for document processing
-        });
-
-        console.log("Document analysis response:", response.data);
-        return response.data;
+        console.log(
+          "📎 File attached:",
+          file.name,
+          "(" + file.size + " bytes)",
+        );
       }
 
-      // Regular JSON request without file
-      const response = await api.post("/api/ai/ask", { question: question });
-      return response.data;
-    } catch (error) {
-      console.error("AI Service Error:", error.response?.data || error.message || error);
-      throw error;
-    }
-  },
-
-  // Upload and analyze a document separately
-  analyzeDocument: async (file, question = "") => {
-    console.log("Analyzing document:", file.name);
-
-    const formData = new FormData();
-    formData.append("file", file);
-    if (question) {
-      formData.append("question", question);
-    }
-
-    try {
-      const response = await api.post("/api/ai/analyze-document", formData, {
+      console.log("📤 Posting to /api/ai/ask...");
+      const response = await api.post("/api/ai/ask", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        timeout: 180000,
+        timeout: 180000, // 3 minutes for AI processing
       });
 
+      console.log(
+        "✅ AI Response received:",
+        response.data.success ? "SUCCESS" : "FAILED",
+      );
       return response.data;
     } catch (error) {
-      console.error("Document Analysis Error:", error.response?.data || error);
+      console.error(
+        "❌ AI Service Error:",
+        error.response?.data || error.message || error,
+      );
       throw error;
     }
   },
@@ -155,8 +140,21 @@ export const aiService = {
 // Land Data Service
 export const landDataService = {
   analyze: async (location) => {
-    const response = await api.post("/api/land-data/analyze", { location });
-    return response.data;
+    console.log("🌍 Analyzing land data for:", location);
+    try {
+      const response = await api.post("/api/land-data/analyze", { location });
+      console.log(
+        "✅ Land data received:",
+        response.data.success ? "SUCCESS" : "FAILED",
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        "❌ Land Data Error:",
+        error.response?.data || error.message,
+      );
+      throw error;
+    }
   },
 };
 
