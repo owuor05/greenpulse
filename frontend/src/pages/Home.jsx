@@ -9,7 +9,7 @@ function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-sans">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-12 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -62,7 +62,7 @@ function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -91,7 +91,7 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -182,7 +182,7 @@ function Home() {
       </section>
 
       {/* Subscription Section */}
-      <section id="subscribe" className="relative py-16 px-4 overflow-hidden">
+      <section id="subscribe" className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -276,7 +276,7 @@ function Home() {
       </section>
 
       {/* Impact Section */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -347,7 +347,7 @@ function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{

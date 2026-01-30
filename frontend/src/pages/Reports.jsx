@@ -405,7 +405,7 @@ function Reports() {
   return (
     <div className="min-h-screen font-sans">
       {/* Header - White to Green radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -738,7 +738,7 @@ function Reports() {
       </section>
 
       {/* Info Section - Green to Dark */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -776,7 +776,7 @@ function Reports() {
       </section>
 
       {/* CTA - Green to White radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{

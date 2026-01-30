@@ -9,7 +9,8 @@ function ArticleDetail() {
   const articles = {
     "land-rehabilitation-southern-rangelands": {
       id: 1,
-      title: "Land Rehabilitation Measures for Degraded Southern Rangelands in Kenya",
+      title:
+        "Land Rehabilitation Measures for Degraded Southern Rangelands in Kenya",
       category: "Land Rehabilitation / Community Impact",
       author: "Dr. Lillian Mwangi",
       date: "2025-10-11",
@@ -53,7 +54,8 @@ function ArticleDetail() {
     },
     "conservation-riparian-zones-wetlands": {
       id: 2,
-      title: "Conservation of Riparian Zones and Wetlands in Kenya for Land and Water Security",
+      title:
+        "Conservation of Riparian Zones and Wetlands in Kenya for Land and Water Security",
       category: "Water & Land Conservation",
       author: "Prof. James Odhiambo",
       date: "2025-10-11",
@@ -96,7 +98,8 @@ function ArticleDetail() {
     },
     "prevention-desertification-northern-kenya": {
       id: 3,
-      title: "Prevention of Desertification Through Sustainable Grazing and Rangeland Management in Northern Kenya",
+      title:
+        "Prevention of Desertification Through Sustainable Grazing and Rangeland Management in Northern Kenya",
       category: "Land Governance / Prevention Measures",
       author: "Dr. Mary Wambui",
       date: "2025-10-11",
@@ -182,7 +185,8 @@ function ArticleDetail() {
     },
     "community-land-rights-governance": {
       id: 5,
-      title: "Community Land Rights and Governance in Land Degradation Prevention in Kenya",
+      title:
+        "Community Land Rights and Governance in Land Degradation Prevention in Kenya",
       category: "Land Governance / Prevention Measures",
       author: "Prof. Gladys Wanjiru",
       date: "2025-10-11",
@@ -224,7 +228,8 @@ function ArticleDetail() {
     },
     "climate-smart-agriculture-rehabilitation": {
       id: 6,
-      title: "Climate-Smart Agriculture as a Tool for Land Rehabilitation in Kenya",
+      title:
+        "Climate-Smart Agriculture as a Tool for Land Rehabilitation in Kenya",
       category: "Agriculture / Rehabilitation",
       author: "Dr. Esther Njoki",
       date: "2025-10-11",
@@ -267,7 +272,8 @@ function ArticleDetail() {
     },
     "tree-planting-forest-restoration": {
       id: 7,
-      title: "Tree Planting Initiatives and Forest Landscape Restoration in Kenya",
+      title:
+        "Tree Planting Initiatives and Forest Landscape Restoration in Kenya",
       category: "Forest Conservation / Rehabilitation",
       author: "Prof. Samuel Kipchumba",
       date: "2025-10-11",
@@ -363,7 +369,7 @@ function ArticleDetail() {
       {/* Header */}
       <div
         className={`${getCategoryColor(
-          article.category
+          article.category,
         )} text-white py-16 px-4`}
       >
         <div className="max-w-4xl mx-auto">
@@ -428,7 +434,8 @@ function ArticleDetail() {
                 Ask GreenPulse AI
               </h3>
               <p className="text-gray-600 mt-2">
-                Get climate intelligence and environmental insights from our AI assistant.
+                Get climate intelligence and environmental insights from our AI
+                assistant.
               </p>
             </a>
           </div>
@@ -440,7 +447,8 @@ function ArticleDetail() {
             Connect with GreenPulse AI
           </h2>
           <p className="text-lg mb-6">
-            Get instant climate intelligence and environmental insights via Telegram.
+            Get instant climate intelligence and environmental insights via
+            Telegram.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
             <a
@@ -450,8 +458,6 @@ function ArticleDetail() {
               className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-center"
             >
               Open Telegram Bot
-            </a>
-              Join WhatsApp Updates
             </a>
           </div>
         </div>

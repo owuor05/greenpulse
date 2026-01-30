@@ -114,7 +114,7 @@ function Education() {
   return (
     <div className="min-h-screen font-sans">
       {/* Header - White to Green radial gradient */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -183,7 +183,7 @@ function Education() {
       </section>
 
       {/* Additional Resources - Green to Dark gradient */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -244,7 +244,7 @@ function Education() {
       </section>
 
       {/* Middle Dark Section - Dark/Black transition */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -278,7 +278,7 @@ function Education() {
       </section>
 
       {/* Impact Section - Dark to Green radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -299,7 +299,7 @@ function Education() {
       </section>
 
       {/* CTA - Green to White radial at bottom right */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{

@@ -10,7 +10,7 @@ function About() {
   return (
     <div className="min-h-screen font-sans">
       {/* Hero Section - White to Green radial */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-12 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -32,7 +32,7 @@ function About() {
       </section>
 
       {/* Mission Section - Flowing green */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -62,7 +62,7 @@ function About() {
       </section>
 
       {/* The Problem - Green to Dark */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -107,7 +107,7 @@ function About() {
       </section>
 
       {/* How It Works - Dark/Black */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -203,7 +203,7 @@ function About() {
       </section>
 
       {/* Technology Stack - Dark to Green radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -245,7 +245,7 @@ function About() {
       </section>
 
       {/* Connect Section - Green flowing */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -278,7 +278,7 @@ function About() {
       </section>
 
       {/* CTA - Green to White radial */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-10 px-4 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
