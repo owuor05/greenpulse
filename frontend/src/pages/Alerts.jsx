@@ -254,7 +254,7 @@ function Alerts() {
           <div className="text-center mb-10">
             <h2
               className="text-4xl md:text-5xl font-bold mb-4 text-white"
-              style={{ color: "black" }}
+              style={{ color: "white" }}
             >
               Land Data Explorer
             </h2>
