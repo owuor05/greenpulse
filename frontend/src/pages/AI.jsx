@@ -99,10 +99,13 @@ function AIPage() {
     setFileError("");
     setLoading(true);
 
-    // Create user message with file info if attached
-    const userMessage = selectedFile
-      ? `${q}\n\n📎 Analyzing document: ${selectedFile.name}`
-      : q;
+    // Create user message with file info if attached (truncate long file names)
+    const truncatedFileName =
+      selectedFile && selectedFile.name.length > 40
+        ? selectedFile.name.substring(0, 40) + "..."
+        : selectedFile?.name;
+
+    const userMessage = selectedFile ? `${q}\n\n📎 ${truncatedFileName}` : q;
 
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setInput("");
