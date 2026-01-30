@@ -60,7 +60,7 @@ function Reports() {
         if (!inputRef.current) return;
         if (!google?.maps?.places?.Autocomplete) {
           console.warn(
-            "Google Maps loaded but Places library is unavailable. Ensure Places API is enabled for your key."
+            "Google Maps loaded but Places library is unavailable. Ensure Places API is enabled for your key.",
           );
           return; // keep plain text input
         }
@@ -159,7 +159,7 @@ function Reports() {
       // Transform data to match our UI format
       const transformedReports = data.map((report) => {
         const [derivedTitle, derivedBody] = splitDescription(
-          report.description || ""
+          report.description || "",
         );
         return {
           id: report.id,
@@ -167,7 +167,7 @@ function Reports() {
           title: derivedTitle,
           description: derivedBody,
           reportedAt: (report.created_at || new Date().toISOString()).split(
-            "T"
+            "T",
           )[0],
           reporterName: "Community Member", // For privacy, we'll use generic name
         };
@@ -314,22 +314,23 @@ function Reports() {
 
       if (error.code === "PGRST116" || error.message?.includes("401")) {
         setError(
-          "Database authentication error. Please check your Supabase configuration."
+          "Database authentication error. Please check your Supabase configuration.",
         );
       } else if (
         error.message?.includes("relation") ||
         error.message?.includes("does not exist")
       ) {
         setError(
-          "Database not set up properly. Please run the database schema setup."
+          "Database not set up properly. Please run the database schema setup.",
         );
       } else if (error.message?.includes("permission")) {
         setError(
-          "Permission denied. Database policies may need to be configured."
+          "Permission denied. Database policies may need to be configured.",
         );
       } else {
         setError(
-          error.message || "Failed to submit report. Please try again or contact support."
+          error.message ||
+            "Failed to submit report. Please try again or contact support.",
         );
       }
     } finally {
@@ -340,7 +341,7 @@ function Reports() {
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     setFileError("");
-    
+
     if (!file) {
       setSelectedFile(null);
       return;
@@ -369,7 +370,7 @@ function Reports() {
   const uploadFile = async (file) => {
     if (!file || !isSupabaseConfigured()) return null;
 
-    const fileExt = file.name.split('.').pop();
+    const fileExt = file.name.split(".").pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     const filePath = `reports/${fileName}`;
 
@@ -405,14 +406,20 @@ function Reports() {
     <div className="min-h-screen font-sans">
       {/* Header - White to Green radial */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)"
+            background:
+              "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)",
           }}
         ></div>
         <div className="relative max-w-7xl mx-auto text-center z-10">
-          <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg" style={{ color: 'black' }}>Community Reports</h1>
+          <h1
+            className="text-5xl font-bold mb-4 text-white drop-shadow-lg"
+            style={{ color: "black" }}
+          >
+            Community Reports
+          </h1>
           <p className="text-xl text-green-100 drop-shadow">
             Share observations and learn from fellow farmers
           </p>
@@ -421,10 +428,11 @@ function Reports() {
 
       {/* Main Content - Flowing green */}
       <section className="relative py-12 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+            background:
+              "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)",
           }}
         ></div>
         <div className="relative max-w-7xl mx-auto z-10">
@@ -463,8 +471,7 @@ function Reports() {
                   <div className="mb-6 p-4 bg-green-100 text-green-800 rounded-lg">
                     {isSupabaseConfigured()
                       ? "Thank you! Your report has been submitted and will appear here once reviewed by our team."
-                      : "Thank you! Your report has been submitted successfully. (Demo mode - connect Supabase for persistent storage)."
-                    }
+                      : "Thank you! Your report has been submitted successfully. (Demo mode - connect Supabase for persistent storage)."}
                   </div>
                 )}
 
@@ -524,7 +531,7 @@ function Reports() {
                         className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
                         required
                       ></textarea>
-                      
+
                       {/* PDF Upload Button */}
                       <button
                         type="button"
@@ -532,29 +539,29 @@ function Reports() {
                         className="absolute right-3 bottom-3 p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition"
                         title="Attach PDF document"
                       >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className="h-6 w-6" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
                           stroke="currentColor"
                         >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" 
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                           />
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M9 9h1m4 0h1m-6 4h6m-6 4h4" 
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 9h1m4 0h1m-6 4h6m-6 4h4"
                           />
                         </svg>
                       </button>
                     </div>
-                    
+
                     {/* Hidden file input */}
                     <input
                       ref={fileInputRef}
@@ -563,22 +570,22 @@ function Reports() {
                       onChange={handleFileSelect}
                       className="hidden"
                     />
-                    
+
                     {/* File selection feedback */}
                     {selectedFile && (
                       <div className="mt-2 flex items-center gap-2 p-2 bg-green-50 border border-green-200 rounded-lg">
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className="h-5 w-5 text-green-600" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-green-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
                           stroke="currentColor"
                         >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                           />
                         </svg>
                         <span className="text-sm text-green-700 flex-1 truncate">
@@ -591,36 +598,38 @@ function Reports() {
                           type="button"
                           onClick={() => {
                             setSelectedFile(null);
-                            if (fileInputRef.current) fileInputRef.current.value = "";
+                            if (fileInputRef.current)
+                              fileInputRef.current.value = "";
                           }}
                           className="text-red-500 hover:text-red-700 p-1"
                           title="Remove file"
                         >
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            className="h-4 w-4" 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
                             stroke="currentColor"
                           >
-                            <path 
-                              strokeLinecap="round" 
-                              strokeLinejoin="round" 
-                              strokeWidth={2} 
-                              d="M6 18L18 6M6 6l12 12" 
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
                             />
                           </svg>
                         </button>
                       </div>
                     )}
-                    
+
                     {/* File error message */}
                     {fileError && (
                       <p className="mt-1 text-sm text-red-600">{fileError}</p>
                     )}
-                    
+
                     <p className="text-xs text-gray-500 mt-1">
-                      You can attach a PDF document (max 10MB) by clicking the file icon
+                      You can attach a PDF document (max 10MB) by clicking the
+                      file icon
                     </p>
                   </div>
 
@@ -702,7 +711,7 @@ function Reports() {
                               {
                                 month: "short",
                                 day: "numeric",
-                              }
+                              },
                             )}
                           </span>
                         </div>
@@ -730,10 +739,11 @@ function Reports() {
 
       {/* Info Section - Green to Dark */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)"
+            background:
+              "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)",
           }}
         ></div>
         <div className="relative max-w-4xl mx-auto z-10">
@@ -767,25 +777,28 @@ function Reports() {
 
       {/* CTA - Green to White radial */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)"
+            background:
+              "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)",
           }}
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
-          <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-lg">Stay Connected</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-lg">
+            Connect with GreenPulse AI
+          </h2>
           <p className="text-xl mb-8 text-green-100 drop-shadow">
-            Get instant alerts and share observations via messaging
+            Get instant climate intelligence via our Telegram bot
           </p>
           <div className="flex justify-center">
             <a
-              href="https://t.me/TerraGuard_Bot"
+              href="https://t.me/GreenPulse_AI_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-green-700 px-8 py-3 rounded-lg font-bold hover:bg-green-50 transition shadow-lg"
             >
-              Telegram Bot
+              Open Telegram Bot
             </a>
           </div>
         </div>

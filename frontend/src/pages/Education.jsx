@@ -11,7 +11,8 @@ function Education() {
   const articles = [
     {
       id: 1,
-      title: "Land Rehabilitation Measures for Degraded Southern Rangelands in Kenya",
+      title:
+        "Land Rehabilitation Measures for Degraded Southern Rangelands in Kenya",
       category: "Land Rehabilitation / Community Impact",
       excerpt:
         "Discover how rehabilitation efforts in Kajiado and Narok are restoring ecological balance and sustaining community livelihoods through assisted natural regeneration and agroforestry.",
@@ -24,7 +25,8 @@ function Education() {
     },
     {
       id: 2,
-      title: "Conservation of Riparian Zones and Wetlands in Kenya for Land and Water Security",
+      title:
+        "Conservation of Riparian Zones and Wetlands in Kenya for Land and Water Security",
       category: "Water & Land Conservation",
       excerpt:
         "Learn how protecting rivers, wetlands, and riparian zones is vital for regulating water flow, maintaining quality, and reducing land degradation across Kenya.",
@@ -37,7 +39,8 @@ function Education() {
     },
     {
       id: 3,
-      title: "Prevention of Desertification Through Sustainable Grazing and Rangeland Management in Northern Kenya",
+      title:
+        "Prevention of Desertification Through Sustainable Grazing and Rangeland Management in Northern Kenya",
       category: "Land Governance / Prevention Measures",
       excerpt:
         "Explore how rotational grazing, rangeland enclosures, and capacity building are preventing desertification in Turkana, Marsabit, and Samburu counties.",
@@ -63,7 +66,8 @@ function Education() {
     },
     {
       id: 5,
-      title: "Community Land Rights and Governance in Land Degradation Prevention in Kenya",
+      title:
+        "Community Land Rights and Governance in Land Degradation Prevention in Kenya",
       category: "Land Governance / Prevention Measures",
       excerpt:
         "Understand how secure land tenure, participatory planning, and local governance are preventing land degradation before it becomes irreversible.",
@@ -76,12 +80,12 @@ function Education() {
     },
     {
       id: 6,
-      title: "Climate-Smart Agriculture as a Tool for Land Rehabilitation in Kenya",
+      title:
+        "Climate-Smart Agriculture as a Tool for Land Rehabilitation in Kenya",
       category: "Agriculture / Rehabilitation",
       excerpt:
         "Learn how conservation agriculture, drought-tolerant crops, and water harvesting are rehabilitating degraded land while maintaining food production.",
-      image:
-        "https://scx2.b-cdn.net/gfx/news/2020/restorationo.jpg",
+      image: "https://scx2.b-cdn.net/gfx/news/2020/restorationo.jpg",
       readTime: "9 min read",
       slug: "climate-smart-agriculture-rehabilitation",
       author: "Dr. Esther Njoki",
@@ -89,7 +93,8 @@ function Education() {
     },
     {
       id: 7,
-      title: "Tree Planting Initiatives and Forest Landscape Restoration in Kenya",
+      title:
+        "Tree Planting Initiatives and Forest Landscape Restoration in Kenya",
       category: "Forest Conservation / Rehabilitation",
       excerpt:
         "Explore how the 15 Billion Tree Campaign and community nurseries are restoring forests, mitigating climate change, and supporting livelihoods across Kenya.",
@@ -110,14 +115,20 @@ function Education() {
     <div className="min-h-screen font-sans">
       {/* Header - White to Green radial gradient */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)"
+            background:
+              "radial-gradient(ellipse 120% 80% at 0% 0%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 20%, rgba(255, 255, 255, 0.7) 40%, rgba(34, 197, 94, 0.75) 55%, rgba(5, 150, 105, 0.9) 70%, rgb(4, 120, 87) 100%)",
           }}
         ></div>
         <div className="relative max-w-7xl mx-auto text-center z-10">
-          <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg" style={{ color: 'black' }}>Education Hub</h1>
+          <h1
+            className="text-5xl font-bold mb-4 text-white drop-shadow-lg"
+            style={{ color: "black" }}
+          >
+            Education Hub
+          </h1>
           <p className="text-xl text-green-100 drop-shadow">
             Learn climate-smart farming practices and build resilience
           </p>
@@ -126,10 +137,11 @@ function Education() {
 
       {/* Articles Grid - Flowing green gradient */}
       <section className="relative py-12 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)"
+            background:
+              "linear-gradient(180deg, rgb(4, 120, 87) 0%, rgb(3, 105, 78) 30%, rgb(2, 90, 68) 50%, rgb(2, 80, 60) 70%, rgb(4, 120, 87) 100%)",
           }}
         ></div>
         <div className="relative max-w-7xl mx-auto z-10">
@@ -172,10 +184,11 @@ function Education() {
 
       {/* Additional Resources - Green to Dark gradient */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)"
+            background:
+              "linear-gradient(135deg, rgb(4, 120, 87) 0%, rgb(2, 80, 60) 25%, rgb(1, 50, 40) 50%, rgb(10, 30, 25) 75%, rgb(5, 15, 12) 100%)",
           }}
         ></div>
         <div className="relative max-w-4xl mx-auto z-10">
@@ -202,28 +215,19 @@ function Education() {
             </div>
             <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md p-6 hover:bg-white transition">
               <h3 className="text-xl font-bold mb-2 text-gray-800">
-                Ask Our AI
+                Ask GreenPulse AI
               </h3>
               <p className="text-gray-600 mb-4">
-                Get instant answers to your farming questions via Telegram or
-                WhatsApp
+                Get instant climate intelligence answers via Telegram
               </p>
               <div className="flex gap-3">
                 <a
-                  href="https://t.me/TerraGuard_Bot"
+                  href="https://t.me/GreenPulse_AI_bot"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-green-600 hover:text-green-700 font-semibold"
                 >
-                  Telegram →
-                </a>
-                <a
-                  href="https://wa.me/14155238886?text=join%20actual-mother"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-600 hover:text-green-700 font-semibold"
-                >
-                  WhatsApp →
+                  Telegram Bot →
                 </a>
               </div>
             </div>
@@ -241,10 +245,11 @@ function Education() {
 
       {/* Middle Dark Section - Dark/Black transition */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "linear-gradient(135deg, rgb(5, 15, 12) 0%, rgb(10, 25, 20) 20%, rgb(5, 40, 30) 40%, rgb(2, 50, 40) 60%, rgb(0, 0, 0) 100%)"
+            background:
+              "linear-gradient(135deg, rgb(5, 15, 12) 0%, rgb(10, 25, 20) 20%, rgb(5, 40, 30) 40%, rgb(2, 50, 40) 60%, rgb(0, 0, 0) 100%)",
           }}
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
@@ -252,7 +257,8 @@ function Education() {
             Knowledge is Power
           </h2>
           <p className="text-xl text-green-200 mb-8">
-            Empowering Kenyan communities with the information they need to protect and rehabilitate their land
+            Empowering Kenyan communities with the information they need to
+            protect and rehabilitate their land
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
@@ -273,10 +279,11 @@ function Education() {
 
       {/* Impact Section - Dark to Green radial */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgb(4, 120, 87) 0%, rgba(5, 150, 105, 0.9) 20%, rgba(22, 163, 74, 0.8) 35%, rgb(10, 30, 25) 55%, rgb(5, 15, 12) 70%, rgb(0, 0, 0) 100%)"
+            background:
+              "radial-gradient(ellipse 120% 120% at 100% 100%, rgb(4, 120, 87) 0%, rgba(5, 150, 105, 0.9) 20%, rgba(22, 163, 74, 0.8) 35%, rgb(10, 30, 25) 55%, rgb(5, 15, 12) 70%, rgb(0, 0, 0) 100%)",
           }}
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
@@ -284,17 +291,20 @@ function Education() {
             Learn From Experts
           </h2>
           <p className="text-xl text-gray-200 mb-8">
-            Our articles are written by agricultural scientists, environmental experts, and local practitioners with deep knowledge of Kenyan landscapes
+            Our articles are written by agricultural scientists, environmental
+            experts, and local practitioners with deep knowledge of Kenyan
+            landscapes
           </p>
         </div>
       </section>
 
       {/* CTA - Green to White radial at bottom right */}
       <section className="relative py-16 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)"
+            background:
+              "radial-gradient(ellipse 120% 120% at 100% 100%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 15%, rgba(255, 255, 255, 0.6) 30%, rgba(34, 197, 94, 0.7) 45%, rgba(5, 150, 105, 0.85) 60%, rgb(4, 120, 87) 80%, rgb(2, 80, 60) 100%)",
           }}
         ></div>
         <div className="relative max-w-4xl mx-auto text-center z-10">
